@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/container"
+    android:background="@color/bg_grey">
+
+    <include android:id="@+id/layout"
+        layout="@layout/layout_header"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clContact"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_100"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@mipmap/ic_camera_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/phone"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10"
+            android:textColor="@color/grey_3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent "
+            tools:ignore="UsingOnClickInXml" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/axiforma_medium"
+            android:gravity="center"
+            tools:text="@string/camera"
+            android:textAllCaps="false"
+            android:textColor="@color/black_2"
+            android:layout_marginEnd="@dimen/dp_80"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivContact"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clEmail"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_100"
+        android:layout_gravity="center"
+        android:background="@mipmap/ic_camera_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clContact"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_10"
+
+            android:textColor="@color/grey_3"
+            app:layout_constraintBottom_toBottomOf="parent "
+            app:layout_constraintTop_toTopOf="parent "
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@mipmap/mail_support"
+            tools:ignore="UsingOnClickInXml" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            tools:text="@string/photo_library"
+            android:textAllCaps="false"
+            android:gravity="center"
+            android:textColor="@color/black_2"
+            android:fontFamily="@font/axiforma_medium"
+            android:layout_marginEnd="@dimen/dp_60"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivEmail" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAddress"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_100"
+        android:layout_gravity="center"
+        android:background="@mipmap/ic_camera_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clEmail"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginStart="@dimen/dp_10"
+
+            android:textColor="@color/grey_3"
+            app:layout_constraintBottom_toBottomOf="parent "
+            app:layout_constraintTop_toTopOf="parent "
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@mipmap/location"
+            tools:ignore="UsingOnClickInXml" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            tools:text="@string/photo_library"
+            android:textAllCaps="false"
+            android:gravity="center"
+            android:textColor="@color/black_2"
+            android:fontFamily="@font/axiforma_medium"
+            android:layout_marginEnd="@dimen/dp_60"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivAddress" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

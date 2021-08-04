@@ -1,0 +1,871 @@
+package com.app.okra.utils
+
+import android.Manifest
+import android.app.Activity
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.LocationManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import android.text.InputFilter
+import android.util.Base64
+import android.util.Log
+import android.view.*
+import android.widget.Button
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
+import com.app.okra.R
+import com.app.okra.data.preference.PreferenceManager
+import com.app.okra.extension.beGone
+import com.app.okra.extension.beVisible
+import com.app.okra.models.ItemModel
+import com.app.okra.ui.boarding.login.LoginActivity
+import com.app.okra.utils.AppConstants.Companion.ISO_FORMAT
+import com.app.okra.utils.AppConstants.Companion.ISO_FORMATE
+import com.google.android.gms.maps.model.LatLng
+import java.io.File
+import java.io.UnsupportedEncodingException
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.regex.Pattern
+
+
+fun showAlertDialog(
+    context: Context?,
+    listener: Listeners.DialogListener?,
+    msg: String?,
+    needCancelButton: Boolean
+) {
+    val dialog: AlertDialog.Builder = AlertDialog.Builder(context!!)
+    dialog.setCancelable(false)
+    dialog.setMessage(msg)
+    dialog.setPositiveButton("Ok") { dialog1, which ->
+        if (listener != null) {
+            listener.onOkClick(dialog1)
+        } else {
+            dialog1.dismiss()
+        }
+    }
+    if (needCancelButton) {
+        dialog.setNegativeButton("Cancel") { dialog, _ ->
+            if (listener != null) {
+                listener.onCancelClick(dialog)
+            } else {
+                dialog.dismiss()
+            }
+        }
+    }
+    dialog.show()
+}
+
+fun Context.sendEmail(email: String, subject: String) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_EMAIL, email)
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+        putExtra(Intent.EXTRA_TEXT, "")
+    }
+    startActivity(Intent.createChooser(intent, "Send Email"))
+}
+
+fun Context.openLink(url: String) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(browserIntent)
+}
+
+
+fun showAlertDialog(
+
+    context: Context?,
+    listener: Listeners.DialogListener?,
+    msg: String?,
+    needCancelButton: Boolean,
+    positiveButtonText: String?,
+    negativeButtonText: String?,
+    title: String = ""
+) {
+    val dialog: AlertDialog.Builder = AlertDialog.Builder(context!!)
+    dialog.setCancelable(false)
+    if (title.isNotEmpty()) {
+        dialog.setTitle(title)
+    }
+    dialog.setMessage(msg)
+    dialog.setPositiveButton(positiveButtonText) { dialog, _ ->
+        if (listener != null) {
+            listener.onOkClick(dialog)
+        } else {
+            dialog.dismiss()
+        }
+    }
+    if (needCancelButton) {
+        dialog.setNegativeButton(negativeButtonText) { dialog, _ ->
+            if (listener != null) {
+                listener.onCancelClick(dialog)
+            } else {
+                dialog.dismiss()
+            }
+        }
+    }
+    dialog.show()
+}
+
+
+fun getKeyHash(context: Context) {
+    try {
+        val info: PackageInfo = context.getPackageManager().getPackageInfo(
+            context.packageName,
+            PackageManager.GET_SIGNATURES
+        )
+        for (signature in info.signatures) {
+            val md: MessageDigest = MessageDigest.getInstance("SHA")
+            md.update(signature.toByteArray())
+            val hashKey: String = String(Base64.encode(md.digest(), 0))
+            Log.i("TAG", "printHashKey() Hash Key: $hashKey")
+        }
+    } catch (e: NoSuchAlgorithmException) {
+        Log.e("TAG", "printHashKey()", e)
+    } catch (e: Exception) {
+        Log.e("TAG", "printHashKey()", e)
+    }
+
+}
+
+var builder: AlertDialog.Builder? = null
+var dialog: Dialog? = null
+
+fun showProgressDialog(context: Activity, cancelable: Boolean): AlertDialog {
+    val builder = AlertDialog.Builder(context)
+    val inflater = context.layoutInflater
+    val view = inflater.inflate(R.layout.layout_loader, null)
+    builder.setView(view)
+    builder.setCancelable(cancelable)
+    return builder.create()
+}
+
+fun getInputFilter(): InputFilter {
+    return InputFilter { source, start, end, dest, dstart, dend ->
+        for (index in start until end - 1) {
+            val type = Character.getType(source[index])
+            if (type == Character.SURROGATE.toInt()) {
+                return@InputFilter ""
+            }
+        }
+        null
+    }
+}
+
+fun getTimeStampFromDate(selectDate: String?, formatYouWant: String? = null): Long? {
+    var fromFormat = "dd/MM/yyyy"
+
+    if (formatYouWant != null) {
+        fromFormat = formatYouWant
+    }
+    val formatter: DateFormat = SimpleDateFormat(fromFormat, Locale.getDefault())
+    var date: Date? = null
+    try {
+        date = formatter.parse(selectDate)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return date!!.time
+}
+
+
+fun getDateFromTimeStamp(timeStamp: Long?, formatYouWant: String? = null): String? {
+    var fromFormat = "dd/MM/yyyy"
+
+    if (formatYouWant != null) {
+        fromFormat = formatYouWant
+    }
+    if (timeStamp != null) {
+        val dateInstance = Date(timeStamp)
+
+        val formatter: DateFormat = SimpleDateFormat(fromFormat, Locale.getDefault())
+        try {
+            return formatter.format(dateInstance)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+    return ""
+}
+
+
+fun getDateOnly(year: Int?, month: Int?, day: Int?): String {
+    val cal: Calendar = GregorianCalendar()
+    cal.set(year!!, month!!, day!!)
+    val selectedDate: Date = cal.time
+    val targetFormat: DateFormat = SimpleDateFormat("EEEE MMM dd", Locale.ENGLISH)
+    var result = ""
+    try {
+        result = targetFormat.format(selectedDate)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return result
+}
+
+
+fun getISOFromDateAndTime(year: Int?, month: Int?, day: Int?, hour: Int, min: Int): String? {
+    val cal: Calendar = GregorianCalendar()
+    if (hour == -1 && min == 0) { //for 00.00 hours
+        cal.set(year!!, month!!, day!!, 0, 0, 0)
+    } else if (hour == 0 && min == 0) {
+        cal.set(year!!, month!!, day!!, 12, 0, 0)
+    } else {
+        cal.set(year!!, month!!, day!!, hour!!, min!!, 0)
+    }
+
+    val selectedDate: Date = cal.time
+    val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
+    } else {
+        SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
+    }
+    formatISO.timeZone = TimeZone.getTimeZone("UTC")
+
+    var result = ""
+    try {
+
+        result = formatISO.format(selectedDate)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return result
+}
+
+fun getISOFromDateAndTime(date: Date?): String? {
+    val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
+    } else {
+        SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
+    }
+    var result = ""
+
+    if (date != null) {
+        try {
+            result = formatISO.format(date)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+    return result
+}
+
+fun getISOFromDateAndTime_inDate(date: Date?): Date? {
+    val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
+    } else {
+        SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
+    }
+    var result: Date? = null
+
+    if (date != null) {
+        try {
+            result = formatISO.parse(formatISO.format(date))
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+    return result
+}
+
+
+fun getDateFromDateISO(
+    selectDate: String?,
+    formatYouWant: String? = null,
+    needFormatYouWantInUtc: Boolean = true,
+    needCurrentFormatInUtc: Boolean = false
+): Date? {
+    var fromFormat = "dd/MM/yyyy"
+
+    if (formatYouWant != null) {
+        fromFormat = formatYouWant
+    }
+
+    // Required Format
+    val formatter: DateFormat = SimpleDateFormat(fromFormat, Locale.getDefault())
+    if (needFormatYouWantInUtc)
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
+
+    if (needCurrentFormatInUtc) {
+        // Initial Format for converting ISO date to UTC
+        val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
+        } else {
+            SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
+        }
+        formatISO.timeZone = TimeZone.getTimeZone("UTC")
+
+        val dateInISO = formatISO.parse(selectDate)
+
+        try {
+            return formatter.parse(formatter.format(dateInISO))
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    } else {
+        try {
+            return formatter.parse(selectDate)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+    return null
+}
+
+
+fun getDateTimeFromISO(iSODate: String, formatYouWant: String? = "EEE MMM dd, HH:mm"): String? {
+
+    val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
+    } else {
+        SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
+    }
+    formatISO.timeZone = TimeZone.getTimeZone("UTC")
+
+    val targetFormat: DateFormat = SimpleDateFormat(formatYouWant, Locale.getDefault())
+    val date = formatISO.parse(iSODate)
+    var result = ""
+    try {
+        result = targetFormat.format(date)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return result
+}
+
+fun getDateFromISOInString(
+    iSODate: String,
+    formatYouWant: String = "hh:mm a, EEE MMM dd",
+    dateInUTC: Boolean = true
+): String {
+    // val formatISO = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault());
+    val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
+    } else {
+        SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
+    }
+    if (dateInUTC) {
+        formatISO.timeZone = TimeZone.getTimeZone("UTC")
+    }
+    val targetFormat: DateFormat = SimpleDateFormat(formatYouWant, Locale.ENGLISH)
+    val date = formatISO.parse(iSODate)
+    var result = ""
+    try {
+        result = targetFormat.format(date)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return result
+}
+
+fun getDateFromISOInDate(
+    selectDate: String?,
+    formatYouWant: String? = null,
+    needInUtc: Boolean = true
+): Date? {
+    var fromFormat = ISO_FORMATE
+    if (formatYouWant != null)
+        fromFormat = formatYouWant
+    /*val formatter: DateFormat = SimpleDateFormat(fromFormat, Locale.US)
+
+    if(needInUtc)
+        formatter.timeZone= TimeZone.getTimeZone("UTC")
+    var date: Date? = null
+    try {
+        date = formatter.parse(selectDate)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return date!!*/
+
+    return getDateFromDateISO(selectDate, fromFormat, needInUtc)
+}
+
+
+fun showCustomAlertDialog(
+        context: Context?,
+        listener: Listeners.DialogListener?,
+        message: String?=null,
+        needCancelButton: Boolean,
+        positiveButtonText: String?=null,
+        negativeButtonText: String?=null,
+        title: String?=null
+) {
+    dialog = Dialog(context!!, R.style.MyCustomTheme)
+    val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_custom_alert, null)
+    dialog?.apply {
+        setContentView(view)
+        setCanceledOnTouchOutside(true)
+
+        val lp = dialog!!.window!!.attributes
+        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        lp.gravity = Gravity.CENTER
+        lp.dimAmount = 0.5f
+        window?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        lp.windowAnimations = R.style.DialogAnimation
+        window?.attributes = lp
+
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window?.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window?.setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }*/
+
+        val btnPositive: Button = findViewById(R.id.btnPositive)
+        val btnNegative: Button = findViewById(R.id.btnNegative)
+        val tvMessage: TextView = findViewById(R.id.tvMessage)
+        val tvTitle: TextView = findViewById(R.id.tvTitle)
+
+        positiveButtonText?.let{
+            btnPositive.text = it
+        }
+
+        title?.let{
+            tvTitle.text = it
+        }
+
+        if(needCancelButton) {
+            btnNegative.beVisible()
+            negativeButtonText?.let {
+                btnNegative.text = it
+            }
+        }else{
+            btnNegative.beGone()
+        }
+
+        message?.let {
+            tvMessage.text = it
+        }
+
+        btnPositive.setOnClickListener {
+            listener?.onOkClick(dialog)
+            dialog?.dismiss()
+        }
+
+        btnNegative.setOnClickListener {
+            dialog?.dismiss()
+            listener?.onCancelClick(dialog)
+        }
+
+        show()
+    }
+}
+
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+public fun getFileSize(uri: Uri): Long {
+    try {
+        val file = File(uri.path);
+        if (file.exists()) {
+            var fileSize = file.length();
+            if (fileSize >= 1024) {
+                fileSize /= 1024; //For KB
+
+                return if (fileSize > 1024)
+                    fileSize / 1024; //For MB
+                else
+                    0;
+
+            }
+            return fileSize;
+        }
+    } catch (e: Exception) {
+        Log.d("Error", e.toString());
+    }
+    return -1;
+}
+
+
+
+/*fun getUserData(): UserDetailResponse {
+    val userData = PreferenceManager.getString(AppConstants.Pref_Key.USER_DATA)
+    return Gson().fromJson(userData, UserDetailResponse::class.java)
+}*/
+
+fun getFullName(firstName: String?, lastName: String?): String? {
+    return if (!firstName.isNullOrEmpty()) {
+        if (!lastName.isNullOrEmpty()) {
+            return "$firstName $lastName"
+        }
+        return firstName
+    } else null
+}
+
+
+fun getAddressFromLatLng(latLng: LatLng, mContext: Context?): Address? {
+    val geocoder = Geocoder(mContext)
+    val addresses: List<Address>?
+    return try {
+        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 5)
+        addresses?.get(0)
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+
+/*fun navigateToLogin(activity: FragmentActivity) {
+    val isSupporterCoachMarks =
+            PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_SUPPORTER_COACHMARK_SHOW)
+    val isParticipantCoachMarks =
+            PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_PARTICIPANT_COACHMARK_SHOW)
+    val deviceToken = PreferenceManager.getString(AppConstants.Pref_Key.DEVICE_TOKEN)
+
+    // CLEAR ALL PREF DATA
+    PreferenceManager.clearAllPrefs()
+    PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_LOGIN_PREVIOUSLY, true)
+    PreferenceManager.putBoolean(
+            AppConstants.Pref_Key.IS_SUPPORTER_COACHMARK_SHOW,
+            isSupporterCoachMarks
+    )
+    PreferenceManager.putBoolean(
+            AppConstants.Pref_Key.IS_PARTICIPANT_COACHMARK_SHOW,
+            isParticipantCoachMarks
+    )
+    PreferenceManager.putString(
+            AppConstants.Pref_Key.DEVICE_TOKEN,
+            deviceToken
+    )
+
+    GlobalScope.launch {
+        val appDatabase: AppDb? = AppDb.invoke(activity)
+        appDatabase?.searchHistoryDao()?.deleteSearchHistory()
+    }
+    ActivityCompat.finishAffinity(activity);
+    activity.startActivity(
+            Intent(activity, LoginActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
+    )
+}*/
+
+fun getAgeFromDob(dob: Long?): String? {
+    val dateNew = Date()
+    dateNew.time = dob!!
+    val dateofbirth = SimpleDateFormat("yyyy", Locale.US).format(dateNew)
+
+    val cal = Calendar.getInstance()
+    val age = (cal.get(Calendar.YEAR) - dateofbirth.toInt()).toString()
+    return age
+}
+
+fun getDateFromMonth(month: Int, year: Int): Date? {
+    val calendar = Calendar.getInstance()
+    calendar[year, month] = 1
+    return calendar.time
+}
+
+
+fun checkLocationEnabled(context: Context?): Boolean {
+
+    context?.apply {
+        val lm: LocationManager =
+            context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var gps_enabled = false
+        var network_enabled = false
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (ex: java.lang.Exception) {
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        } catch (ex: java.lang.Exception) {
+        }
+
+        if (!gps_enabled && !network_enabled) {
+            return false
+        }
+    }
+
+    return true
+}
+
+/*
+@initialFormat : It can be empty. If user set it empty. We will consider by default font "dd-MM-yyyy".
+@formatYouWant: It must not be empty. This is the form you need.
+*/
+fun getDifferentInfoFromDate(
+    dateToConvert: String,
+    initFormat: String?,
+    formatYouWant: String
+): Date? {
+    var month = "";
+    var date: Date? = null
+    var initialFormat: String? = initFormat
+
+    if (initialFormat == null || initialFormat.isEmpty()) {
+        initialFormat = "dd-MM-yyyy";
+    }
+    val dayFormat = SimpleDateFormat(formatYouWant, Locale.getDefault());
+    try {
+        date = SimpleDateFormat(initialFormat, Locale.getDefault()).parse(dateToConvert);
+        month = dayFormat.format(date!!);
+
+    } catch (e: ParseException) {
+        e.printStackTrace();
+    }
+    return date;
+}
+
+fun compareDates(
+    selectedDate: Long,
+    currentDate: Long,
+    formatYouWant: String? = "dd-MM-yyyy HH:mm"
+): Boolean {
+    var selectedDateInstance: Date? = null
+    var currentDateInstance: Date? = null
+
+    val dateFormatToCheck = SimpleDateFormat(formatYouWant, Locale.getDefault())
+
+    val stringSelectedDate = dateFormatToCheck.format(Date(selectedDate))
+    val stringCurrentDate = dateFormatToCheck.format(Date(currentDate))
+
+    try {
+        selectedDateInstance = dateFormatToCheck.parse(stringSelectedDate)
+        currentDateInstance = dateFormatToCheck.parse(stringCurrentDate)
+
+        return (selectedDateInstance == currentDateInstance)
+
+    } catch (e1: ParseException) {
+        e1.printStackTrace()
+    }
+    return false
+}
+
+fun compareAndGetDateToSet(
+    startTime: String,
+    endTime: String,
+    needCurrentFormatInUtc: Boolean,
+    formatYouWantToCompare: String? = null,
+    needFormatYouWantInUtc: Boolean = false
+): String {
+    val sdate = getDateFromDateISO(
+        startTime, formatYouWantToCompare,
+        needCurrentFormatInUtc = needCurrentFormatInUtc,
+        needFormatYouWantInUtc = needFormatYouWantInUtc
+    )
+    val edate = getDateFromDateISO(
+        endTime, formatYouWantToCompare,
+        needCurrentFormatInUtc = needCurrentFormatInUtc,
+        needFormatYouWantInUtc = needFormatYouWantInUtc,
+    )
+    val sTime = getDateTimeFromISO(startTime)
+
+    return when {
+        edate!! == sdate -> {
+            val eTime = getDateTimeFromISO(endTime, "HH:mm")
+            "$sTime - $eTime"
+        }
+        edate.after(sdate) -> {
+            val eTime = getDateTimeFromISO(endTime)
+            "$sTime - $eTime"
+        }
+        else -> {
+            sTime!!
+        }
+    }
+}
+
+
+public fun compareAndGetDateMatchStatus(
+    time1: String,
+    time2: String,
+    needCurrentFormatInUtc: Boolean,
+    formatYouWantToCompare: String? = null
+): Int {
+    val t1date = getDateFromDateISO(time1, formatYouWantToCompare, needCurrentFormatInUtc)
+    val t2date = getDateFromDateISO(time2, formatYouWantToCompare, needCurrentFormatInUtc)
+    return when {
+        t2date!! == t1date -> {
+            0
+        }
+        t2date.after(t1date) -> {
+            1
+        }
+        else -> {
+            -1
+        }
+    }
+}
+
+
+/*
+* Encode the text and smiley using base64
+* */
+fun encodeSmiley(old: String): String? {
+    val st = old.trim { it <= ' ' }.replace("\n".toRegex(), " ")
+    var data = ByteArray(0)
+    var base64 = st
+    try {
+        data = st.toByteArray(charset("UTF-8"))
+        base64 = Base64.encodeToString(data, Base64.DEFAULT)
+    } catch (e: UnsupportedEncodingException) {
+        e.printStackTrace()
+        return base64
+    }
+    base64 = base64.replace("\n".toRegex(), "")
+    return base64
+    //return old;
+}
+
+fun decodeSmiley(`in`: String?): String? {
+    var `in` = `in`
+    if (`in` != null && `in`.isNotEmpty()) {
+        var text = `in`
+        try {
+            val regex = "([A-Za-z0-9+/]{4})*" +
+                    "([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)"
+            val patron = Pattern.compile(regex)
+            `in` = `in`.replace("\n", "")
+            text = if (!patron.matcher(`in`).matches()) {
+                return text
+            } else {
+                val data = Base64.decode(`in`, Base64.DEFAULT)
+                String(data)
+            }
+        } catch (e: UnsupportedEncodingException) {
+            e.printStackTrace()
+            return text
+        }
+        return text
+    }
+    return `in`
+}
+
+
+fun navigateToLogin(activity: FragmentActivity) {
+
+    val deviceToken = PreferenceManager.getString(AppConstants.Pref_Key.DEVICE_TOKEN)
+    val isFirstTime =PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_FIRST_TIME)
+
+    // CLEAR ALL PREF DATA
+    PreferenceManager.clearAllPrefs()
+    PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_LOGGED_IN, false)
+    PreferenceManager.putString(AppConstants.Pref_Key.DEVICE_TOKEN, deviceToken)
+    PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_FIRST_TIME, isFirstTime)
+
+    /*GlobalScope.launch {
+        val appDatabase: AppDb? = AppDb.invoke(activity)
+        appDatabase?.searchHistoryDao()?.deleteSearchHistory()
+    }*/
+    ActivityCompat.finishAffinity(activity);
+    activity.startActivity(
+        Intent(activity, LoginActivity::class.java)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
+    )
+}
+
+
+fun getProfileItems(context: Context?): MutableMap<Int, ItemModel> {
+    val profileHash = mutableMapOf<Int, ItemModel>()
+
+    profileHash[0] = ItemModel("Personal informations", R.mipmap.personal_info)
+    profileHash[1] = ItemModel(
+        "My subscriptions",
+        R.mipmap.my_subs
+    )
+    profileHash[2] = ItemModel("Connected devices", R.mipmap.connected_device)
+    profileHash[3] = ItemModel(
+        "Settings",
+        R.mipmap.setting
+    )
+    profileHash[4] = ItemModel("Change password", R.mipmap.change_password)
+    profileHash[5] = ItemModel("Share app", R.mipmap.share_app)
+    profileHash[6] = ItemModel("My reminders", R.mipmap.my_reminder)
+    profileHash[7] = ItemModel("Support request", R.mipmap.support_request)
+
+
+    return profileHash
+}
+fun getSettingsItems(context: Context?): MutableMap<Int, ItemModel> {
+    val profileHash = mutableMapOf<Int, ItemModel>()
+
+    profileHash[0] = ItemModel("About us", R.mipmap.about_us)
+    profileHash[1] = ItemModel(
+        "Privacy policy",
+        R.mipmap.privacy_policy
+    )
+    profileHash[2] = ItemModel("Terms and conditions", R.mipmap.terms_conditions)
+
+    profileHash[3] = ItemModel("Notifications settings", R.mipmap.notifications_settings)
+    profileHash[4] = ItemModel("Measurement settings", R.mipmap.measurement_settings)
+    profileHash[5] = ItemModel("FAQ", R.mipmap.my_reminder)
+    profileHash[6] = ItemModel("Contact us", R.mipmap.contact_us)
+
+    return profileHash
+}
+
+
+fun showOptionDialog(
+    context: Context?,
+    listener: Listeners.CustomDialogListener,
+    isUploadFromEmail: Boolean
+) {
+    dialog = Dialog(context!!, R.style.MyCustomTheme)
+    val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_more_option, null)
+    dialog?.apply {
+        setContentView(view)
+        setCanceledOnTouchOutside(true)
+
+        val lp = dialog!!.window!!.attributes
+        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        lp.gravity = Gravity.BOTTOM
+        lp.dimAmount = 0.5f
+        window?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        lp.windowAnimations = R.style.DialogAnimation
+        window?.attributes = lp
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window?.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window?.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+
+        val clCamera: ConstraintLayout = findViewById(R.id.clCamera)
+        val clLibrary: ConstraintLayout = findViewById(R.id.clLibrary)
+
+
+        clCamera.setOnClickListener {
+            listener.onImageClick(dialog)
+            dialog?.dismiss()
+        }
+
+        clLibrary.setOnClickListener {
+            dialog?.dismiss()
+            listener.onUploadFromGallery(dialog)
+        }
+        show()
+    }
+}
+
+

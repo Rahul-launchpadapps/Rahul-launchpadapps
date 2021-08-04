@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.app.okra">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+
+
+
+    <application
+        android:name=".OkraApplication"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup"
+        tools:targetApi="n">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.boarding.login.LoginActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.boarding.otpVerify.OTPVerifyActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.boarding.resetPassword.ResetOrChangePasswordActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.tutorial.TutorialsActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.DashBoardActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.MessageActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.Message2Activity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.profile.profile_details.ProfileInfoActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.boarding.forgotPassword.ForgotPassActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.my_account.setting.SettingsActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.profile.StaticContentActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.my_account.setting.notification.NotificationActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.my_account.setting.measurement.MeasurementSettingActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.my_account.setting.contactus.ContactUsActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.connected_devices.ConnectedDeviceActivity"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".ui.my_account.support_request.SupportRequestActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+
+        <service
+            android:name=".fcm.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

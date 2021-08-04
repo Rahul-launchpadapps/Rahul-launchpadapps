@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name">Okra</string>
+
+    <!-- Titles-->
+    <string name="title_my_setting">My Settings</string>
+    <string name="title_terms_and_condition"><![CDATA[Terms & conditions]]></string>
+    <string name="title_about_us">About us</string>
+    <string name="title_privacy_policy">Privacy policy</string>
+    <string name="title_faq">FAQ</string>
+    <string name="title_notification">Notifications settings</string>
+    <string name="title_measurement_setting">Measurement settings</string>
+    <string name="title_connect_device">Connect device</string>
+    <string name="title_my_support_request">My support request</string>
+    <string name="title_my_support_request_details">Support request details</string>
+    <string name="title_new_support_request">Add new request</string>
+
+
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="sign_in_with_okra">Sign In With Okra</string>
+    <string name="manage_your_account"><![CDATA[Manage your account & get the access to various services provided by the okra]]></string>
+    <string name="email_id">Email ID</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="don_t_have_an_account">Don\'t have account? Sign up</string>
+    <string name="cancel">Cancel</string>
+    <string name="allow">Allow</string>
+    <string name="enter_the_email_id"><![CDATA[Enter the Email Id associated with your okra account & we will send a verification code to reset your password]]></string>
+    <string name="send">Send</string>
+    <string name="verification_code_successfully_sent_to_your_mail">Verification code successfully sent to your mail.</string>
+    <string name="verify_your_email">Verify Your Email Id</string>
+    <string name="we_have_sent_a">We have sent a 4 digit verification code to your email id:</string>
+    <string name="verify_your_otp">Verify the OTP to reset your password.</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="invalid_code">Invalid Code</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="verify">Verify</string>
+    <string name="reset_your_password">Reset Your Password</string>
+    <string name="enter_ur_password">Enter your new password below. Your new password must be different from previous used passwords.</string>
+    <string name="password_instruction">Please ensure your password is at least 8 characters long and contains a special character or number.</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="resend_pass">Reset Password</string>
+    <string name="reset_password_successfully">Reset password successfully</string>
+    <string name="header_reset_password_successfully">Reset Password Successfully</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tutorial_header_1">Ready to Simplify Diabetes?</string>
+    <string name="tutorial_sub_header_1">At Okra, we believe that everyone deserves to be healthy That’s we keep our cost low</string>
+    <string name="you_have_successfully">You have successfully updated your Okra account password.</string>
+    <string name="lets_get_started">Let\'s get started</string>
+    <string name="back_to_signin">Back to sign in</string>
+    <string name="logout">Logout</string>
+    <string name="welcome_to_home">Welcome To Home</string>
+    <string name="my_account">My Account</string>
+    <string name="view_profile">View Profile</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone No</string>
+    <string name="age">Age</string>
+    <string name="phone_no">Phone No</string>
+    <string name="save">Save</string>
+    <string name="change_password">Change Password</string>
+    <string name="enter_your_new">Enter your new password below, your new password must be different from the current password</string>
+    <string name="current_password">Current Password</string>
+    <string name="ok">OK</string>
+    <string name="camera">Camera</string>
+    <string name="photo_library">Photo Library</string>
+    <string name="upload_image">Upload Image</string>
+
+    <string name="in_app_notification">In app notifications</string>
+    <string name="push_notification">Push notifications</string>
+
+    <string name="hyper_blood_glucose">Hyper blood glucose value</string>
+    <string name="hypo_blood_glucose">Hypo blood glucose value</string>
+    <string name="blood_glucose_unit">Blood glucose unit</string>
+    <string name="title_contact_us">Contact us</string>
+    <string name="instruction_1">Turn off the meter if it is on.</string>
+    <string name="instruction_2">Long press both button on the front of the device at the same time (3 seconds) until bluetooth symbol showup on the meters\'s display.</string>
+    <string name="connect">Connect</string>
+    <string name="need_help">Need Help?</string>
+    <string name="connected_devices">Connected Devices</string>
+    <string name="lets_connect">Let\'s connect your device</string>
+
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="no_support_request">No support request</string>
+    <string name="please_click">Please click on the “+” Icon to start your support request</string>
+    <string name="title">Title</string>
+    <string name="write_your">Write your notes…</string>
+    <string name="max_char">Max. 1000 characters</string>
+    <string name="description">Description</string>
+    <string name="hang_tight">Hang tight!</string>
+    <string name="your_message"><![CDATA[Your message is on the way tot he Okra crew & we will get back to you soon]]></string>
+    <string name="submit">Submit</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="discovering">Discovering…</string>
+    <string name="alert">Alert</string>
+
+
+</resources>
