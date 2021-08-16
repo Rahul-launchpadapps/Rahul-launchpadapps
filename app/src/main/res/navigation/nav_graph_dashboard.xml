@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.app.okra.ui.profile.ProfileFragment"
+        android:name="com.app.okra.ui.logbook.LogbookFragment"
         android:label="DashboardFragment"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_logbook"/>
 
 </navigation>

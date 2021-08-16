@@ -42,8 +42,36 @@
         android:textColor="@color/grey_3"
         android:onClick="onBackClick"
         app:layout_constraintTop_toTopOf="parent "
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivDelete"
         android:background="@mipmap/edit"
         android:visibility="invisible"
         tools:ignore="UsingOnClickInXml" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_3"
+        android:onClick="onBackClick"
+        app:layout_constraintTop_toTopOf="parent "
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/delete"
+        android:visibility="gone"
+        tools:ignore="UsingOnClickInXml" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        style="@style/btn_style"
+        android:layout_marginStart="@dimen/dp_0"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_width="0dp"
+        android:text="@string/save"
+        android:visibility="gone"
+        android:textColor="@color/green_1"
+        app:layout_constraintTop_toTopOf="parent "
+        app:layout_constraintStart_toEndOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@mipmap/bg_button"
+        tools:ignore="UsingOnClickInXml" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

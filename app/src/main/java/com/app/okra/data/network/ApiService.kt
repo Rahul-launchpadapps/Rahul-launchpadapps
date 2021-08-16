@@ -57,5 +57,7 @@ interface ApiService {
     suspend fun sendSupportRequest(@FieldMap params: WeakHashMap<String, Any>):
             Response<BaseResponse<Any>>
 
+    @GET("v1/test")
+    suspend fun getTestLogs(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<UserDetailResponse>>
 
 }

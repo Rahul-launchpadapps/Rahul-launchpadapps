@@ -96,16 +96,16 @@
       <androidx.appcompat.widget.AppCompatEditText
           android:id="@+id/etPassword"
           style="@style/edit_text_style"
-          android:hint="@string/password"
-          android:inputType="textPassword"
-          android:paddingEnd="@dimen/dp_50"
-          android:lines="1"
           android:layout_marginStart="@dimen/dp_20"
           android:layout_marginEnd="@dimen/dp_20"
-          android:singleLine="true"
-          android:imeOptions="actionDone"
           android:digits="1234567890!@#$%^&amp;*_-~?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+          android:hint="@string/password"
+          android:imeOptions="actionDone"
+          android:inputType="textPassword"
+          android:lines="1"
           android:maxLength="40"
+          android:paddingEnd="@dimen/dp_50"
+          android:singleLine="true"
           tools:ignore="RtlSymmetry" />
 
       <androidx.appcompat.widget.AppCompatImageView
