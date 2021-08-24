@@ -17,6 +17,11 @@ import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.*
+import kotlinx.android.synthetic.main.bottomsheet_logs_filter.ivAfterMeal
+import kotlinx.android.synthetic.main.bottomsheet_logs_filter.ivDisplayAll
+import kotlinx.android.synthetic.main.bottomsheet_logs_filter.tvFromDate
+import kotlinx.android.synthetic.main.bottomsheet_logs_filter.tvToDate
+import kotlinx.android.synthetic.main.bottomsheet_meal_logs_filter.*
 import kotlinx.android.synthetic.main.fragment_logbook.*
 import java.util.*
 
@@ -88,7 +93,10 @@ class LogbookFragment : BaseFragment() {
         }
 
         ivFilter.setOnClickListener {
-            showBottomSheetDialog()
+            if(viewPager.currentItem == 0)
+                showTestBottomSheetDialog()
+            else
+                showMealBottomSheetDialog()
         }
     }
 
@@ -117,7 +125,7 @@ class LogbookFragment : BaseFragment() {
         }
     }
 
-    private fun showBottomSheetDialog() {
+    private fun showTestBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog.setContentView(R.layout.bottomsheet_logs_filter)
         bottomSheetDialog.show()
@@ -167,6 +175,52 @@ class LogbookFragment : BaseFragment() {
                 bottomSheetDialog.ivControlSolution.isSelected = false
             } else {
                 bottomSheetDialog.ivControlSolution.isSelected = true
+            }
+        }
+
+        bottomSheetDialog.tvFromDate.setOnClickListener {
+            selectDate(bottomSheetDialog.tvFromDate)
+        }
+
+        bottomSheetDialog.tvToDate.setOnClickListener {
+            selectDate(bottomSheetDialog.tvToDate)
+        }
+    }
+
+    private fun showMealBottomSheetDialog() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.setContentView(R.layout.bottomsheet_meal_logs_filter)
+        bottomSheetDialog.show()
+
+        bottomSheetDialog.ivDisplayAll.setOnClickListener {
+            if (bottomSheetDialog.ivDisplayAll.isSelected) {
+                bottomSheetDialog.ivDisplayAll.isSelected = false
+            } else {
+                bottomSheetDialog.ivDisplayAll.isSelected = true
+            }
+        }
+
+        bottomSheetDialog.ivToday.setOnClickListener {
+            if (bottomSheetDialog.ivToday.isSelected) {
+                bottomSheetDialog.ivToday.isSelected = false
+            } else {
+                bottomSheetDialog.ivToday.isSelected = true
+            }
+        }
+
+        bottomSheetDialog.ivThisWeek.setOnClickListener {
+            if (bottomSheetDialog.ivThisWeek.isSelected) {
+                bottomSheetDialog.ivThisWeek.isSelected = false
+            } else {
+                bottomSheetDialog.ivThisWeek.isSelected = true
+            }
+        }
+
+        bottomSheetDialog.ivThisMonth.setOnClickListener {
+            if (bottomSheetDialog.ivThisMonth.isSelected) {
+                bottomSheetDialog.ivThisMonth.isSelected = false
+            } else {
+                bottomSheetDialog.ivThisMonth.isSelected = true
             }
         }
 

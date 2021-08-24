@@ -8,9 +8,15 @@ import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.extension.beVisible
+import com.app.okra.models.Data
+import com.app.okra.utils.getDateFromISOInString
+import kotlinx.android.synthetic.main.fragment_edit_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
 
 class EditTestDetailsFragment : BaseFragment() {
+
+    private var data: Data? = null
+
     override fun getViewModel(): BaseViewModel? {
         return null
     }
@@ -27,6 +33,7 @@ class EditTestDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
         setListener()
+        getData()
     }
 
     private fun setUpToolbar() {
@@ -43,4 +50,25 @@ class EditTestDetailsFragment : BaseFragment() {
             navController.navigate(R.id.action_editTestDetails_to_successfulUpdatedFragment, null)
         }
     }
+
+    private fun getData() {
+        arguments?.let {
+            data = it.getParcelable("data")
+
+            tvDateValue.text =
+                data?.createdAt?.let { it1 ->
+                    getDateFromISOInString(
+                        it1,
+                        formatYouWant = "MMM dd yyyy"
+                    )
+                }
+            tvTestingTimeValue.text = data?.testingTime ?: ""
+            tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
+            tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
+            tvInsulinValue.text = data?.insulin ?: ""
+            tvDeviceIdValue.text = data?.deviceId ?: ""
+            tvDeviceNameValue.text = data?.deviceName ?: ""
+        }
+    }
+
 }

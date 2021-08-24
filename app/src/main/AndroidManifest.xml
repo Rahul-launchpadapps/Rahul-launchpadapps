@@ -38,6 +38,10 @@
             android:name=".ui.logbook.TestDetailsActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.logbook.MealDetailsActivity"
+            android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

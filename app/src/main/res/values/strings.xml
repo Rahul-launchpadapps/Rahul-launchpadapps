@@ -129,4 +129,17 @@
     <string name="successfully_updated_test_details">Successfully updated test details</string>
     <string name="your_test_details_has_been_updated_successfully">Your test details has been updated successfully</string>
     <string name="additional_notes">Additional Notes</string>
+    <string name="today">Today</string>
+    <string name="this_week">This Week</string>
+    <string name="this_month">This Month</string>
+    <string name="meal_details">Meal Details</string>
+    <string name="date_time">Date &amp; Time</string>
+    <string name="food_type">Food Type</string>
+    <string name="calories">Calories</string>
+    <string name="carbs">Carbs</string>
+    <string name="fats">Fats</string>
+    <string name="protein">Protein</string>
+    <string name="delete_meal">Delete Meal</string>
+    <string name="are_you_sure_you_want_to_delete_the_added_meal">Are you sure you want to delete the added meal?</string>
+    <string name="edit_meal_details">Edit Meal Details</string>
 </resources>

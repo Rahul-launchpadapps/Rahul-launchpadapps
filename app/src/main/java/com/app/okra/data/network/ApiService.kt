@@ -58,6 +58,9 @@ interface ApiService {
             Response<BaseResponse<Any>>
 
     @GET("v1/test")
-    suspend fun getTestLogs(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<UserDetailResponse>>
+    suspend fun getTestLogs(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<TestListResponse>>
+
+    @GET("v1/test")
+    suspend fun getTestDetails(@Query("testId") testId: String): Response<BaseResponse<TestListResponse>>
 
 }

@@ -5,13 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
-import com.app.okra.models.SupportResponse
+import com.app.okra.models.Data
+import com.app.okra.models.TestListResponse
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import kotlinx.android.synthetic.main.row_test_logs.view.*
 
 class TestLogsAdapter (var listener: Listeners.ItemClickListener,
-                       private val dataList : List<SupportResponse>,
+                       private val dataList : List<Data>,
 ) : RecyclerView.Adapter<TestLogsAdapter.ItemViewHolder>() {
 
 
@@ -36,17 +37,17 @@ class TestLogsAdapter (var listener: Listeners.ItemClickListener,
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun onBind(data: SupportResponse?, position: Int) {
+        fun onBind(data: Data?, position: Int) {
 
             data?.let{ it ->
-                it.title?.let{
-                    itemView.tvTitle.text = it
+                it.bloodGlucose?.let{
+                    itemView.tvGlucoseValue.text = it
                 }
-                it.description?.let{
+                it.testingTime?.let{
                     itemView.tvDetail.text = it
                 }
 
-                it.updatedAt?.let{
+                it.createdAt?.let{
                     if(it.isNotEmpty()) {
                         itemView.tvTime.text = getDateFromISOInString(it, formatYouWant = "hh:mm a")
                     }

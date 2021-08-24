@@ -15,7 +15,9 @@ import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
-import com.app.okra.models.SupportResponse
+import com.app.okra.models.Data
+import com.app.okra.models.DevicesListModel
+import com.app.okra.models.TestListResponse
 import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.fragment_test_logs.progressBar_loadMore
@@ -27,7 +29,7 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
     private var pageNo :Int = 1
     private var totalPage: Int = 0
     private var nextHit: Int = 0
-    private val requestList  = ArrayList<SupportResponse>()
+    private val requestList  = ArrayList<Data>()
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -63,7 +65,7 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
-        viewModel._profileInfoLiveData.observe(viewLifecycleOwner) { it ->
+        viewModel._testListLiveData.observe(viewLifecycleOwner) { it ->
           //  swipe_request.isRefreshing = false
 
             if (it.totalPage != null) {
@@ -76,7 +78,7 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
                 if (pageNo == 1 && requestList.size > 0)
                     requestList.clear()
 
-               // requestList.addAll(it)
+                it.data?.let { it1 -> requestList.addAll(it1) }
                 requestAdapter.notifyDataSetChanged()
             }
             manageViewVisibility()
@@ -127,7 +129,10 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-        startActivity(Intent(activity,TestDetailsActivity::class.java))
+        val data = o1 as Data
+
+        startActivity(Intent(activity,TestDetailsActivity::class.java)
+            .putExtra("data",data))
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {

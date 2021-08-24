@@ -6,15 +6,20 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.network.ApiData
 import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.TestLogsRepo
+import com.app.okra.models.TestListResponse
 import com.app.okra.models.UserDetailResponse
 import com.app.okra.utils.*
 import java.util.*
 
 class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
 
-    private var profileInfoLiveData = MutableLiveData<ApiData<UserDetailResponse>>()
-    val _profileInfoLiveData: LiveData<ApiData<UserDetailResponse>>
-        get() = profileInfoLiveData
+    private var testListLiveData = MutableLiveData<ApiData<TestListResponse>>()
+    val _testListLiveData: LiveData<ApiData<TestListResponse>>
+        get() = testListLiveData
+
+    private var testDetailLiveData = MutableLiveData<ApiData<TestListResponse>>()
+    val _testDetailLiveData: LiveData<ApiData<TestListResponse>>
+        get() = testDetailLiveData
 
     var params= WeakHashMap<String, Any>()
 
@@ -28,7 +33,7 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
             hideProgressBar()
             when (result) {
                 is ApiResult.Success -> {
-                    profileInfoLiveData.value = result.value
+                    testListLiveData.value = result.value
                 }
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))
@@ -39,4 +44,25 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
             }
         }
     }
+
+    fun getTestDetails(testId: String) {
+        launchDataLoad {
+
+            showProgressBar()
+            val result = repo?.getTestDetails(testId)
+            hideProgressBar()
+            when (result) {
+                is ApiResult.Success -> {
+                    testDetailLiveData.value = result.value
+                }
+                is ApiResult.GenericError -> {
+                    errorObserver.value = Event(ApiData(message = result.message))
+                }
+                is ApiResult.NetworkError -> {
+                    errorObserver.value = Event(ApiData(message = "Network Issue"))
+                }
+            }
+        }
+    }
+
 }
