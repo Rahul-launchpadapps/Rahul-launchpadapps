@@ -16,19 +16,20 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
-import com.app.okra.models.SupportResponse
-import com.app.okra.models.TestListResponse
+import com.app.okra.models.MealsData
+import com.app.okra.ui.logbook.add_meal.AddMealActivity
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.fragment_meal_logs.*
 
 class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var requestAdapter: TestLogsAdapter
+    private lateinit var requestAdapter: MealLogsAdapter
     private var pageNo :Int = 1
     private var totalPage: Int = 0
     private var nextHit: Int = 0
-    private val requestList  = ArrayList<Data>()
+    private val requestList  = ArrayList<MealsData>()
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -47,7 +48,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_test_logs, container, false)
+        return inflater.inflate(R.layout.fragment_meal_logs, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,6 +60,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     private fun getData() {
+        viewModel.setRequest(pageNo = pageNo.toString(), limit = AppConstants.DATA_LIMIT.toString())
         viewModel.getMealLogs()
     }
 
@@ -77,7 +79,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
                 if (pageNo == 1 && requestList.size > 0)
                     requestList.clear()
 
-                // requestList.addAll(it)
+                it.data?.let { it1 -> requestList.addAll(it1) }
                 requestAdapter.notifyDataSetChanged()
             }
             manageViewVisibility()
@@ -99,7 +101,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     private fun setAdapter() {
-        requestAdapter = TestLogsAdapter(
+        requestAdapter = MealLogsAdapter(
             this,
             requestList
         )
@@ -125,10 +127,14 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
                 }
             }
         })
+
+        ivAdd.setOnClickListener {
+            startActivity(Intent(activity,AddMealActivity::class.java))
+        }
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-        startActivity(Intent(activity,TestDetailsActivity::class.java))
+        startActivity(Intent(activity,MealDetailsActivity::class.java))
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {

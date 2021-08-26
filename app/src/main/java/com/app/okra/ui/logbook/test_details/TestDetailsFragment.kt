@@ -13,11 +13,13 @@ import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 import com.app.okra.ui.logbook.TestLogsViewModel
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.showCustomAlertDialog
 import kotlinx.android.synthetic.main.fragment_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
+import kotlinx.android.synthetic.main.row_test_logs.view.*
 
 class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
@@ -83,7 +85,14 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
                         formatYouWant = "MMM dd yyyy"
                     )
                 }
-            tvTestingTimeValue.text = data?.testingTime ?: ""
+
+            if(data?.testingTime.equals(AppConstants.Testing_Time.AFTER_MEAL))
+                tvTestingTimeValue.text = getString(R.string.after_meal)
+            else if(data?.testingTime.equals(AppConstants.Testing_Time.BEFORE_MEAL))
+                tvTestingTimeValue.text = getString(R.string.before_meal)
+            else
+                tvTestingTimeValue.text = data?.testingTime
+
             tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
             tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
             tvInsulinValue.text = data?.insulin ?: ""

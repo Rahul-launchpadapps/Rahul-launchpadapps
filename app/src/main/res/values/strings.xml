@@ -142,4 +142,6 @@
     <string name="delete_meal">Delete Meal</string>
     <string name="are_you_sure_you_want_to_delete_the_added_meal">Are you sure you want to delete the added meal?</string>
     <string name="edit_meal_details">Edit Meal Details</string>
+    <string name="new_meal">New Meal</string>
+    <string name="add_meal">Add Meal</string>
 </resources>

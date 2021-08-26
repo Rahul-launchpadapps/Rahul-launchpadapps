@@ -18,6 +18,7 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 import com.app.okra.models.DevicesListModel
 import com.app.okra.models.TestListResponse
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.fragment_test_logs.progressBar_loadMore
@@ -60,6 +61,7 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
     }
 
     private fun getData() {
+        viewModel.setRequest(pageNo = pageNo.toString(), limit = AppConstants.DATA_LIMIT.toString())
         viewModel.getTestLogs()
     }
 

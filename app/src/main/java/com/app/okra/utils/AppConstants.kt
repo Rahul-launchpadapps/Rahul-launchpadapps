@@ -94,4 +94,13 @@ class AppConstants {
         const val ABOUT_US_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "CODE_OF_CONDUCT"
         const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "DWES_CHECK_SIGNED"
     }
+
+    class Testing_Time {
+        companion object {
+            const val AFTER_MEAL = "AFTER_MEAL"
+            const val BEFORE_MEAL = "BEFORE_MEAL"
+        }
+
+    }
+
 }
