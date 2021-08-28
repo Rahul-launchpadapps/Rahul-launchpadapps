@@ -90,7 +90,7 @@
                 android:id="@+id/btnGetStarted"
                 style="@style/btn_style"
                 android:layout_width="@dimen/dp_150"
-                android:background="@mipmap/bg_button"
+                android:background="@mipmap/get_started_btn"
                 android:layout_marginBottom="@dimen/dp_0"
                 android:layout_marginEnd="@dimen/dp_0"
                 android:onClick="onGetStartedClick"

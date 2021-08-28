@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/container"
-    android:background="@color/white"
-    android:paddingStart="@dimen/dp_20"
-    android:paddingEnd="@dimen/dp_20">
+    android:background="@color/white">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLogbook"
@@ -31,7 +29,7 @@
         android:padding="-15dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/filter"
+        android:src="@mipmap/filter"
         tools:ignore="UsingOnClickInXml" />
 
     <RelativeLayout

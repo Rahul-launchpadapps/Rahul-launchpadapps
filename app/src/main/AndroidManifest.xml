@@ -112,6 +112,8 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".ui.LogLocalActivity" />
+        <activity android:name=".ui.MyAccountLocalActivity" />
 
         <service
             android:name=".fcm.MyFirebaseMessagingService"

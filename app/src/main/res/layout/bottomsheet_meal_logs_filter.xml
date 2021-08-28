@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+
     android:background="@color/white"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -42,37 +44,37 @@
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/edit_text_style"
         android:layout_width="@dimen/dp_0"
-        android:id="@+id/tvFromDate"
+        android:id="@+id/tvMealFromDate"
         android:layout_height="wrap_content"
         android:background="@mipmap/bg_edittext"
         android:hint="@string/from"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
-        android:drawableEnd="@drawable/calendar"
+        android:drawableEnd="@mipmap/calendar"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvToDate"/>
+        app:layout_constraintEnd_toStartOf="@id/tvMealToDate"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/edit_text_style"
         android:layout_width="@dimen/dp_0"
-        android:id="@+id/tvToDate"
+        android:id="@+id/tvMealToDate"
         android:layout_height="wrap_content"
         android:background="@mipmap/bg_edittext"
         android:hint="@string/to"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
-        android:drawableEnd="@drawable/calendar"
+        android:drawableEnd="@mipmap/calendar"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
-        app:layout_constraintStart_toEndOf="@id/tvFromDate"
+        app:layout_constraintStart_toEndOf="@id/tvMealFromDate"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -89,7 +91,7 @@
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvFromDate"
+        app:layout_constraintTop_toBottomOf="@id/tvMealFromDate"
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -110,7 +112,7 @@
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivDisplayAll"
+        android:id="@+id/ivMealDisplayAll"
         style="@style/textContainer"
         android:layout_width="@dimen/dp_0"
         android:src="@drawable/selector_tick"
@@ -213,12 +215,12 @@
         android:textColor="@color/grey_4"
         app:layout_constraintTop_toBottomOf="@+id/tvThisMonth"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnApplyFilter"
-        android:background="@mipmap/bg_button"
+        app:layout_constraintEnd_toStartOf="@id/btnMealApplyFilter"
+        android:background="@mipmap/apply_filter"
         tools:ignore="UsingOnClickInXml" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnApplyFilter"
+        android:id="@+id/btnMealApplyFilter"
         style="@style/btn_style"
         android:layout_marginStart="@dimen/dp_0"
         android:layout_marginEnd="@dimen/dp_0"
@@ -228,7 +230,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvThisMonth"
         app:layout_constraintStart_toEndOf="@id/btnReset"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@mipmap/bg_button"
+        android:background="@mipmap/apply_filter"
         tools:ignore="UsingOnClickInXml" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -15,21 +16,37 @@ import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.utils.AppConstants
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.*
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.ivAfterMeal
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.ivDisplayAll
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.tvFromDate
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.tvToDate
+import kotlinx.android.synthetic.main.bottomsheet_logs_filter.btnApplyFilter
+import kotlinx.android.synthetic.main.bottomsheet_logs_filter.btnReset
 import kotlinx.android.synthetic.main.bottomsheet_meal_logs_filter.*
+import kotlinx.android.synthetic.main.bottomsheet_meal_logs_filter.ivMealDisplayAll
 import kotlinx.android.synthetic.main.fragment_logbook.*
 import java.util.*
 
 class LogbookFragment : BaseFragment() {
 
+    private var mPagerAdapter: ViewPagerBottomBar?=null
     private var mYear: Int = 0
     private var mMonth: Int = 0
     private var mDay: Int = 0
+    private var displayAll =false
+    private var beforeMeal =false
+    private var afterMeal =false
+    private var postMedicine =false
+    private var postWorkout=false
+    private var controlSolution=false
+
+    private var today=false
+    private var thisWeek=false
+    private var thisMonth=false
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -58,7 +75,7 @@ class LogbookFragment : BaseFragment() {
     }
 
     private fun setupViewPager() {
-        val mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerBottomBar(it) }
+        mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerBottomBar(it) }
         mPagerAdapter?.addFragment(TestLogsFragment())
         mPagerAdapter?.addFragment(MealLogsFragment())
         viewPager.adapter = mPagerAdapter
@@ -66,15 +83,13 @@ class LogbookFragment : BaseFragment() {
         viewPager.beginFakeDrag()
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
+            override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {
-            }
+            ) {}
 
             override fun onPageSelected(position: Int) {
                 handleTabsBackground(position)
@@ -125,112 +140,210 @@ class LogbookFragment : BaseFragment() {
         }
     }
 
+    private fun setupFullHeight(bottomSheet: BottomSheetDialog) {
+        val parentLayout = bottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        parentLayout?.let { it ->
+            val behaviour = BottomSheetBehavior.from(it)
+            val layoutParams = it.layoutParams
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            it.layoutParams = layoutParams
+            behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
     private fun showTestBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
-        bottomSheetDialog.setContentView(R.layout.bottomsheet_logs_filter)
-        bottomSheetDialog.show()
+        bottomSheetDialog.apply {
+            setContentView(R.layout.bottomsheet_logs_filter)
+            setupFullHeight(bottomSheetDialog)
+            show()
 
-        bottomSheetDialog.ivDisplayAll.setOnClickListener {
-            if (bottomSheetDialog.ivDisplayAll.isSelected) {
-                bottomSheetDialog.ivDisplayAll.isSelected = false
-            } else {
-                bottomSheetDialog.ivDisplayAll.isSelected = true
+            resetTestLogFilter()
+
+            ivDisplayAll.setOnClickListener {
+                ivDisplayAll.isSelected = !ivDisplayAll.isSelected
+                ivBeforeMeal.isSelected= false
+                ivAfterMeal.isSelected= false
+                ivPostMedicine.isSelected= false
+                ivPostWorkout.isSelected= false
+                ivControlSolution.isSelected= false
+
+                beforeMeal = false
+                afterMeal = false
+                postMedicine = false
+                postWorkout = false
+                controlSolution = false
+            }
+            ivBeforeMeal.setOnClickListener {
+                beforeMeal = !ivBeforeMeal.isSelected
+                ivBeforeMeal.isSelected = !ivBeforeMeal.isSelected
+
+                ivDisplayAll.isSelected = false
+                displayAll = false
+            }
+            ivAfterMeal.setOnClickListener {
+                afterMeal = !ivAfterMeal.isSelected
+                ivAfterMeal.isSelected = !ivAfterMeal.isSelected
+
+                ivDisplayAll.isSelected = false
+                displayAll = false
+
+            }
+            ivPostMedicine.setOnClickListener {
+                postMedicine = !ivPostMedicine.isSelected
+                ivPostMedicine.isSelected = !ivPostMedicine.isSelected
+
+                ivDisplayAll.isSelected = false
+                displayAll = false
+
+            }
+            ivPostWorkout.setOnClickListener {
+                postWorkout = !ivPostWorkout.isSelected
+                ivPostWorkout.isSelected = !ivPostWorkout.isSelected
+
+                ivDisplayAll.isSelected = false
+                displayAll = false
+
+            }
+            ivControlSolution.setOnClickListener {
+                controlSolution = !ivControlSolution.isSelected
+                ivControlSolution.isSelected = !ivControlSolution.isSelected
+
+                ivDisplayAll.isSelected = false
+                displayAll = false
+            }
+            tvFromDate.setOnClickListener {
+                selectDate(tvFromDate)
+            }
+            tvToDate.setOnClickListener {
+                selectDate(tvToDate)
+            }
+            btnApplyFilter.setOnClickListener {
+                if (mPagerAdapter?.position == 0){
+                    val testLogFragment = mPagerAdapter?.getItem(0) as TestLogsFragment
+                    val toDate = tvToDate.text.toString().trim()
+                    val fromDate = tvFromDate.text.toString().trim()
+                    val filterTiming = getSelectedFilterTiming()
+                    testLogFragment.getData(
+                        pageNo = 1,
+                        testingTime = filterTiming,
+                        fromDate= fromDate,
+                        toDate= toDate,
+                    )
+                    bottomSheetDialog.dismiss()
+                }
+            }
+            btnReset.setOnClickListener {
+                tvFromDate.text = ""
+                tvToDate.text = ""
+                ivDisplayAll.isSelected =false
+                ivBeforeMeal.isSelected= false
+                ivAfterMeal.isSelected= false
+                ivPostMedicine.isSelected= false
+                ivPostWorkout.isSelected= false
+                ivControlSolution.isSelected= false
+                resetTestLogFilter()
             }
         }
+    }
 
-        bottomSheetDialog.ivBeforeMeal.setOnClickListener {
-            if (bottomSheetDialog.ivBeforeMeal.isSelected) {
-                bottomSheetDialog.ivBeforeMeal.isSelected = false
-            } else {
-                bottomSheetDialog.ivBeforeMeal.isSelected = true
-            }
+    private fun getSelectedFilterTiming(): String {
+        val sBuilder = StringBuilder()
+
+        if(displayAll){
+            sBuilder.append(AppConstants.DISPLAY_ALL)
         }
 
-        bottomSheetDialog.ivAfterMeal.setOnClickListener {
-            if (bottomSheetDialog.ivAfterMeal.isSelected) {
-                bottomSheetDialog.ivAfterMeal.isSelected = false
-            } else {
-                bottomSheetDialog.ivAfterMeal.isSelected = true
-            }
+        if(beforeMeal){
+            sBuilder.append(AppConstants.BEFORE_MEAL)
+            sBuilder.append(",")
         }
 
-        bottomSheetDialog.ivPostMedicine.setOnClickListener {
-            if (bottomSheetDialog.ivPostMedicine.isSelected) {
-                bottomSheetDialog.ivPostMedicine.isSelected = false
-            } else {
-                bottomSheetDialog.ivPostMedicine.isSelected = true
-            }
+        if(afterMeal){
+            sBuilder.append(AppConstants.AFTER_MEAL)
+            sBuilder.append(",")
         }
-
-        bottomSheetDialog.ivPostWorkout.setOnClickListener {
-            if (bottomSheetDialog.ivPostWorkout.isSelected) {
-                bottomSheetDialog.ivPostWorkout.isSelected = false
-            } else {
-                bottomSheetDialog.ivPostWorkout.isSelected = true
-            }
+        if(postMedicine){
+            sBuilder.append(AppConstants.POST_MEDICINE)
+            sBuilder.append(",")
         }
-
-        bottomSheetDialog.ivControlSolution.setOnClickListener {
-            if (bottomSheetDialog.ivControlSolution.isSelected) {
-                bottomSheetDialog.ivControlSolution.isSelected = false
-            } else {
-                bottomSheetDialog.ivControlSolution.isSelected = true
-            }
+        if(postWorkout){
+            sBuilder.append(AppConstants.POST_WORKOUT)
+            sBuilder.append(",")
         }
-
-        bottomSheetDialog.tvFromDate.setOnClickListener {
-            selectDate(bottomSheetDialog.tvFromDate)
+        if(controlSolution){
+            sBuilder.append(AppConstants.CONTROLE_SOLUTION)
         }
-
-        bottomSheetDialog.tvToDate.setOnClickListener {
-            selectDate(bottomSheetDialog.tvToDate)
-        }
+        return  sBuilder.toString()
     }
 
     private fun showMealBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
-        bottomSheetDialog.setContentView(R.layout.bottomsheet_meal_logs_filter)
-        bottomSheetDialog.show()
+        bottomSheetDialog.apply {
+            setContentView(R.layout.bottomsheet_meal_logs_filter)
+            setupFullHeight(bottomSheetDialog)
+            show()
 
-        bottomSheetDialog.ivDisplayAll.setOnClickListener {
-            if (bottomSheetDialog.ivDisplayAll.isSelected) {
-                bottomSheetDialog.ivDisplayAll.isSelected = false
-            } else {
-                bottomSheetDialog.ivDisplayAll.isSelected = true
+            resetMealLogFilter()
+
+            ivMealDisplayAll.setOnClickListener {
+                ivMealDisplayAll.isSelected = !ivMealDisplayAll.isSelected
+                displayAll = !ivMealDisplayAll.isSelected
+                ivToday.isSelected = false
+                ivThisWeek.isSelected = false
+                ivThisMonth.isSelected = false
+
+                today = false
+                thisWeek = false
+                thisMonth = false
+            }
+            ivToday.setOnClickListener {
+                ivToday.isSelected = !ivToday.isSelected
+                today = !ivToday.isSelected
+            }
+            ivThisWeek.setOnClickListener {
+                ivThisWeek.isSelected = !ivThisWeek.isSelected
+                thisWeek = !ivThisWeek.isSelected
+            }
+            ivThisMonth.setOnClickListener {
+                ivThisMonth.isSelected = !ivThisMonth.isSelected
+                thisMonth = !ivThisMonth.isSelected
+            }
+            tvMealFromDate.setOnClickListener {
+                selectDate(tvFromDate)
+            }
+            tvMealToDate.setOnClickListener {
+                selectDate(tvToDate)
+            }
+            btnMealApplyFilter.setOnClickListener {
+                // selectDate(tvToDate)
+            }
+            btnReset.setOnClickListener {
+                tvMealFromDate.text = ""
+                tvMealToDate.text = ""
+                displayAll = false
+                ivToday.isSelected = false
+                ivThisWeek.isSelected = false
+                ivThisMonth.isSelected = false
+                resetMealLogFilter()
             }
         }
+    }
 
-        bottomSheetDialog.ivToday.setOnClickListener {
-            if (bottomSheetDialog.ivToday.isSelected) {
-                bottomSheetDialog.ivToday.isSelected = false
-            } else {
-                bottomSheetDialog.ivToday.isSelected = true
-            }
-        }
 
-        bottomSheetDialog.ivThisWeek.setOnClickListener {
-            if (bottomSheetDialog.ivThisWeek.isSelected) {
-                bottomSheetDialog.ivThisWeek.isSelected = false
-            } else {
-                bottomSheetDialog.ivThisWeek.isSelected = true
-            }
-        }
+    private fun resetTestLogFilter() {
+        displayAll = false
+        beforeMeal = false
+        afterMeal = false
+        postMedicine = false
+        postWorkout = false
+        controlSolution = false
+    }
 
-        bottomSheetDialog.ivThisMonth.setOnClickListener {
-            if (bottomSheetDialog.ivThisMonth.isSelected) {
-                bottomSheetDialog.ivThisMonth.isSelected = false
-            } else {
-                bottomSheetDialog.ivThisMonth.isSelected = true
-            }
-        }
-
-        bottomSheetDialog.tvFromDate.setOnClickListener {
-            selectDate(bottomSheetDialog.tvFromDate)
-        }
-
-        bottomSheetDialog.tvToDate.setOnClickListener {
-            selectDate(bottomSheetDialog.tvToDate)
-        }
+    private fun resetMealLogFilter() {
+        displayAll = false
+        today = false
+        thisWeek = false
+        thisMonth = false
     }
 
     private fun selectDate(tvFromDate: AppCompatTextView) {

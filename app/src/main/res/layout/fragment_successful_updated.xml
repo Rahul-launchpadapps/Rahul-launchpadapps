@@ -18,7 +18,7 @@
         android:textSize="@dimen/sp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
-        android:drawableTop="@drawable/successfully_updated_test_details"
+        android:drawableTop="@mipmap/successfully_updated_test_details"
         android:gravity="center"
         android:drawablePadding="@dimen/dp_30"
         app:layout_constraintEnd_toEndOf="parent"

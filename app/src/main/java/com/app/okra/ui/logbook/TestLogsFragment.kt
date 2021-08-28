@@ -16,11 +16,13 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
-import com.app.okra.models.DevicesListModel
-import com.app.okra.models.TestListResponse
 import com.app.okra.utils.Listeners
+import com.app.okra.utils.compareAndGetDateMatchStatus
+import com.app.okra.utils.getDateFromISOInString
+import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.fragment_test_logs.progressBar_loadMore
+import java.util.EnumSet.range
 
 class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
 
@@ -29,7 +31,9 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
     private var pageNo :Int = 1
     private var totalPage: Int = 0
     private var nextHit: Int = 0
-    private val requestList  = ArrayList<Data>()
+    private var hashMapKeyList  = ArrayList<String>()
+    private var hashMapTestLog = hashMapOf<String,  ArrayList<Data>>()
+
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -54,19 +58,23 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        getData()
+        getData(pageNo)
         setObserver()
         setListener()
     }
 
-    private fun getData() {
+    public fun getData(pageNo: Int,
+                        testingTime: String?=null,
+                        fromDate: String?=null,
+                        toDate: String?=null) {
+        viewModel.prepareRequest(pageNo,testingTime, fromDate, toDate)
         viewModel.getTestLogs()
     }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._testListLiveData.observe(viewLifecycleOwner) { it ->
-          //  swipe_request.isRefreshing = false
+            swipe_request.isRefreshing = false
 
             if (it.totalPage != null) {
                 totalPage = it.totalPage
@@ -75,22 +83,56 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
                 nextHit = it.nextHit
             }
             it.data?.let{
-                if (pageNo == 1 && requestList.size > 0)
-                    requestList.clear()
+                if (pageNo == 1 && hashMapTestLog.size > 0) {
+                    hashMapTestLog.clear()
+                    hashMapKeyList.clear()
+                }
 
-                it.data?.let { it1 -> requestList.addAll(it1) }
+                it.data?.let { it1 -> prepareDateWiseData(it1)
+                    /*requestList.addAll(it1)*/ }
                 requestAdapter.notifyDataSetChanged()
             }
             manageViewVisibility()
         }
 
         viewModel._errorObserver.observe(viewLifecycleOwner){
-           // swipe_request.isRefreshing = false
+            swipe_request.isRefreshing = false
+            val data = it.getContent()!!
+            showToast(data.message!!)
+
+            if (data.message == "Your login session has been expired.") {
+                navigateToLogin(requireActivity())
+
+                requireActivity().finish()
+            }
+
         }
     }
 
+    private fun prepareDateWiseData(testLogData: ArrayList<Data>) {
+        val hashMap = hashMapOf<String,  ArrayList<Data>>()
+        if(testLogData.isNotEmpty()) {
+            for ((index, data) in testLogData.withIndex()){
+                val date = data.date
+                date?.let{
+                    val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
+
+                    val list: java.util.ArrayList<Data> = if(hashMap.containsKey(dateToSet)){
+                       hashMap[dateToSet] as ArrayList<Data>
+                    }else{
+                        ArrayList()
+                    }
+                    list.add(data)
+                    hashMap[dateToSet]  = list
+                }
+            }
+        }
+        hashMapTestLog.putAll(hashMap)
+        hashMapKeyList.addAll(hashMap.keys.toList())
+    }
+
     private fun manageViewVisibility() {
-        if(requestList.isNullOrEmpty()){
+        if(hashMapTestLog.isNullOrEmpty()){
             tvNoTestLogged.beVisible()
             rv_test_list.beGone()
         }else{
@@ -100,11 +142,8 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
     }
 
     private fun setAdapter() {
-        requestAdapter = TestLogsAdapter(
-            this,
-            requestList
-        )
-        layoutManager =LinearLayoutManager(requireContext())
+        requestAdapter = TestLogsAdapter(this, hashMapKeyList, hashMapTestLog)
+        layoutManager = LinearLayoutManager(requireContext())
         rv_test_list.layoutManager = layoutManager
         rv_test_list.adapter = requestAdapter
     }
@@ -121,11 +160,16 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
                     if (visibleItemCount + firstVisibleItem >= totalItemCount) {
                         pageNo += 1
                         progressBar_loadMore.visibility = View.VISIBLE
-                        getData()
+                        getData(pageNo)
                     }
                 }
             }
         })
+
+        swipe_request.setOnRefreshListener {
+            pageNo=1
+            getData(1)
+        }
     }
 
     override fun onSelect(o: Any?, o1: Any?) {

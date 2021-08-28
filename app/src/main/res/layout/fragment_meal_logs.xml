@@ -37,7 +37,7 @@
         android:text="@string/no_test_logged"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_20"
-        android:drawableTop="@drawable/no_test_logged"
+        android:drawableTop="@mipmap/no_test_logged"
         android:gravity="center"
         android:visibility="gone"
         android:drawablePadding="@dimen/dp_30"

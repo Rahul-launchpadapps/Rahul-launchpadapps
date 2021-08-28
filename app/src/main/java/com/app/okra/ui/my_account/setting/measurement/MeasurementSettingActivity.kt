@@ -32,7 +32,6 @@ class MeasurementSettingActivity : BaseActivity(), View.OnClickListener{
 
     private val bloodGlucoseList by lazy {
         arrayListOf<String>()
-
     }
 
     private var bloodGlucoseUnit = PreferenceManager.getString(AppConstants.Pref_Key.BLOOD_GLUCOSE_UNIT)

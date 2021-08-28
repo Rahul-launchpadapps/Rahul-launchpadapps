@@ -15,6 +15,7 @@ import com.app.okra.models.Data
 import com.app.okra.ui.logbook.TestLogsViewModel
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
+import com.app.okra.utils.getMealTime
 import com.app.okra.utils.showCustomAlertDialog
 import kotlinx.android.synthetic.main.fragment_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
@@ -39,7 +40,6 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_test_details, container, false)
     }
 
@@ -48,6 +48,15 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
         setUpToolbar()
         setListener()
         getData()
+        setObserver()
+    }
+
+    private fun setObserver() {
+        setBaseObservers(viewModel, this)
+        viewModel._deleteTestLiveData.observe(viewLifecycleOwner) { it ->
+            navController.popBackStack()
+        }
+
     }
 
     private fun setUpToolbar() {
@@ -68,12 +77,20 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
         }
 
         ivDelete.setOnClickListener {
-            showCustomAlertDialog(context,this,getString(R.string.are_you_sure_you_want_to_delete_the_added_test),true,getString(R.string.cancel),getString(R.string.delete),getString(R.string.delete_test))
+            showCustomAlertDialog(
+                context,
+                this,
+                getString(R.string.are_you_sure_you_want_to_delete_the_added_test),
+                true,
+                positiveButtonText=   getString(R.string.delete),
+                negativeButtonText = getString(R.string.cancel),
+                title = getString(R.string.delete_test)
+            )
         }
     }
 
     private fun getData() {
-        arguments?.let {
+        arguments?.let { it ->
             data = it.getParcelable("data")
 
             tvDateValue.text =
@@ -83,7 +100,10 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
                         formatYouWant = "MMM dd yyyy"
                     )
                 }
-            tvTestingTimeValue.text = data?.testingTime ?: ""
+
+            data?.testingTime?.let {
+                tvTestingTimeValue.text =getMealTime(it)
+            }
             tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
             tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
             tvInsulinValue.text = data?.insulin ?: ""
@@ -93,11 +113,12 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
     }
 
     override fun onOkClick(dialog: DialogInterface?) {
-
+        viewModel.deleteTest(data?._id!!)
+        dialog?.dismiss()
     }
 
     override fun onCancelClick(dialog: DialogInterface?) {
-
+        dialog?.dismiss()
     }
 
 }

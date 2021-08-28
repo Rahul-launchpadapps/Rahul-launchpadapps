@@ -16,19 +16,26 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
-import com.app.okra.models.SupportResponse
-import com.app.okra.models.TestListResponse
+import com.app.okra.models.MealData
 import com.app.okra.utils.Listeners
-import kotlinx.android.synthetic.main.fragment_meal_logs.*
+import com.app.okra.utils.getDateFromISOInString
+import com.app.okra.utils.navigateToLogin
+import kotlinx.android.synthetic.main.fragment_meal_logs.progressBar_loadMore
+import kotlinx.android.synthetic.main.fragment_meal_logs.rv_test_list
+import kotlinx.android.synthetic.main.fragment_meal_logs.tvNoTestLogged
+import kotlinx.android.synthetic.main.fragment_test_logs.*
 
 class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var requestAdapter: TestLogsAdapter
+    private lateinit var mealLogsAdapter: MealLogsAdapter
     private var pageNo :Int = 1
     private var totalPage: Int = 0
     private var nextHit: Int = 0
-    private val requestList  = ArrayList<Data>()
+   // private val mealList  = ArrayList<MealData>()
+
+    private var hashMapKeyList  = ArrayList<String>()
+    private var hashMapMealLog = hashMapOf<String,  ArrayList<Data>>()
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -53,19 +60,19 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        getData()
+        getData(pageNo)
         setObserver()
         setListener()
     }
 
-    private fun getData() {
-        viewModel.getMealLogs()
+    private fun getData(pageNo: Int) {
+        viewModel.getMealLogs(pageNo)
     }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
-        viewModel._profileInfoLiveData.observe(viewLifecycleOwner) { it ->
-            //  swipe_request.isRefreshing = false
+        viewModel._mealLogLiveData.observe(viewLifecycleOwner) { it ->
+             swipe_request.isRefreshing = false
 
             if (it.totalPage != null) {
                 totalPage = it.totalPage
@@ -74,22 +81,55 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
                 nextHit = it.nextHit
             }
             it.data?.let{
-                if (pageNo == 1 && requestList.size > 0)
-                    requestList.clear()
+                if (pageNo == 1 && hashMapKeyList.size > 0) {
+                    hashMapMealLog.clear()
+                    hashMapKeyList.clear()
+                }
 
-                // requestList.addAll(it)
-                requestAdapter.notifyDataSetChanged()
+                it.data?.let { it1 -> prepareDateWiseData(it1)}
+                mealLogsAdapter.notifyDataSetChanged()
             }
             manageViewVisibility()
         }
 
         viewModel._errorObserver.observe(viewLifecycleOwner){
-            // swipe_request.isRefreshing = false
+             swipe_request.isRefreshing = false
+            val data = it.getContent()!!
+            showToast(data.message!!)
+
+            if (data.message == "Your login session has been expired.") {
+                navigateToLogin(requireActivity())
+
+                requireActivity().finish()
+            }
         }
     }
 
+    private fun prepareDateWiseData(testLogData: ArrayList<Data>) {
+        val hashMap = hashMapOf<String,  ArrayList<Data>>()
+        if(testLogData.isNotEmpty()) {
+            for ((index, data) in testLogData.withIndex()){
+                val date = data.date
+                date?.let{
+                    val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
+
+                    val list: java.util.ArrayList<Data> = if(hashMap.containsKey(dateToSet)){
+                        hashMap[dateToSet] as ArrayList<Data>
+                    }else{
+                        ArrayList()
+                    }
+                    list.add(data)
+                    hashMap[dateToSet]  = list
+                }
+            }
+        }
+        hashMapMealLog.putAll(hashMap)
+        hashMapKeyList.addAll(hashMap.keys.toList())
+    }
+
+
     private fun manageViewVisibility() {
-        if(requestList.isNullOrEmpty()){
+        if(hashMapKeyList.isNullOrEmpty()){
             tvNoTestLogged.beVisible()
             rv_test_list.beGone()
         }else{
@@ -99,13 +139,10 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     private fun setAdapter() {
-        requestAdapter = TestLogsAdapter(
-            this,
-            requestList
-        )
+        mealLogsAdapter = MealLogsAdapter(this, hashMapKeyList, hashMapMealLog)
         layoutManager = LinearLayoutManager(requireContext())
         rv_test_list.layoutManager = layoutManager
-        rv_test_list.adapter = requestAdapter
+        rv_test_list.adapter = mealLogsAdapter
     }
 
     private fun setListener() {
@@ -120,15 +157,20 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
                     if (visibleItemCount + firstVisibleItem >= totalItemCount) {
                         pageNo += 1
                         progressBar_loadMore.visibility = View.VISIBLE
-                        getData()
+                        getData(pageNo)
                     }
                 }
             }
         })
+
+        swipe_request.setOnRefreshListener {
+            pageNo=1
+            getData(1)
+        }
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-        startActivity(Intent(activity,TestDetailsActivity::class.java))
+        startActivity(Intent(activity,MealDetailsActivity::class.java))
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {

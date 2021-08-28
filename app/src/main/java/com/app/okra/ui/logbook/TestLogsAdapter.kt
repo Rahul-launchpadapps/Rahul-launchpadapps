@@ -6,54 +6,45 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.Data
-import com.app.okra.models.TestListResponse
 import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import kotlinx.android.synthetic.main.row_test_logs.view.*
+import com.app.okra.utils.getDifferentInfoFromDate_String
+import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
 
 class TestLogsAdapter (var listener: Listeners.ItemClickListener,
-                       private val dataList : List<Data>,
+                       private val hashMapKeyList : List<String>,
+                       private val hashMap : HashMap<String, ArrayList<Data>>,
 ) : RecyclerView.Adapter<TestLogsAdapter.ItemViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.row_test_logs, parent, false
+                R.layout.row_test_or_meal_logs, parent, false
             )
         )
     }
 
     override fun getItemCount(): Int {
-        return dataList.size
+        return hashMapKeyList.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.onBind(dataList[position], position)
-
-        holder.itemView.setOnClickListener {
-            listener.onSelect(position, dataList[position])
-        }
+        holder.onBind(position)
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun onBind(data: Data?, position: Int) {
+        fun onBind(position: Int) {
 
-            data?.let{ it ->
-                it.bloodGlucose?.let{
-                    itemView.tvGlucoseValue.text = it
-                }
-                it.testingTime?.let{
-                    itemView.tvDetail.text = it
-                }
+            val dateKey = hashMapKeyList[position]
+            val entriesOfDate = hashMap[dateKey] as ArrayList<Data>
 
-                it.createdAt?.let{
-                    if(it.isNotEmpty()) {
-                        itemView.tvTime.text = getDateFromISOInString(it, formatYouWant = "hh:mm a")
-                    }
-                }
+            itemView.tvDate.text = getDifferentInfoFromDate_String(
+                dateKey,
+                initFormat = "dd/MM/yyyy",
+                formatYouWant = "MMM dd yyyy")
 
-            }
+            val adapter = TestsAdapter(listener, entriesOfDate)
+            itemView.rvTestLogs.adapter = adapter
         }
     }
 }

@@ -30,8 +30,18 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.models.ItemModel
 import com.app.okra.ui.boarding.login.LoginActivity
+import com.app.okra.utils.AppConstants.Companion.AFTER_MEAL
+import com.app.okra.utils.AppConstants.Companion.AFTER_MEAL_TEXT
+import com.app.okra.utils.AppConstants.Companion.BEFORE_MEAL
+import com.app.okra.utils.AppConstants.Companion.BEFORE_MEAL_TEXT
+import com.app.okra.utils.AppConstants.Companion.CONTROLE_SOLUTION
+import com.app.okra.utils.AppConstants.Companion.CONTROLE_SOLUTION_TEXT
 import com.app.okra.utils.AppConstants.Companion.ISO_FORMAT
 import com.app.okra.utils.AppConstants.Companion.ISO_FORMATE
+import com.app.okra.utils.AppConstants.Companion.POST_MEDICINE
+import com.app.okra.utils.AppConstants.Companion.POST_MEDICINE_TEXT
+import com.app.okra.utils.AppConstants.Companion.POST_WORKOUT
+import com.app.okra.utils.AppConstants.Companion.POST_WORKOUT_TEXT
 import com.google.android.gms.maps.model.LatLng
 import java.io.File
 import java.io.UnsupportedEncodingException
@@ -399,13 +409,13 @@ fun getDateFromISOInDate(
 
 
 fun showCustomAlertDialog(
-        context: Context?,
-        listener: Listeners.DialogListener?,
-        message: String?=null,
-        needCancelButton: Boolean,
-        positiveButtonText: String?=null,
-        negativeButtonText: String?=null,
-        title: String?=null
+    context: Context?,
+    listener: Listeners.DialogListener?,
+    message: String?=null,
+    needCancelButton: Boolean,
+    positiveButtonText: String?=null,
+    negativeButtonText: String?=null,
+    title: String?=null
 ) {
     dialog = Dialog(context!!, R.style.MyCustomTheme)
     val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_custom_alert, null)
@@ -629,6 +639,33 @@ fun getDifferentInfoFromDate(
         e.printStackTrace();
     }
     return date;
+}
+
+/*
+@initialFormat : It can be empty. If user set it empty. We will consider by default font "dd-MM-yyyy".
+@formatYouWant: It must not be empty. This is the form you need.
+*/
+fun getDifferentInfoFromDate_String(
+    dateToConvert: String,
+    initFormat: String?,
+    formatYouWant: String
+): String? {
+    var month = "";
+    var date: Date? = null
+    var initialFormat: String? = initFormat
+
+    if (initialFormat == null || initialFormat.isEmpty()) {
+        initialFormat = "dd-MM-yyyy";
+    }
+    val dayFormat = SimpleDateFormat(formatYouWant, Locale.getDefault());
+    try {
+        date = SimpleDateFormat(initialFormat, Locale.getDefault()).parse(dateToConvert);
+        return dayFormat.format(date!!);
+
+    } catch (e: ParseException) {
+        e.printStackTrace();
+    }
+    return null
 }
 
 fun compareDates(
@@ -865,6 +902,50 @@ fun showOptionDialog(
             listener.onUploadFromGallery(dialog)
         }
         show()
+    }
+}
+
+
+fun getMealTime(mealTime: String, forValue :Boolean =true): String{
+
+    if(forValue){
+        return when (mealTime) {
+            AFTER_MEAL -> {
+                AFTER_MEAL_TEXT
+            }
+            BEFORE_MEAL -> {
+                BEFORE_MEAL_TEXT
+            }
+            CONTROLE_SOLUTION -> {
+                CONTROLE_SOLUTION_TEXT
+            }
+            POST_MEDICINE -> {
+                POST_MEDICINE_TEXT
+            }
+            POST_WORKOUT -> {
+                POST_WORKOUT_TEXT
+            }
+            else -> ""
+        }
+    }else{
+        return when (mealTime) {
+            AFTER_MEAL_TEXT -> {
+                AFTER_MEAL
+            }
+            BEFORE_MEAL_TEXT -> {
+                BEFORE_MEAL
+            }
+            CONTROLE_SOLUTION_TEXT -> {
+                CONTROLE_SOLUTION
+            }
+            POST_MEDICINE_TEXT -> {
+                POST_MEDICINE
+            }
+            POST_WORKOUT_TEXT-> {
+                POST_WORKOUT
+            }
+            else -> ""
+        }
     }
 }
 

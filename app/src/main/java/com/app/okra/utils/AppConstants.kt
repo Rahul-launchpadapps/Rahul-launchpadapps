@@ -52,6 +52,16 @@ class AppConstants {
             const val limit: String = "limit"
             const val title: String = "title"
             const val description: String = "description"
+            const val testingTime: String = "testingTime"
+            const val fromDate: String = "fromDate"
+            const val toDate: String = "toDate"
+            const val testId: String = "testId"
+            const val bloodGlucose: String = "bloodGlucose"
+            const val bloodPressure: String = "bloodPressure"
+            const val insulin: String = "insulin"
+            const val additionalNotes: String = "additionalNotes"
+            const val mealsBefore: String = "mealsBefore"
+            const val mealsAfter: String = "mealsAfter"
         }
     }
 
@@ -86,6 +96,19 @@ class AppConstants {
         const val ALLOWED_FILE_SIZE =10
         const val ISO_FORMATE= "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
         const val ISO_FORMAT= "yyyy-MM-dd'T'HH:mm:ss"
+        const val SELECT_TESTING_TIME= "Choose Testing Time"
+        const val AFTER_MEAL_TEXT= "After Meal"
+        const val AFTER_MEAL= "AFTER_MEAL"
+        const val DISPLAY_ALL= "DISPLAY_ALL"
+        const val BEFORE_MEAL_TEXT= "Before Meal"
+        const val BEFORE_MEAL= "BEFORE_MEAL"
+        const val CONTROLE_SOLUTION_TEXT= "Control Solution"
+        const val CONTROLE_SOLUTION= "CONTROLE_SOLUTION"
+        const val POST_MEDICINE_TEXT= "Post Medicine"
+        const val POST_MEDICINE= "POST_MEDICINE"
+        const val POST_WORKOUT_TEXT= "Post Workout"
+        const val POST_WORKOUT= "POST_WORKOUT"
+
     }
 
     object ContentManagementUrl {

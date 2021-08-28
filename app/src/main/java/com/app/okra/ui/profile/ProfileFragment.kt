@@ -291,8 +291,4 @@ class ProfileFragment : BaseFragment(), Listeners.ItemClickListener,
                 .start(requireActivity())
 
     }
-
-
-
-
 }

@@ -6,6 +6,7 @@ import com.app.okra.data.network.ApiService
 import com.app.okra.data.network.BaseRepo
 import com.app.okra.models.ContactResponse
 import com.app.okra.models.TestListResponse
+import com.app.okra.models.TestUpdateRequest
 import com.app.okra.models.UserDetailResponse
 import kotlinx.coroutines.Dispatchers
 import retrofit2.http.QueryMap
@@ -25,6 +26,18 @@ class TestLogsRepoImpl constructor(
     override suspend fun getTestDetails(testId: String): ApiResult<ApiData<TestListResponse>> {
         return safeApiCall(Dispatchers.IO) {
             apiService.getTestDetails(testId)
+        }
+    }
+
+    override suspend fun updateTestLog(params: TestUpdateRequest): ApiResult<ApiData<Any>> {
+        return safeApiCall(Dispatchers.IO) {
+            apiService.updateTest(params)
+        }
+    }
+
+    override suspend fun deleteTest(id: String): ApiResult<ApiData<Any>> {
+        return safeApiCall(Dispatchers.IO) {
+            apiService.deleteTest(id)
         }
     }
 
