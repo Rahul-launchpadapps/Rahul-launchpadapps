@@ -9,4 +9,6 @@ import java.util.*
 interface MealLogsRepo {
     //suspend fun getMealLogs(params: WeakHashMap<String, Any>): ApiResult<ApiData<MealListResponse>>
     suspend fun getMealLogs(params: WeakHashMap<String, Any>): ApiResult<ApiData<TestListResponse>>
+
+
 }

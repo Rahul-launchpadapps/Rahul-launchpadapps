@@ -104,6 +104,8 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
             data?.testingTime?.let {
                 tvTestingTimeValue.text =getMealTime(it)
             }
+
+
             tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
             tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
             tvInsulinValue.text = data?.insulin ?: ""

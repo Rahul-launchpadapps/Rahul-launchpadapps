@@ -1,5 +1,6 @@
 package com.app.okra.ui.logbook
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,10 @@ class TestLogsAdapter (var listener: Listeners.ItemClickListener,
                        private val hashMap : HashMap<String, ArrayList<Data>>,
 ) : RecyclerView.Adapter<TestLogsAdapter.ItemViewHolder>() {
 
+    lateinit var context : Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        context = parent.context
         return ItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.row_test_or_meal_logs, parent, false
@@ -45,6 +48,7 @@ class TestLogsAdapter (var listener: Listeners.ItemClickListener,
 
             val adapter = TestsAdapter(listener, entriesOfDate)
             itemView.rvTestLogs.adapter = adapter
+
         }
     }
 }

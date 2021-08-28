@@ -16,6 +16,8 @@ import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
 class MealLogsAdapter (var listener: Listeners.ItemClickListener,
                        private val hashMapKeyList : List<String>,
                        private val hashMap : HashMap<String, ArrayList<Data>>
+
+
 ) : RecyclerView.Adapter<MealLogsAdapter.ItemViewHolder>() {
 
 

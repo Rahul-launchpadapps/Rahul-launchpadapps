@@ -100,8 +100,25 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
 
     }
 
+    fun  setRequest(
+        pageNo: String?=null,
+        limit: String?=null,
+    ){
+
+        params = WeakHashMap<String, Any>()
+
+        pageNo?.let{
+            params[AppConstants.RequestParam.pageNo] =pageNo
+        }
+
+        limit?.let{
+            params[AppConstants.RequestParam.limit] =it
+        }
+    }
+
     fun getTestLogs() {
         launchDataLoad {
+
             showProgressBar()
             val result = repo?.getTestLogs(params)
             hideProgressBar()

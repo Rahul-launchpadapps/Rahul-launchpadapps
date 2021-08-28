@@ -17,10 +17,14 @@ class MealLogsRepoImpl constructor(
 
     override suspend fun getMealLogs(params: WeakHashMap<String, Any>): ApiResult<ApiData<TestListResponse>> {
         return safeApiCall(Dispatchers.IO) {
-            //apiService.getMealLogs(params)
             apiService.getTestLogs(params)
         }
     }
+    /*override suspend fun getMealLogs(params: WeakHashMap<String, Any>): ApiResult<ApiData<MealListResponse>> {
+        return safeApiCall(Dispatchers.IO) {
+            apiService.getMealLogs(params)
+        }
+    }*/
 
 }
 

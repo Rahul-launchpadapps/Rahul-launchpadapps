@@ -15,17 +15,34 @@ import java.util.*
 
 class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
 
+
+   /* private var mealLogLiveData = MutableLiveData<ApiData<MealListResponse>>()
+    val _mealLogLiveData: LiveData<ApiData<MealListResponse>>
+        get() = mealLogLiveData*/
+
     private var mealLogLiveData = MutableLiveData<ApiData<TestListResponse>>()
     val _mealLogLiveData: LiveData<ApiData<TestListResponse>>
         get() = mealLogLiveData
 
     var params= WeakHashMap<String, Any>()
 
-    fun getMealLogs(pageNo:Int) {
-        launchDataLoad {
-            params[AppConstants.RequestParam.pageNo] = pageNo
-            params[AppConstants.RequestParam.limit] = AppConstants.DATA_LIMIT
+    fun  setRequest(
+        pageNo: Int?=null,
+        limit: String?=null,
+    ){
 
+        params = WeakHashMap<String, Any>()
+
+        pageNo?.let{
+            params[AppConstants.RequestParam.pageNo] =pageNo
+        }
+
+         params[AppConstants.RequestParam.limit] =AppConstants.DATA_LIMIT
+
+    }
+
+    fun getMealLogs() {
+        launchDataLoad {
             showProgressBar()
             val result = repo?.getMealLogs(params)
             hideProgressBar()

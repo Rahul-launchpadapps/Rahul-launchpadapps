@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/selector_tick.xml" value="0.2074074074074074" />
+        <entry key="app/src/main/res/layout/activity_add_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_meal_details.xml" value="0.10643115942028986" />
@@ -17,7 +18,7 @@
         <entry key="app/src/main/res/layout/fragment_edit_test_details.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_logbook.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_meal_details.xml" value="0.19791666666666666" />
-        <entry key="app/src/main/res/layout/fragment_meal_logs.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/fragment_meal_logs.xml" value="0.14" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_successful_updated.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_support_request_list.xml" value="0.10643115942028986" />
@@ -32,7 +33,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

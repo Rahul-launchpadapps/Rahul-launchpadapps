@@ -16,14 +16,17 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
-import com.app.okra.models.MealData
+
+
+import com.app.okra.ui.logbook.add_meal.AddMealActivity
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
+import kotlinx.android.synthetic.main.fragment_meal_logs.*
 import kotlinx.android.synthetic.main.fragment_meal_logs.progressBar_loadMore
-import kotlinx.android.synthetic.main.fragment_meal_logs.rv_test_list
+import kotlinx.android.synthetic.main.fragment_meal_logs.rv_meal_list
 import kotlinx.android.synthetic.main.fragment_meal_logs.tvNoTestLogged
-import kotlinx.android.synthetic.main.fragment_test_logs.*
 
 class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
 
@@ -32,10 +35,11 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     private var pageNo :Int = 1
     private var totalPage: Int = 0
     private var nextHit: Int = 0
-   // private val mealList  = ArrayList<MealData>()
+    // private val mealList  = ArrayList<MealData>()
 
     private var hashMapKeyList  = ArrayList<String>()
     private var hashMapMealLog = hashMapOf<String,  ArrayList<Data>>()
+
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -54,7 +58,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_test_logs, container, false)
+        return inflater.inflate(R.layout.fragment_meal_logs, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,13 +70,14 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     private fun getData(pageNo: Int) {
-        viewModel.getMealLogs(pageNo)
+        viewModel.setRequest(pageNo)
+        viewModel.getMealLogs()
     }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._mealLogLiveData.observe(viewLifecycleOwner) { it ->
-             swipe_request.isRefreshing = false
+            swipe_request.isRefreshing = false
 
             if (it.totalPage != null) {
                 totalPage = it.totalPage
@@ -88,12 +93,13 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
 
                 it.data?.let { it1 -> prepareDateWiseData(it1)}
                 mealLogsAdapter.notifyDataSetChanged()
+
             }
             manageViewVisibility()
         }
 
         viewModel._errorObserver.observe(viewLifecycleOwner){
-             swipe_request.isRefreshing = false
+            swipe_request.isRefreshing = false
             val data = it.getContent()!!
             showToast(data.message!!)
 
@@ -131,26 +137,27 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     private fun manageViewVisibility() {
         if(hashMapKeyList.isNullOrEmpty()){
             tvNoTestLogged.beVisible()
-            rv_test_list.beGone()
+            rv_meal_list.beGone()
         }else{
             tvNoTestLogged.beGone()
-            rv_test_list.beVisible()
+            rv_meal_list.beVisible()
         }
     }
 
     private fun setAdapter() {
         mealLogsAdapter = MealLogsAdapter(this, hashMapKeyList, hashMapMealLog)
+
         layoutManager = LinearLayoutManager(requireContext())
-        rv_test_list.layoutManager = layoutManager
-        rv_test_list.adapter = mealLogsAdapter
+        rv_meal_list.layoutManager = layoutManager
+        rv_meal_list.adapter = mealLogsAdapter
     }
 
     private fun setListener() {
-        rv_test_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rv_meal_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val visibleItemCount: Int = rv_test_list.childCount
-                val totalItemCount: Int = rv_test_list.layoutManager!!.itemCount
+                val visibleItemCount: Int = rv_meal_list.childCount
+                val totalItemCount: Int = rv_meal_list.layoutManager!!.itemCount
                 val firstVisibleItem: Int =layoutManager.findFirstVisibleItemPosition()
 
                 if(nextHit>0) {
@@ -164,8 +171,11 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
         })
 
         swipe_request.setOnRefreshListener {
-            pageNo=1
+            pageNo = 1
             getData(1)
+        }
+        ivAdd.setOnClickListener {
+            startActivity(Intent(activity,AddMealActivity::class.java))
         }
     }
 
