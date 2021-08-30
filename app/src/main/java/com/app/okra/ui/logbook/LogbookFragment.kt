@@ -16,6 +16,9 @@ import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.ui.logbook.meal.MealLogsFragment
+import com.app.okra.ui.logbook.test.TestLogsFragment
+import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.utils.AppConstants
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog

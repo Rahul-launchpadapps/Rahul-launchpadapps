@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook
+package com.app.okra.ui.logbook.meal
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.Data
-import com.app.okra.models.MealData
-import com.app.okra.models.TestListResponse
 import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.getDifferentInfoFromDate_String
 import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
 

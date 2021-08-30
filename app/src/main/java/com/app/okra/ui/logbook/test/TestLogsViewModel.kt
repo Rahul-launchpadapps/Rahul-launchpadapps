@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook
+package com.app.okra.ui.logbook.test
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

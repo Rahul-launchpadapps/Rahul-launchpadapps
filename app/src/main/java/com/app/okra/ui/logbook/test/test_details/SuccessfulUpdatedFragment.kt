@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook.meal_detail
+package com.app.okra.ui.logbook.test.test_details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
-import com.app.okra.extension.beVisible
-import kotlinx.android.synthetic.main.layout_header.*
+import com.app.okra.utils.AppConstants.RequestOrResultCodes.RESULT_CODE_TEST_LOG_UPDATED
+import kotlinx.android.synthetic.main.layout_button.*
 
-class EditMealDetailsFragment : BaseFragment() {
+class SuccessfulUpdatedFragment : BaseFragment() {
     override fun getViewModel(): BaseViewModel? {
         return null
     }
@@ -20,27 +20,21 @@ class EditMealDetailsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_meal_details, container, false)
+        return inflater.inflate(R.layout.fragment_successful_updated, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpToolbar()
+        btnCommon.text = getString(R.string.ok)
         setListener()
     }
 
-    private fun setUpToolbar() {
-        tvTitle.text = getString(R.string.edit_meal_details)
-        btnSave.beVisible()
-    }
-
     private fun setListener() {
-        ivBack.setOnClickListener {
-            activity?.finish()
-        }
-
-        btnSave.setOnClickListener {
-            navController.navigate(R.id.action_editMealDetails_to_successfulUpdatedFragment, null)
+        btnCommon.setOnClickListener{
+            requireActivity().apply{
+                setResult(RESULT_CODE_TEST_LOG_UPDATED)
+                finish()
+            }
         }
     }
 }

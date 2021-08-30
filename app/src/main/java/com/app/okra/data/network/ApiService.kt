@@ -70,7 +70,7 @@ interface ApiService {
     suspend fun updateTest(@Body params: TestUpdateRequest): Response<BaseResponse<Any>>
 
    @DELETE("v1/test")
-    suspend fun deleteTest(@Path("id")  id:String): Response<BaseResponse<Any>>
+    suspend fun deleteTest(@Query("testId")  id:String): Response<BaseResponse<Any>>
 
 
 }

@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook
+package com.app.okra.ui.logbook.test
 
 import android.content.Context
 import android.view.LayoutInflater

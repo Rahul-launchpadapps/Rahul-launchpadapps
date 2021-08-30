@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook
+package com.app.okra.ui.logbook.meal
 
 import android.os.Bundle
 import com.app.okra.R

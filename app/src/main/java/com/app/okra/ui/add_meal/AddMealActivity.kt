@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook.add_meal
+package com.app.okra.ui.add_meal
 
 import android.content.DialogInterface
 import android.content.Intent

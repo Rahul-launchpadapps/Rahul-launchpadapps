@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook
+package com.app.okra.ui.logbook.meal
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,8 +18,7 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 
 
-import com.app.okra.ui.logbook.add_meal.AddMealActivity
-import com.app.okra.utils.AppConstants
+import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
@@ -180,7 +179,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-        startActivity(Intent(activity,MealDetailsActivity::class.java))
+        startActivity(Intent(activity, MealDetailsActivity::class.java))
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {

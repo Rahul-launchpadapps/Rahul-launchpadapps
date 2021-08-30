@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook.test_details
+package com.app.okra.ui.logbook.test.test_details
 
 import android.os.Bundle
 import android.text.Editable
@@ -17,7 +17,7 @@ import com.app.okra.extension.beInvisible
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
-import com.app.okra.ui.logbook.TestLogsViewModel
+import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
 import com.app.okra.utils.*
 import kotlinx.android.synthetic.main.fragment_edit_test_details.*
@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceIdValue
 import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceNameValue
 import kotlinx.android.synthetic.main.fragment_edit_test_details.tvInsulinValue
 import kotlinx.android.synthetic.main.fragment_edit_test_details.tvTestingTimeValue
-import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.layout_header.*
 import kotlinx.android.synthetic.main.layout_header.btnSave
 
@@ -227,8 +226,8 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
                     bloodPressure = bloodPresure,
                     insulin = insulin,
                     additionalNotes = etNotes.text.toString().trim(),
-                    mealsAfter = mealAfter,
-                    mealsBefore = mealBefore,
+                    mealsAfter = null,
+                    mealsBefore = null,
                     testingTime = testingTime
                 )
                 viewModel.updateTest()

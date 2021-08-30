@@ -7,7 +7,6 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.ui.boarding.login.LoginActivity
-import com.app.okra.ui.logbook.TestDetailsActivity
 import com.app.okra.ui.tutorial.TutorialsActivity
 
 

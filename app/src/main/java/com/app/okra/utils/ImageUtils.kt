@@ -13,7 +13,6 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import com.app.okra.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
@@ -61,7 +60,7 @@ class ImageUtils {
                     takePictureIntent.putExtra("return-data", true)
                     mActivity.startActivityForResult(
                         takePictureIntent,
-                        AppConstants.RequestCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
+                        AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
                     )
                 }
             }
@@ -89,7 +88,7 @@ class ImageUtils {
     fun setImageResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                AppConstants.RequestCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA -> {
+                AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA -> {
                     if (photoURI != null) {
                         val image: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             Uri.parse(mCurrentPhotoPath)
@@ -100,7 +99,7 @@ class ImageUtils {
                     }
                 }
 
-                AppConstants.RequestCodes.REQUEST_PICK_IMAGE_FROM_GALLERY -> {
+                AppConstants.RequestOrResultCodes.REQUEST_PICK_IMAGE_FROM_GALLERY -> {
                     if (data != null) {
 
                         photoURI = data.data
@@ -118,7 +117,7 @@ class ImageUtils {
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         mActivity.startActivityForResult(
             intent,
-            AppConstants.RequestCodes.REQUEST_PICK_IMAGE_FROM_GALLERY
+            AppConstants.RequestOrResultCodes.REQUEST_PICK_IMAGE_FROM_GALLERY
         )
     }
 

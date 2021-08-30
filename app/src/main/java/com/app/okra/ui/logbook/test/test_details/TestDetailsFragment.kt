@@ -1,4 +1,4 @@
-package com.app.okra.ui.logbook.test_details
+package com.app.okra.ui.logbook.test.test_details
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -12,11 +12,8 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
-import com.app.okra.ui.logbook.TestLogsViewModel
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import com.app.okra.utils.getMealTime
-import com.app.okra.utils.showCustomAlertDialog
+import com.app.okra.ui.logbook.test.TestLogsViewModel
+import com.app.okra.utils.*
 import kotlinx.android.synthetic.main.fragment_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
 
@@ -54,7 +51,10 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
     private fun setObserver() {
         setBaseObservers(viewModel, this)
         viewModel._deleteTestLiveData.observe(viewLifecycleOwner) { it ->
-            navController.popBackStack()
+            requireActivity().apply{
+                setResult(AppConstants.RequestOrResultCodes.RESULT_CODE_TEST_LOG_DELETED)
+                finish()
+            }
         }
 
     }

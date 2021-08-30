@@ -1,10 +1,11 @@
-package com.app.okra.ui.logbook
+package com.app.okra.ui.logbook.test
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,15 +17,14 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
+import com.app.okra.ui.logbook.test.contract.TestLogContract
 
 
 import com.app.okra.utils.Listeners
-import com.app.okra.utils.compareAndGetDateMatchStatus
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.fragment_test_logs.progressBar_loadMore
-import java.util.EnumSet.range
 
 class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
 
@@ -174,14 +174,26 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
         }
     }
 
+    val activityForResult = registerForActivityResult(TestLogContract()){ result ->
+            if(result){
+                pageNo=1
+                getData(1)
+            }
+    }
+
+
+
     override fun onSelect(o: Any?, o1: Any?) {
         val data = o1 as Data
 
-        startActivity(Intent(activity,TestDetailsActivity::class.java)
-            .putExtra("data",data))
+        activityForResult.launch(data)
+
+      /*  startActivity(Intent(activity, TestDetailsActivity::class.java)
+            .putExtra("data",data))*/
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {
     }
+
 
 }

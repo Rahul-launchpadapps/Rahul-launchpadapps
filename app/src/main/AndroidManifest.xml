@@ -35,13 +35,13 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".ui.logbook.add_meal.AddMealActivity"
+            android:name="com.app.okra.ui.add_meal.AddMealActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.logbook.TestDetailsActivity"
+            android:name=".ui.logbook.test.TestDetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.logbook.MealDetailsActivity"
+            android:name=".ui.logbook.meal.MealDetailsActivity"
             android:exported="true" />
 
         <provider

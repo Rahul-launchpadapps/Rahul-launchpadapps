@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mealDetails"
-        android:name="com.app.okra.ui.logbook.meal_detail.MealDetailsFragment"
+        android:name="com.app.okra.ui.logbook.meal.meal_detail.MealDetailsFragment"
         tools:layout="@layout/fragment_meal_details">
         <action
             android:id="@+id/action_mealDetails_to_editMealDetails"
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/editMealDetails"
-        android:name="com.app.okra.ui.logbook.meal_detail.EditMealDetailsFragment"
+        android:name="com.app.okra.ui.logbook.meal.meal_detail.EditMealDetailsFragment"
         android:label="EditMealDetails"
         tools:layout="@layout/fragment_edit_meal_details">
         <action
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/successfulUpdatedFragment"
-        android:name="com.app.okra.ui.logbook.test_details.SuccessfulUpdatedFragment"
+        android:name="com.app.okra.ui.logbook.test.test_details.SuccessfulUpdatedFragment"
         android:label="SuccessfulUpdatedFragment" />
 
 </navigation>
