@@ -43,7 +43,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/axiforma_semibold"
         android:maxLines="1"
-        android:text="@string/no_test_logged"
+        android:text="@string/no_meal_logged"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_20"
         android:drawableTop="@mipmap/no_test_logged"

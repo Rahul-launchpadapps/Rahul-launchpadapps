@@ -47,6 +47,28 @@
             android:layout_height="match_parent"
             android:padding="@dimen/dp_20">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_image"
+                android:layout_width="@dimen/dp_140"
+                android:layout_height="@dimen/dp_150"
+                app:cardCornerRadius="@dimen/dp_10"
+                app:cardElevation="@dimen/dp_8"
+                android:elevation="@dimen/dp_5"
+                card_view:cardUseCompatPadding="true"
+                android:padding="@dimen/dp_1"
+                app:cardBackgroundColor="@color/bg_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_person_placeholder_bg"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
@@ -54,24 +76,26 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:fontFamily="@font/axiforma_medium"
+                android:layout_marginTop="@dimen/dp_10"
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="@string/date_time"
                 android:textColor="@color/black_2"
                 android:textSize="@dimen/sp_16"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/cv_image" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDateValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/axiforma_regular"
+                android:layout_marginTop="@dimen/dp_10"
                 android:gravity="center"
                 android:textColor="@color/grey_4"
                 android:textSize="@dimen/sp_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_image"
                 tools:text="Apr 15 2021"/>
 
             <androidx.appcompat.widget.AppCompatTextView

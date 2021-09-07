@@ -72,5 +72,10 @@ interface ApiService {
    @DELETE("v1/test")
     suspend fun deleteTest(@Query("testId")  id:String): Response<BaseResponse<Any>>
 
+    @DELETE("v1/meals")
+    suspend fun deleteMeal(@Query("mealsId")  id:String): Response<BaseResponse<Any>>
+
+    @PUT("v1/meals")
+    suspend fun updateMeal(@Body params: MealUpdateRequest): Response<BaseResponse<Any>>
 
 }

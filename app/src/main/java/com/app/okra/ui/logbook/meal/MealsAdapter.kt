@@ -5,13 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
-import com.app.okra.models.Data
+import com.app.okra.models.MealData
 import com.app.okra.utils.Listeners
+import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.getMealTime
-import kotlinx.android.synthetic.main.row_meal.view.*
+import kotlinx.android.synthetic.main.row_meal.view.tvDetail
+import kotlinx.android.synthetic.main.row_meal.view.tvGlucoseValue
 
 class MealsAdapter (var listener: Listeners.ItemClickListener,
-                    private val dataList :  ArrayList<Data>,
+                    private val dataList :  ArrayList<MealData>,
 ) : RecyclerView.Adapter<MealsAdapter.ItemViewHolder>() {
 
 
@@ -36,14 +38,16 @@ class MealsAdapter (var listener: Listeners.ItemClickListener,
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun onBind(data: Data?, position: Int) {
+        fun onBind(data: MealData?, position: Int) {
 
             data?.let{ it ->
-                it.bloodGlucose?.let{
-                    itemView.tvGlucoseValue.text = "$it mg/dL"
+                it.carbs?.let{
+                    itemView.tvDetail.text = it.value + " " + it.unit
                 }
-                it.testingTime?.let{
-                    itemView.tvDetail.text = getMealTime(it)
+                it.createdAt?.let{
+                    if(it.isNotEmpty()) {
+                        itemView.tvGlucoseValue.text = getDateFromISOInString(it, formatYouWant = "hh:mm a")
+                    }
                 }
 
             }

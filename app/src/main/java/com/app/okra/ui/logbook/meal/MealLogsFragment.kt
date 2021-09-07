@@ -16,9 +16,12 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
+import com.app.okra.models.MealData
 
 
 import com.app.okra.ui.add_meal.AddMealActivity
+import com.app.okra.ui.logbook.test.contract.MealLogContract
+import com.app.okra.ui.logbook.test.contract.TestLogContract
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
@@ -37,7 +40,7 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     // private val mealList  = ArrayList<MealData>()
 
     private var hashMapKeyList  = ArrayList<String>()
-    private var hashMapMealLog = hashMapOf<String,  ArrayList<Data>>()
+    private var hashMapMealLog = hashMapOf<String,  ArrayList<MealData>>()
 
 
     override fun getViewModel(): BaseViewModel? {
@@ -50,6 +53,13 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
                 MealLogsViewModel(MealLogsRepoImpl(apiServiceAuth))
             }
         ).get(MealLogsViewModel::class.java)
+    }
+
+    val activityForResult = registerForActivityResult(MealLogContract()){ result ->
+        if(result){
+            pageNo=1
+            getData(1)
+        }
     }
 
     override fun onCreateView(
@@ -68,8 +78,9 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
         setListener()
     }
 
-    private fun getData(pageNo: Int) {
-        viewModel.setRequest(pageNo)
+     fun getData(pageNo: Int,fromDate: String?=null,
+                        toDate: String?=null) {
+        viewModel.prepareRequest(pageNo,fromDate,toDate)
         viewModel.getMealLogs()
     }
 
@@ -104,22 +115,21 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
 
             if (data.message == "Your login session has been expired.") {
                 navigateToLogin(requireActivity())
-
                 requireActivity().finish()
             }
         }
     }
 
-    private fun prepareDateWiseData(testLogData: ArrayList<Data>) {
-        val hashMap = hashMapOf<String,  ArrayList<Data>>()
+    private fun prepareDateWiseData(testLogData: ArrayList<MealData>) {
+        val hashMap = hashMapOf<String,  ArrayList<MealData>>()
         if(testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()){
                 val date = data.date
                 date?.let{
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 
-                    val list: java.util.ArrayList<Data> = if(hashMap.containsKey(dateToSet)){
-                        hashMap[dateToSet] as ArrayList<Data>
+                    val list: java.util.ArrayList<MealData> = if(hashMap.containsKey(dateToSet)){
+                        hashMap[dateToSet] as ArrayList<MealData>
                     }else{
                         ArrayList()
                     }
@@ -179,7 +189,8 @@ class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-        startActivity(Intent(activity, MealDetailsActivity::class.java))
+        val data = o1 as MealData
+        activityForResult.launch(data)
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {

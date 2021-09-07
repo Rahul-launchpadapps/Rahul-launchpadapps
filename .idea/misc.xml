@@ -14,7 +14,7 @@
         <entry key="app/src/main/res/layout/bottomsheet_meal_logs_filter.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_custom_alert.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/dialog_more_option.xml" value="0.19791666666666666" />
-        <entry key="app/src/main/res/layout/fragment_edit_meal_details.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/fragment_edit_meal_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_edit_test_details.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_logbook.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_meal_details.xml" value="0.19791666666666666" />
@@ -26,14 +26,17 @@
         <entry key="app/src/main/res/layout/fragment_test_logs.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/layout_header.xml" value="0.67" />
         <entry key="app/src/main/res/layout/row_dots.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/row_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_profile.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/row_support_request.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/row_test.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_test_logs.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/row_test_or_meal_logs.xml" value="0.18" />
         <entry key="app/src/main/res/layout/selector_tick.xml" value="0.10643115942028986" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

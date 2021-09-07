@@ -1,11 +1,9 @@
 package com.app.okra.ui.logbook.test
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +15,7 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
+import com.app.okra.ui.logbook.test.contract.MealLogContract
 import com.app.okra.ui.logbook.test.contract.TestLogContract
 
 
@@ -180,8 +179,6 @@ class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
                 getData(1)
             }
     }
-
-
 
     override fun onSelect(o: Any?, o1: Any?) {
         val data = o1 as Data

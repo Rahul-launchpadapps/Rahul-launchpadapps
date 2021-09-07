@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.Data
+import com.app.okra.models.MealData
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDifferentInfoFromDate_String
 import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
 
 class MealLogsAdapter (var listener: Listeners.ItemClickListener,
                        private val hashMapKeyList : List<String>,
-                       private val hashMap : HashMap<String, ArrayList<Data>>
+                       private val hashMap : HashMap<String, ArrayList<MealData>>
 
 
 ) : RecyclerView.Adapter<MealLogsAdapter.ItemViewHolder>() {
@@ -39,7 +40,7 @@ class MealLogsAdapter (var listener: Listeners.ItemClickListener,
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun onBind( position: Int) {
             val dateKey = hashMapKeyList[position]
-            val entriesOfDate = hashMap[dateKey] as ArrayList<Data>
+            val entriesOfDate = hashMap[dateKey] as ArrayList<MealData>
 
             itemView.tvDate.text = getDifferentInfoFromDate_String(
                 dateKey,

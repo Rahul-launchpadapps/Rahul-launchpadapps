@@ -14,7 +14,6 @@
       android:background="@color/bg_grey"
       tools:context=".ui.boarding.login.LoginActivity">
 
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvHeading"
         android:layout_width="@dimen/dp_0"

@@ -36,20 +36,20 @@ import java.util.*
 
 class LogbookFragment : BaseFragment() {
 
-    private var mPagerAdapter: ViewPagerBottomBar?=null
+    private var mPagerAdapter: ViewPagerBottomBar? = null
     private var mYear: Int = 0
     private var mMonth: Int = 0
     private var mDay: Int = 0
-    private var displayAll =false
-    private var beforeMeal =false
-    private var afterMeal =false
-    private var postMedicine =false
-    private var postWorkout=false
-    private var controlSolution=false
+    private var displayAll = false
+    private var beforeMeal = false
+    private var afterMeal = false
+    private var postMedicine = false
+    private var postWorkout = false
+    private var controlSolution = false
 
-    private var today=false
-    private var thisWeek=false
-    private var thisMonth=false
+    private var today = false
+    private var thisWeek = false
+    private var thisMonth = false
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -92,7 +92,8 @@ class LogbookFragment : BaseFragment() {
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {}
+            ) {
+            }
 
             override fun onPageSelected(position: Int) {
                 handleTabsBackground(position)
@@ -111,7 +112,7 @@ class LogbookFragment : BaseFragment() {
         }
 
         ivFilter.setOnClickListener {
-            if(viewPager.currentItem == 0)
+            if (viewPager.currentItem == 0)
                 showTestBottomSheetDialog()
             else
                 showMealBottomSheetDialog()
@@ -144,7 +145,8 @@ class LogbookFragment : BaseFragment() {
     }
 
     private fun setupFullHeight(bottomSheet: BottomSheetDialog) {
-        val parentLayout = bottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val parentLayout =
+            bottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         parentLayout?.let { it ->
             val behaviour = BottomSheetBehavior.from(it)
             val layoutParams = it.layoutParams
@@ -153,6 +155,7 @@ class LogbookFragment : BaseFragment() {
             behaviour.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
+
     private fun showTestBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog.apply {
@@ -164,11 +167,11 @@ class LogbookFragment : BaseFragment() {
 
             ivDisplayAll.setOnClickListener {
                 ivDisplayAll.isSelected = !ivDisplayAll.isSelected
-                ivBeforeMeal.isSelected= false
-                ivAfterMeal.isSelected= false
-                ivPostMedicine.isSelected= false
-                ivPostWorkout.isSelected= false
-                ivControlSolution.isSelected= false
+                ivBeforeMeal.isSelected = false
+                ivAfterMeal.isSelected = false
+                ivPostMedicine.isSelected = false
+                ivPostWorkout.isSelected = false
+                ivControlSolution.isSelected = false
 
                 beforeMeal = false
                 afterMeal = false
@@ -221,7 +224,7 @@ class LogbookFragment : BaseFragment() {
                 selectDate(tvToDate)
             }
             btnApplyFilter.setOnClickListener {
-                if (mPagerAdapter?.position == 0){
+                if (mPagerAdapter?.position == 0) {
                     val testLogFragment = mPagerAdapter?.getItem(0) as TestLogsFragment
                     val toDate = tvToDate.text.toString().trim()
                     val fromDate = tvFromDate.text.toString().trim()
@@ -229,8 +232,8 @@ class LogbookFragment : BaseFragment() {
                     testLogFragment.getData(
                         pageNo = 1,
                         testingTime = filterTiming,
-                        fromDate= fromDate,
-                        toDate= toDate,
+                        fromDate = fromDate,
+                        toDate = toDate,
                     )
                     bottomSheetDialog.dismiss()
                 }
@@ -238,12 +241,12 @@ class LogbookFragment : BaseFragment() {
             btnReset.setOnClickListener {
                 tvFromDate.text = ""
                 tvToDate.text = ""
-                ivDisplayAll.isSelected =false
-                ivBeforeMeal.isSelected= false
-                ivAfterMeal.isSelected= false
-                ivPostMedicine.isSelected= false
-                ivPostWorkout.isSelected= false
-                ivControlSolution.isSelected= false
+                ivDisplayAll.isSelected = false
+                ivBeforeMeal.isSelected = false
+                ivAfterMeal.isSelected = false
+                ivPostMedicine.isSelected = false
+                ivPostWorkout.isSelected = false
+                ivControlSolution.isSelected = false
                 resetTestLogFilter()
             }
         }
@@ -252,31 +255,31 @@ class LogbookFragment : BaseFragment() {
     private fun getSelectedFilterTiming(): String {
         val sBuilder = StringBuilder()
 
-        if(displayAll){
+        if (displayAll) {
             sBuilder.append(AppConstants.DISPLAY_ALL)
         }
 
-        if(beforeMeal){
+        if (beforeMeal) {
             sBuilder.append(AppConstants.BEFORE_MEAL)
             sBuilder.append(",")
         }
 
-        if(afterMeal){
+        if (afterMeal) {
             sBuilder.append(AppConstants.AFTER_MEAL)
             sBuilder.append(",")
         }
-        if(postMedicine){
+        if (postMedicine) {
             sBuilder.append(AppConstants.POST_MEDICINE)
             sBuilder.append(",")
         }
-        if(postWorkout){
+        if (postWorkout) {
             sBuilder.append(AppConstants.POST_WORKOUT)
             sBuilder.append(",")
         }
-        if(controlSolution){
+        if (controlSolution) {
             sBuilder.append(AppConstants.CONTROLE_SOLUTION)
         }
-        return  sBuilder.toString()
+        return sBuilder.toString()
     }
 
     private fun showMealBottomSheetDialog() {
@@ -312,13 +315,22 @@ class LogbookFragment : BaseFragment() {
                 thisMonth = !ivThisMonth.isSelected
             }
             tvMealFromDate.setOnClickListener {
-                selectDate(tvFromDate)
+                selectDate(tvMealFromDate)
             }
             tvMealToDate.setOnClickListener {
-                selectDate(tvToDate)
+                selectDate(tvMealToDate)
             }
             btnMealApplyFilter.setOnClickListener {
-                // selectDate(tvToDate)
+                val mealLogFragment = mPagerAdapter?.getItem(1) as MealLogsFragment
+                val toDate = tvMealToDate.text.toString().trim()
+                val fromDate = tvMealFromDate.text.toString().trim()
+                val filterTiming = getSelectedFilterTiming()
+                mealLogFragment.getData(
+                    pageNo = 1,
+                    fromDate = fromDate,
+                    toDate = toDate,
+                )
+                bottomSheetDialog.dismiss()
             }
             btnReset.setOnClickListener {
                 tvMealFromDate.text = ""
@@ -355,10 +367,12 @@ class LogbookFragment : BaseFragment() {
         mMonth = c.get(Calendar.MONTH)
         mDay = c.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
-            val strDate: String = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
-            tvFromDate.text = strDate
-        }, mYear, mMonth, mDay)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
+                val strDate: String =
+                    year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
+                tvFromDate.text = strDate
+            }, mYear, mMonth, mDay)
         val c1 = Calendar.getInstance()
         c1.add(Calendar.MONTH, -2)
         datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
