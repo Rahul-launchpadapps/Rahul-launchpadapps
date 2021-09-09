@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
+import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MealLogsRepoImpl
 import com.app.okra.extension.beGone
@@ -30,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_meal_logs.progressBar_loadMore
 import kotlinx.android.synthetic.main.fragment_meal_logs.rv_meal_list
 import kotlinx.android.synthetic.main.fragment_meal_logs.tvNoTestLogged
 
-class MealLogsFragment : BaseFragment(), Listeners.ItemClickListener {
+class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var mealLogsAdapter: MealLogsAdapter

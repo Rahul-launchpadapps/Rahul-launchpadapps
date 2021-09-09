@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
+import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
@@ -34,7 +35,7 @@ import kotlinx.android.synthetic.main.bottomsheet_meal_logs_filter.ivMealDisplay
 import kotlinx.android.synthetic.main.fragment_logbook.*
 import java.util.*
 
-class LogbookFragment : BaseFragment() {
+class LogbookFragment : BaseFragmentWithoutNav() {
 
     private var mPagerAdapter: ViewPagerBottomBar? = null
     private var mYear: Int = 0

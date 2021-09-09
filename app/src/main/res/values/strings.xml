@@ -145,4 +145,7 @@
     <string name="edit_meal_details">Edit Meal Details</string>
     <string name="new_meal">New Meal</string>
     <string name="add_meal">Add Meal</string>
+    <string name="add_new">Add New</string>
+    <string name="add_new_test">Add New Test</string>
+    <string name="add_new_meal">Add New Meal</string>
 </resources>

@@ -9,13 +9,19 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import com.app.okra.data.network.ApiManager
+import com.app.okra.data.network.ApiService
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.navigateToLogin
 import com.app.okra.utils.showProgressDialog
 
 abstract class BaseFragmentWithoutNav : Fragment() {
 
     var builder: AlertDialog.Builder? = null
     private var progressDialog: androidx.appcompat.app.AlertDialog? = null
+    protected var apiService: ApiService = ApiManager.getRetrofit()
+    protected var apiServiceAuth: ApiService = ApiManager.getRetrofitAuth()
 
     private var viewModel: BaseViewModel? = null
 
@@ -113,4 +119,53 @@ abstract class BaseFragmentWithoutNav : Fragment() {
     open fun hideProgressBar() {
         progressDialog?.let { if (it.isShowing) it.dismiss() }
     }
+
+    protected fun setBaseObservers(
+        viewModel: BaseViewModel?,
+        lifecycleOwner: LifecycleOwner,
+        observeToast :Boolean = true,
+        observeError :Boolean = true,
+        observeProgress :Boolean = true,
+    ) {
+        viewModel?.apply {
+            if(observeError) {
+                _errorObserver.observe(lifecycleOwner) {
+                    val data = it.getContent()!!
+                    showToast(data.message!!)
+
+                    if (data.message == "Your login session has been expired.") {
+                        navigateToLogin(requireActivity())
+
+                        requireActivity().finish()
+                    }
+                }
+            }
+
+            if(observeToast) {
+                _toastObserver.observe(lifecycleOwner) {
+                    val data = it.getContent()!!
+                    showToast(data.message)
+
+                    if (data.message == "Your login session has been expired.") {
+                        navigateToLogin(requireActivity())
+                        requireActivity().finish()
+                    }
+                }
+            }
+
+            if(observeProgress) {
+                _progressDialog.observe(lifecycleOwner) { it ->
+
+                    it?.getContent()?.let {
+                        if (it.status) {
+                            this@BaseFragmentWithoutNav.showProgressBar()
+                        } else {
+                            this@BaseFragmentWithoutNav.hideProgressBar()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseFragment
+import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.ProfileRepoImpl
@@ -34,7 +35,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.File
 
-class ProfileFragment : BaseFragment(), Listeners.ItemClickListener,
+class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
         View.OnClickListener,
         Listeners.CustomDialogListener,
         PermissionUtils.IGetPermissionListener,

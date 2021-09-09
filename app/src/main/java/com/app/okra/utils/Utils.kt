@@ -21,6 +21,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
@@ -905,6 +906,50 @@ fun showOptionDialog(
     }
 }
 
+fun showAddNewDialog(
+    context: Context?,
+    listener: Listeners.CustomDialogListener
+) {
+    dialog = Dialog(context!!, R.style.MyCustomTheme)
+    val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_add_new, null)
+    dialog?.apply {
+        setContentView(view)
+        setCanceledOnTouchOutside(true)
+
+        val lp = dialog!!.window!!.attributes
+        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        lp.gravity = Gravity.BOTTOM
+        lp.dimAmount = 0.5f
+        window?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        lp.windowAnimations = R.style.DialogAnimation
+        window?.attributes = lp
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window?.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window?.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+
+        val clAddTest: CardView = findViewById(R.id.clAddTest)
+        val clAddMeal: CardView = findViewById(R.id.clAddMeal)
+
+
+        clAddTest.setOnClickListener {
+            listener.onImageClick(dialog)
+            dialog?.dismiss()
+        }
+
+        clAddMeal.setOnClickListener {
+            dialog?.dismiss()
+            listener.onUploadFromGallery(dialog)
+        }
+        show()
+    }
+}
 
 fun getMealTime(mealTime: String, forValue :Boolean =true): String{
 

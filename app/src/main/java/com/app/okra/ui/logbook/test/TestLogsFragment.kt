@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
+import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.beGone
@@ -25,7 +26,7 @@ import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.fragment_test_logs.progressBar_loadMore
 
-class TestLogsFragment : BaseFragment(),  Listeners.ItemClickListener {
+class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var requestAdapter: TestLogsAdapter

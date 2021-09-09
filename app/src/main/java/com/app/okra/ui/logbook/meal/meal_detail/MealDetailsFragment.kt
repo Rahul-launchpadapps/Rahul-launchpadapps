@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
