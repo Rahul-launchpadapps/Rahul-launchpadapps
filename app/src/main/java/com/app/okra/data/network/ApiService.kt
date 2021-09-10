@@ -1,6 +1,7 @@
 package com.app.okra.data.network
 
 import com.app.okra.models.*
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
@@ -78,4 +79,8 @@ interface ApiService {
     @PUT("v1/meals")
     suspend fun updateMeal(@Body params: MealUpdateRequest): Response<BaseResponse<Any>>
 
+    @Multipart
+    @POST("v1/foodrecognition/full")
+    suspend fun foodRecognition(@Part file: MultipartBody.Part? = null, @Query("user_key") key:String):
+            Response<Any>
 }

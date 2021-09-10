@@ -30,6 +30,7 @@ abstract class BaseActivity :AppCompatActivity() {
     private var viewModel: BaseViewModel?=null
     protected var apiService: ApiService = ApiManager.getRetrofit()
     protected var apiServiceAuth: ApiService = ApiManager.getRetrofitAuth()
+    protected var apiServiceCalorieMama: ApiService = ApiManager.getRetrofitCalorieMama()
 
     abstract fun getViewModel() : BaseViewModel?
 

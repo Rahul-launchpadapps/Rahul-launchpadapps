@@ -67,6 +67,49 @@ abstract class ApiExecutor {
         }
     }
 
+    suspend fun <T> safeApiCallWithoutBaseResponse(
+        dispatcher: CoroutineDispatcher,
+        baseCall: suspend () -> Response<T>
+    ): Any {
+        return withContext(dispatcher) {
+            try {
+                val result = baseCall.invoke()
+
+                val apiResult = if (result.isSuccessful) {
+                    ApiResult.Success1(
+                        result.body()
+                    )
+                }else {
+                    val baseResponse: BaseResponse<Any> = Gson().fromJson(result.errorBody()?.string(),
+                        BaseResponse::class.java) as BaseResponse<Any>
+
+                    ApiResult.GenericError(
+                        message = baseResponse.message ?: "Unknown error",
+                        errorCode = (baseResponse.statusCode ?: "0"),
+                        type = (baseResponse.type ?: ""),
+                        data = baseResponse.data
+                    )
+                }
+                apiResult
+            }
+            catch (throwable: Throwable) {
+                throwable.printStackTrace()
+                println("Error: ${throwable.message}")
+                when (throwable) {
+                    is IOException -> {
+                        ApiResult.NetworkError
+                    }
+                    is HttpException -> {
+                        ApiResult.GenericError(throwable.code().toString(), convertErrorBody(throwable))
+                    }
+                    else -> {
+                        ApiResult.GenericError(message = MessageConstants.Errors.an_error_occurred)
+                    }
+                }
+            }
+        }
+    }
+
     private fun convertErrorBody(throwable: HttpException): String {
         val errorStr = throwable.response()?.errorBody()?.string()
         if (errorStr != null) {

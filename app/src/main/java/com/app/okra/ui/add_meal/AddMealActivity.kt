@@ -6,16 +6,27 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
+import com.app.okra.data.repo.AddMealRepoImpl
 import com.app.okra.extension.beVisible
+import com.app.okra.extension.viewModelFactory
 import com.app.okra.utils.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
 import kotlinx.android.synthetic.main.layout_header.*
 import java.io.File
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+
+
+
+
+
+
 
 class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     PermissionUtils.IGetPermissionListener,
@@ -26,9 +37,16 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private var typeOfAction: Int = 0
 
     override fun getViewModel(): BaseViewModel? {
-        return null
+        return viewModel
     }
 
+    private val viewModel by lazy {
+        ViewModelProvider(this,
+            viewModelFactory {
+                AddMealViewModel(AddMealRepoImpl(apiServiceCalorieMama))
+            }
+        ).get(AddMealViewModel::class.java)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_meal)
@@ -44,7 +62,6 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     private fun setListener() {
         mChooseImageUtils.setCallbacks(this, this)
-       // viewModel.setAmazonCallback(this)
 
         ivBack.setOnClickListener {
             finish()
@@ -118,13 +135,11 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                     val result: CropImage.ActivityResult? = CropImage.getActivityResult(data)
 
                     if (result != null && result.uri != null) {
-
                         val imageUri = result.uri!!
-
                         val fileSize = getFileSize(imageUri!!)
                         println(":::: File Size: $fileSize")
                         if (fileSize > -1 && fileSize <= AppConstants.ALLOWED_FILE_SIZE) {
-                          //  viewModel.uploadFile(imageUri)
+                            viewModel.foodRecognition(imageUri.path)
                         } else {
                             showToast("Selected file exceeds the maximum limit of ${AppConstants.ALLOWED_FILE_SIZE} MB.")
                         }
@@ -160,6 +175,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             .setBorderLineThickness(8f)
             .setGuidelines(CropImageView.Guidelines.OFF)
             .setAllowRotation(false)
+            .setRequestedSize(50,50)
             .start(this)
 
     }

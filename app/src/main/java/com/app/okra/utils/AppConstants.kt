@@ -66,6 +66,7 @@ class AppConstants {
             const val additionalNotes: String = "additionalNotes"
             const val mealsBefore: String = "mealsBefore"
             const val mealsAfter: String = "mealsAfter"
+            const val user_key: String = "user_key"
         }
     }
 

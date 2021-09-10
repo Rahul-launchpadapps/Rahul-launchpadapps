@@ -17,11 +17,12 @@ import java.util.concurrent.TimeUnit
 object ApiManager {
     private val retrofit: Retrofit
     private val retrofitAuth: Retrofit
+    private val retrofitCalorieMama: Retrofit
 
     init {
         retrofit = httpClient
         retrofitAuth = httpClientAuth
-
+        retrofitCalorieMama = httpClientCalorieMama
     }
 
     private val httpClient: Retrofit
@@ -39,6 +40,15 @@ object ApiManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BuildConfig.API_BASE_URL)
                 .client(getHttpClientAuth().build())
+                .build()
+        }
+
+    private val httpClientCalorieMama: Retrofit
+        get() {
+            return Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api-2445582032290.production.gw.apicast.io/")
+                .client(getHttpClientCalorieMama().build())
                 .build()
         }
 
@@ -134,5 +144,21 @@ object ApiManager {
 
     fun getRetrofit() : ApiService = retrofit.create(ApiService::class.java)
     fun getRetrofitAuth() : ApiService = retrofitAuth.create(ApiService::class.java)
+    fun getRetrofitCalorieMama() : ApiService = retrofitCalorieMama.create(ApiService::class.java)
+
+    private fun getHttpClientCalorieMama(): OkHttpClient.Builder {
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val requestBuilder: Request.Builder = original.newBuilder()
+                    .method(original.method, original.body)
+                val request = requestBuilder.build()
+                val response = chain.proceed(request)
+                response
+            }
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .readTimeout(30000, TimeUnit.MILLISECONDS)
+            .writeTimeout(30000, TimeUnit.MILLISECONDS)
+    }
 
 }
