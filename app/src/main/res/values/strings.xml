@@ -148,4 +148,7 @@
     <string name="add_new">Add New</string>
     <string name="add_new_test">Add New Test</string>
     <string name="add_new_meal">Add New Meal</string>
+    <string name="successfully_updated_meal_details">Successfully updated meal details</string>
+    <string name="your_meal_details_has_been_updated_successfully">Your meal details has been updated successfully</string>
+
 </resources>

@@ -12,13 +12,13 @@ class MealUpdateRequest(
     var carbs: CommonData?=null,
     var fat: CommonData?=null,
     var protien: CommonData?=null,
-    var foodItems: FoodItemsRequest?=null,
+    var foodItems: ArrayList<FoodItemsRequest>?=null,
 )
 
 class FoodItemsRequest(
-    val item: String?,
-    val type: String?,
-    val servingSize: String?,
+    var item: String?,
+    var type: String?,
+    var servingSize: String?,
 )
 
 class MealListResponse(

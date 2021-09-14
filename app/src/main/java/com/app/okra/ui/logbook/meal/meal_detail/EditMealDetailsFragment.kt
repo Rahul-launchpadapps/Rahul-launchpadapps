@@ -11,6 +11,7 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MealLogsRepoImpl
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
 import com.app.okra.models.MealData
 import com.app.okra.ui.logbook.meal.MealLogsViewModel
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_edit_meal_details.tvDateValue
 import kotlinx.android.synthetic.main.fragment_edit_meal_details.tvFatValue
 import kotlinx.android.synthetic.main.fragment_edit_meal_details.tvFoodTypeValue
 import kotlinx.android.synthetic.main.layout_header.*
+import java.sql.Array
 
 class EditMealDetailsFragment : BaseFragment() {
 
@@ -69,7 +71,9 @@ class EditMealDetailsFragment : BaseFragment() {
             var mealId = ""
             var date = ""
             var image = ""
-            var foodItemsRequest : FoodItemsRequest? = null
+            var foodItemsRequest :FoodItemsRequest
+            var foodList : ArrayList<FoodItemsRequest> = ArrayList()
+
             data?.apply {
                 mealId = if (!_id.isNullOrEmpty()) {
                     _id!!
@@ -80,18 +84,23 @@ class EditMealDetailsFragment : BaseFragment() {
                 image = if (!this.image.isNullOrEmpty()) {
                     this.image!!
                 } else ""
+
+                foodItemsRequest = FoodItemsRequest(foodItems?.get(0)?.item,
+                    foodItems?.get(0)?.type,
+                    foodItems?.get(0)?.servingSize)
+                foodList.add(foodItemsRequest)
             }
 
             viewModel.prepareUpdateRequest(
                 mealsId  = mealId,
                 date = date,
                 image = image,
-                foodItems = null,
+                foodItems = foodList,
                 foodType = data?.foodType,
-                calories = data?.calories,
-                carbs = data?.carbs,
-                fat = data?.fat,
-                protein = data?.protien
+                calories = CommonData(tvCaloriesValue.text.toString(),data?.calories?.value),
+                carbs = CommonData(tvCarbsValue.text.toString(),data?.carbs?.value),
+                fat = CommonData(tvFatValue.text.toString(),data?.fat?.value),
+                protein = CommonData(tvProteinValue.text.toString(),data?.protien?.value),
             )
             viewModel.updateMeal()
         }
@@ -99,10 +108,12 @@ class EditMealDetailsFragment : BaseFragment() {
 
     private fun setObserver() {
         setBaseObservers(viewModel, this)
-        viewModel._updateMealLiveData.observe(viewLifecycleOwner) { it ->
+        viewModel._updateMealLiveData.observe(viewLifecycleOwner) {
+            val bundle = Bundle()
+            bundle.putString("from","meal")
             navController.navigate(
                 R.id.action_editMealDetails_to_successfulUpdatedFragment,
-                null
+                bundle
             )
         }
     }
@@ -124,10 +135,10 @@ class EditMealDetailsFragment : BaseFragment() {
                 tvFoodTypeValue.text = it.value?.let { it1 -> getMealTime(it1) }
             }
 
-            tvCaloriesValue.setText(data?.calories?.value + " Cal")
-            tvCarbsValue.setText(data?.carbs?.value + " gm")
-            tvFatValue.setText(data?.fat?.value + " gm")
-            tvProteinValue.setText(data?.protien?.value + " gm")
+            tvCaloriesValue.setText(data?.calories?.value)
+            tvCarbsValue.setText(data?.carbs?.value)
+            tvFatValue.setText(data?.fat?.value)
+            tvProteinValue.setText(data?.protien?.value)
         }
     }
 

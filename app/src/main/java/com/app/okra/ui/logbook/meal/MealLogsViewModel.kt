@@ -9,6 +9,7 @@ import com.app.okra.data.repo.MealLogsRepo
 import com.app.okra.models.*
 import com.app.okra.utils.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
 
@@ -52,7 +53,7 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
         mealsId: String?=null,
         date: String?=null,
         image: String?=null,
-        foodItems: FoodItemsRequest?=null,
+        foodItems: ArrayList<FoodItemsRequest>?=null,
         foodType: CommonData?=null,
         calories: CommonData?=null,
         carbs: CommonData?=null,

@@ -73,8 +73,8 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 this,
                 getString(R.string.are_you_sure_you_want_to_delete_the_added_meal),
                 true,
-                positiveButtonText=   getString(R.string.delete),
-                negativeButtonText = getString(R.string.cancel),
+                positiveButtonText=   getString(R.string.cancel),
+                negativeButtonText = getString(R.string.delete),
                 title = getString(R.string.delete_meal)
             )
 
@@ -116,11 +116,11 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
     }
 
     override fun onOkClick(dialog: DialogInterface?) {
-        viewModel.deleteMeal(data?._id!!)
         dialog?.dismiss()
     }
 
     override fun onCancelClick(dialog: DialogInterface?) {
+        viewModel.deleteMeal(data?._id!!)
         dialog?.dismiss()
     }
 }
