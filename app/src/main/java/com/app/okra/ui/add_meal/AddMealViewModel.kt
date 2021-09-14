@@ -28,7 +28,7 @@ class AddMealViewModel(private val repo: AddMealRepo?) : BaseViewModel() {
             hideProgressBar()
             when (result) {
                 is ApiResult.Success1<*> -> {
-                    foodRecognitionLiveData.value = result.value!!
+                    foodRecognitionLiveData.value = result.value.toString()
                 }
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))

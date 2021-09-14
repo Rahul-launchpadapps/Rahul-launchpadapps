@@ -117,7 +117,7 @@
     <style name="edit_text_style" >
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:paddingStart">@dimen/dp_24</item>
+        <item name="android:paddingStart">@dimen/dp_28</item>
         <item name="android:paddingTop">@dimen/dp_12</item>
         <item name="android:paddingEnd">@dimen/dp_14</item>
         <item name="android:paddingBottom">@dimen/dp_12</item>

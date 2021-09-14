@@ -111,10 +111,10 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
         viewModel._errorObserver.observe(viewLifecycleOwner){
             swipe_request.isRefreshing = false
-            val data = it.getContent()!!
-            showToast(data.message!!)
+            val data = it.getContent()
+            data?.message?.let { it1 -> showToast(it1) }
 
-            if (data.message == "Your login session has been expired.") {
+            if (data?.message == "Your login session has been expired.") {
                 navigateToLogin(requireActivity())
                 requireActivity().finish()
             }

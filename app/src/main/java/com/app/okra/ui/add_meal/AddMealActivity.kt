@@ -13,20 +13,14 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.AddMealRepoImpl
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.FoodRecognintionResponse
 import com.app.okra.utils.*
+import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
 import kotlinx.android.synthetic.main.layout_header.*
 import java.io.File
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-
-
-
-
-
-
 
 class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     PermissionUtils.IGetPermissionListener,
@@ -51,6 +45,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_meal)
         setUpToolbar()
+        setObserver()
         setListener()
     }
 
@@ -179,4 +174,24 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             .start(this)
 
     }
+
+    private fun setObserver() {
+        setBaseObservers(viewModel, this,this, observeError = false)
+        viewModel._foodRecognitionLiveData.observe(this) { it ->
+            val response =
+                Gson().fromJson(Gson().toJson(it), FoodRecognintionResponse::class.java)
+            if(!response.is_food)
+                showToast("Please select food image")
+            else if(response.results?.size==null || response.results?.size==0)
+                showToast("Please select correct food image")
+            else
+                showToast("Successfull")
+        }
+
+        viewModel._errorObserver.observe(this){
+            val data = it.getContent()!!
+            showToast(data.message!!)
+        }
+    }
+
 }

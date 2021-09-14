@@ -18,8 +18,8 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
-    <string name="sign_in_with_okra">Sign In With Okra</string>
-    <string name="manage_your_account"><![CDATA[Manage your account & get the access to various services provided by the okra]]></string>
+    <string name="sign_in_with_okra">Sign in With Okra</string>
+    <string name="manage_your_account"><![CDATA[Manage your account & get the access to various services provided by the okra.]]></string>
     <string name="email_id">Email ID</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password</string>

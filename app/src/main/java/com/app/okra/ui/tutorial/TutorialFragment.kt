@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.app.okra.R
+import com.app.okra.base.BaseFragment
+import com.app.okra.base.BaseFragmentWithoutNav
+import com.app.okra.base.BaseViewModel
 import com.app.okra.models.TutorialModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_tutorial.*
@@ -13,9 +16,13 @@ import kotlinx.android.synthetic.main.fragment_tutorial.*
 private const val DATA = "data"
 private const val POSITION = "position"
 
-class TutorialFragment : Fragment() {
+class TutorialFragment : BaseFragmentWithoutNav() {
     private var data: TutorialModel? = null
     private var position: Int? = null
+
+    override fun getViewModel(): BaseViewModel? {
+        return null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
