@@ -39,9 +39,9 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener {
     }
 
     private fun setFragments() {
+        homeViewPagerAdapter?.addFragment(InSightFragment())
         homeViewPagerAdapter?.addFragment(LogbookFragment())
-        homeViewPagerAdapter?.addFragment(LogbookFragment())
-        homeViewPagerAdapter?.addFragment(LogbookFragment())
+        homeViewPagerAdapter?.addFragment(InSightFragment())
         homeViewPagerAdapter?.addFragment(ProfileFragment())
         view_pager_home.setAdapter(homeViewPagerAdapter)
         view_pager_home.setOffscreenPageLimit(4)

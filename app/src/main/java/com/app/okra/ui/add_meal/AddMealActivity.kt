@@ -1,10 +1,12 @@
 package com.app.okra.ui.add_meal
 
+import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import com.app.okra.R
@@ -20,7 +22,9 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
 import kotlinx.android.synthetic.main.layout_header.*
+import kotlinx.android.synthetic.main.layout_header.tvTitle
 import java.io.File
+import java.util.*
 
 class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     PermissionUtils.IGetPermissionListener,
@@ -29,6 +33,9 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private val mPermissionUtils: PermissionUtils = PermissionUtils(this)
     private val mChooseImageUtils: ImageUtils = ImageUtils()
     private var typeOfAction: Int = 0
+    private var mYear: Int = 0
+    private var mMonth: Int = 0
+    private var mDay: Int = 0
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -68,6 +75,10 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
         btnSave.setOnClickListener {
            // navController.navigate(R.id.action_editTestDetails_to_successfulUpdatedFragment, null)
+        }
+
+        tvDate.setOnClickListener {
+            selectDate(tvDate)
         }
     }
 
@@ -192,6 +203,25 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             val data = it.getContent()!!
             showToast(data.message!!)
         }
+    }
+
+    private fun selectDate(tvFromDate: AppCompatTextView) {
+        val c = Calendar.getInstance()
+        mYear = c.get(Calendar.YEAR)
+        mMonth = c.get(Calendar.MONTH)
+        mDay = c.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog =
+            DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
+                val strDate: String =
+                    year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
+                tvFromDate.text = strDate
+            }, mYear, mMonth, mDay)
+        val c1 = Calendar.getInstance()
+        c1.add(Calendar.MONTH, -2)
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+        datePickerDialog.show()
+
     }
 
 }
