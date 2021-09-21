@@ -22,7 +22,7 @@
             android:layout_alignParentBottom="true"
             android:background="@mipmap/nav_bg"
             app:elevation="@dimen/dp_10"
-            android:layout_marginBottom="-10dp"
+            android:layout_marginBottom="-24dp"
             app:menu="@menu/bottom_navigation" />
     </RelativeLayout>
 
@@ -34,7 +34,7 @@
         android:layout_gravity="center"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginBottom="@dimen/dp_40"
+        android:layout_marginBottom="@dimen/dp_24"
         android:src="@mipmap/add"
         app:layout_anchor="@id/bottom_navigation"
         app:layout_anchorGravity="center" />

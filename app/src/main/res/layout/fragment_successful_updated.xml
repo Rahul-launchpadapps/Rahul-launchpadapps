@@ -33,7 +33,7 @@
         style="@style/textContainer"
         android:layout_width="0dp"
         android:layout_marginStart="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_20"
         android:ellipsize="end"
         android:fontFamily="@font/axiforma_medium"
@@ -47,7 +47,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSuccessfullyUpdated"
         tools:ignore="RtlSymmetry" />
-
 
     <include
         android:id="@+id/layoutButton"

@@ -4,19 +4,25 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/bg_button_grey_3.xml" value="0.10833333333333334" />
+        <entry key="app/src/main/res/drawable-v24/d_grey_upper_rounded.xml" value="0.2074074074074074" />
+        <entry key="app/src/main/res/drawable-v24/d_white_upper_rounded.xml" value="0.2140625" />
         <entry key="app/src/main/res/drawable/bg_button_grey.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/drawable/bg_button_grey_3.xml" value="0.10833333333333334" />
+        <entry key="app/src/main/res/drawable/d_grey_top_rounded.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/drawable/selector_tick.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/layout/activity_add_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_forgot_pass.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/layout/activity_image_view.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_meal_details.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/activity_my_reminder.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_otp_verify.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_support_request.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_test_details.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_tutorial.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/bottomsheet_choose_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/bottomsheet_logs_filter.xml" value="0.33" />
         <entry key="app/src/main/res/layout/bottomsheet_meal_logs_filter.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_add_new.xml" value="0.25" />
@@ -24,20 +30,24 @@
         <entry key="app/src/main/res/layout/dialog_more_option.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_edit_meal_details.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_edit_test_details.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/fragment_edit_test_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_in_sight.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_logbook.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_meal_details.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_meal_logs.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/fragment_my_reminder.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_set_reminder.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_successful_updated.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_support_request_list.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/fragment_test_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_test_logs.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_tutorial.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/layout_button.xml" value="0.19791666666666666" />
-        <entry key="app/src/main/res/layout/layout_header.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/layout_header.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/row_connected_devices.xml" value="0.1" />
         <entry key="app/src/main/res/layout/row_dots.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/row_item_name.xml" value="0.21" />
         <entry key="app/src/main/res/layout/row_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_profile.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/row_support_request.xml" value="0.25" />

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@color/white"
+    android:background="@drawable/d_grey_top_rounded"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -55,7 +55,7 @@
         android:layout_width="@dimen/dp_0"
         android:id="@+id/tvFromDate"
         android:layout_height="wrap_content"
-        android:background="@mipmap/bg_edittext"
+        android:background="@mipmap/date_input"
         android:hint="@string/from"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
@@ -73,7 +73,7 @@
         android:layout_width="@dimen/dp_0"
         android:id="@+id/tvToDate"
         android:layout_height="wrap_content"
-        android:background="@mipmap/bg_edittext"
+        android:background="@mipmap/date_input"
         android:hint="@string/to"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"

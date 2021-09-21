@@ -36,6 +36,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private var mYear: Int = 0
     private var mMonth: Int = 0
     private var mDay: Int = 0
+    private var image: String = ""
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -143,6 +144,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                     if (result != null && result.uri != null) {
                         val imageUri = result.uri!!
                         val fileSize = getFileSize(imageUri!!)
+                        image = imageUri.path.toString()
                         println(":::: File Size: $fileSize")
                         if (fileSize > -1 && fileSize <= AppConstants.ALLOWED_FILE_SIZE) {
                             viewModel.foodRecognition(imageUri.path)
@@ -191,12 +193,28 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         viewModel._foodRecognitionLiveData.observe(this) { it ->
             val response =
                 Gson().fromJson(Gson().toJson(it), FoodRecognintionResponse::class.java)
-            if(!response.is_food)
-                showToast("Please select food image")
-            else if(response.results?.size==null || response.results?.size==0)
-                showToast("Please select correct food image")
-            else
-                showToast("Successfull")
+            if(!response.is_food) {
+                startActivityForResult(Intent(this,ImageViewActivity::class.java)
+                    .putExtra("invalid",true)
+                    .putExtra("image",image)
+                    ,100
+                )
+            }
+            else if(response.results?.size==null || response.results?.size==0) {
+                startActivityForResult(Intent(this,ImageViewActivity::class.java)
+                    .putExtra("invalid",true)
+                    .putExtra("image",image)
+                    ,100
+                )
+            }
+            else {
+                startActivityForResult(Intent(this,ImageViewActivity::class.java)
+                    .putExtra("invalid",false)
+                    .putExtra("image",image)
+                    .putExtra("data",response)
+                    ,100
+                )
+            }
         }
 
         viewModel._errorObserver.observe(this){

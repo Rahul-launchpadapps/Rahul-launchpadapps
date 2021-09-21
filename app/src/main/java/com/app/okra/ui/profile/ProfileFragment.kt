@@ -29,6 +29,7 @@ import com.app.okra.ui.profile.profile_details.ProfileInfoActivity
 import com.app.okra.ui.profile.profile_details.ProfileViewModel
 import com.app.okra.ui.my_account.setting.SettingsActivity
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
+import com.app.okra.ui.my_reminder.MyReminderActivity
 import com.app.okra.utils.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -167,7 +168,11 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
                         Intent(requireContext(), ResetOrChangePasswordActivity::class.java)
                                 .putExtra(AppConstants.SCREEN_TYPE, ProfileFragment::class.java.simpleName)
                 )
-            } 8 -> {
+            }
+            7 -> {
+                requireActivity().navigationOnly(MyReminderActivity())
+            }
+            8 -> {
             requireActivity().navigationOnly(SupportRequestActivity())
             }
         }

@@ -150,5 +150,13 @@
     <string name="add_new_meal">Add New Meal</string>
     <string name="successfully_updated_meal_details">Successfully updated meal details</string>
     <string name="your_meal_details_has_been_updated_successfully">Your meal details has been updated successfully</string>
+    <string name="invalid_photo">Invalid Photo</string>
+    <string name="this_does_not_look_like_photo">This does not look like photo. Would you like to retake the photo to get more accurate results?</string>
+    <string name="retake">Retake</string>
+    <string name="choose_your_food_item">Choose your food item</string>
+    <string name="my_reminders">My Reminders</string>
+    <string name="perform_diabetes_test">Perform diabetes test</string>
+    <string name="food_log">Food log</string>
+    <string name="time">Time</string>
 
 </resources>
