@@ -30,6 +30,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
@@ -42,33 +43,47 @@
                 android:textColor="@color/grey_3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent "
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="UsingOnClickInXml" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/date"
+                android:paddingBottom="@dimen/dp_2"
                 android:textAllCaps="false"
                 android:textColor="@color/black_2"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivDate"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvDateValue"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDateValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="top"
+                android:paddingTop="@dimen/dp_2"
+                android:text="@string/date"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:textColor="@color/grey_3"
+                app:layout_constraintStart_toEndOf="@+id/ivDate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivDateSelector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/switch_off"
-                android:onClick="onBackClick"
+                android:background="@drawable/selector_switch"
                 android:textColor="@color/grey_3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UsingOnClickInXml" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -109,30 +124,172 @@
 
             <TextView
                 android:id="@+id/tvTime"
-                android:layout_width="@dimen/dp_0"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/time"
                 android:textAllCaps="false"
                 android:textColor="@color/black_2"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivTime"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvTimeValue"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTimeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="top"
+                android:paddingTop="@dimen/dp_2"
+                android:text="@string/date"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:textColor="@color/grey_3"
+                app:layout_constraintStart_toEndOf="@+id/ivTime"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTime" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivTimeSelector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/switch_off"
-                android:onClick="onBackClick"
+                android:background="@drawable/selector_switch"
                 android:textColor="@color/grey_3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UsingOnClickInXml" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:ellipsize="end"
+        android:fontFamily="@font/axiforma_medium"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="@string/repeat"
+        android:textColor="@color/black_2"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clTime" />
+
+    <FrameLayout
+        android:id="@+id/clSpinnerRepeat"
+        style="@style/edit_text_style"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@mipmap/bg_edittext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRepeat">
+
+        <Spinner
+            android:id="@+id/spinnerRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:overlapAnchor="false"
+            android:gravity="top"
+            android:background="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSetRepeat"
+            style="@style/container"
+            android:digits="1234567890!@#$%^&amp;*_-~?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:drawableEnd="@drawable/ic_arrow"
+            android:hint="@string/repeat"
+            android:imeOptions="actionDone"
+            android:lines="1"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:maxLength="40"
+            android:singleLine="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_details"
+            tools:ignore="RtlSymmetry" />
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvEndRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:ellipsize="end"
+        android:visibility="gone"
+        android:fontFamily="@font/axiforma_medium"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="@string/end_repeat"
+        android:textColor="@color/black_2"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clSpinnerRepeat" />
+
+    <FrameLayout
+        android:id="@+id/clSpinnerEndRepeat"
+        style="@style/edit_text_style"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:visibility="gone"
+        android:background="@mipmap/bg_edittext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEndRepeat">
+
+        <Spinner
+            android:id="@+id/spinnerEndRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:overlapAnchor="false"
+            android:gravity="top"
+            android:background="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSetEndRepeat"
+            style="@style/container"
+            android:digits="1234567890!@#$%^&amp;*_-~?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:drawableEnd="@drawable/ic_arrow"
+            android:hint="@string/repeat"
+            android:imeOptions="actionDone"
+            android:lines="1"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:maxLength="40"
+            android:singleLine="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_details"
+            tools:ignore="RtlSymmetry" />
+    </FrameLayout>
+
+    <include
+        android:id="@+id/layout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_button"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_30"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

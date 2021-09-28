@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/container"
-    android:background="@color/white">
+    android:background="@color/bg_grey">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLogbook"

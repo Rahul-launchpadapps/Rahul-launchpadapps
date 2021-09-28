@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/drawable/bg_button_grey.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/drawable/bg_button_grey_3.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/drawable/d_grey_top_rounded.xml" value="0.10833333333333334" />
+        <entry key="app/src/main/res/drawable/selector_switch.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/drawable/selector_tick.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/layout/activity_add_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.22" />
@@ -37,7 +38,7 @@
         <entry key="app/src/main/res/layout/fragment_meal_logs.xml" value="0.14" />
         <entry key="app/src/main/res/layout/fragment_my_reminder.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_set_reminder.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/fragment_set_reminder.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_successful_updated.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_support_request_list.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/fragment_test_details.xml" value="0.33" />

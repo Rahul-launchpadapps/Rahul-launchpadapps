@@ -412,11 +412,11 @@ fun getDateFromISOInDate(
 fun showCustomAlertDialog(
     context: Context?,
     listener: Listeners.DialogListener?,
-    message: String?=null,
+    message: String? = null,
     needCancelButton: Boolean,
-    positiveButtonText: String?=null,
-    negativeButtonText: String?=null,
-    title: String?=null
+    positiveButtonText: String? = null,
+    negativeButtonText: String? = null,
+    title: String? = null
 ) {
     dialog = Dialog(context!!, R.style.MyCustomTheme)
     val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_custom_alert, null)
@@ -449,20 +449,20 @@ fun showCustomAlertDialog(
         val tvMessage: TextView = findViewById(R.id.tvMessage)
         val tvTitle: TextView = findViewById(R.id.tvTitle)
 
-        positiveButtonText?.let{
+        positiveButtonText?.let {
             btnPositive.text = it
         }
 
-        title?.let{
+        title?.let {
             tvTitle.text = it
         }
 
-        if(needCancelButton) {
+        if (needCancelButton) {
             btnNegative.beVisible()
             negativeButtonText?.let {
                 btnNegative.text = it
             }
-        }else{
+        } else {
             btnNegative.beGone()
         }
 
@@ -506,7 +506,6 @@ public fun getFileSize(uri: Uri): Long {
     }
     return -1;
 }
-
 
 
 /*fun getUserData(): UserDetailResponse {
@@ -798,7 +797,7 @@ fun decodeSmiley(`in`: String?): String? {
 fun navigateToLogin(activity: FragmentActivity) {
 
     val deviceToken = PreferenceManager.getString(AppConstants.Pref_Key.DEVICE_TOKEN)
-    val isFirstTime =PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_FIRST_TIME)
+    val isFirstTime = PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_FIRST_TIME)
 
     // CLEAR ALL PREF DATA
     PreferenceManager.clearAllPrefs()
@@ -840,6 +839,7 @@ fun getProfileItems(context: Context?): MutableMap<Int, ItemModel> {
 
     return profileHash
 }
+
 fun getSettingsItems(context: Context?): MutableMap<Int, ItemModel> {
     val profileHash = mutableMapOf<Int, ItemModel>()
 
@@ -951,9 +951,9 @@ fun showAddNewDialog(
     }
 }
 
-fun getMealTime(mealTime: String, forValue :Boolean =true): String{
+fun getMealTime(mealTime: String, forValue: Boolean = true): String {
 
-    if(forValue){
+    if (forValue) {
         return when (mealTime) {
             AFTER_MEAL -> {
                 AFTER_MEAL_TEXT
@@ -972,7 +972,7 @@ fun getMealTime(mealTime: String, forValue :Boolean =true): String{
             }
             else -> ""
         }
-    }else{
+    } else {
         return when (mealTime) {
             AFTER_MEAL_TEXT -> {
                 AFTER_MEAL
@@ -986,7 +986,7 @@ fun getMealTime(mealTime: String, forValue :Boolean =true): String{
             POST_MEDICINE_TEXT -> {
                 POST_MEDICINE
             }
-            POST_WORKOUT_TEXT-> {
+            POST_WORKOUT_TEXT -> {
                 POST_WORKOUT
             }
             else -> ""
@@ -994,4 +994,44 @@ fun getMealTime(mealTime: String, forValue :Boolean =true): String{
     }
 }
 
+fun convertLocalTimeZoneToUTC(inputPattern: String?, date: String?): String {
+    val utcDateFormat = SimpleDateFormat(inputPattern, Locale.US)
+    var localDate: Date? = null
+    try {
+        localDate = SimpleDateFormat(
+            inputPattern,
+            Locale.US
+        ).parse(date) // Local Date Format (By default)
+        utcDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        utcDateFormat.format(localDate)
+        return localDate.toString()
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return ""
+    }
+}
 
+fun convertUtc2Local(utcTime: String?,date_formate: String?): String? {
+    var time = ""
+    if (utcTime != null) {
+        val utcFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        utcFormatter.timeZone = TimeZone.getTimeZone("UTC")
+        var gpsUTCDate: Date? = null //from  ww  w.j  a va 2 s  . c  o  m
+        try {
+            gpsUTCDate = utcFormatter.parse(utcTime)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        val localFormatter = SimpleDateFormat(date_formate, Locale.getDefault())
+        localFormatter.timeZone = TimeZone.getDefault()
+        assert(gpsUTCDate != null)
+        time = localFormatter.format(gpsUTCDate!!.time)
+        val c = Calendar.getInstance()
+        val currentDate = localFormatter.format(c.time)
+        if (currentDate.equals(time)) {
+            time = "Today"
+        }
+
+    }
+    return time
+}

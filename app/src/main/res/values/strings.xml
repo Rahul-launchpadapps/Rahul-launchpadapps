@@ -158,5 +158,6 @@
     <string name="perform_diabetes_test">Perform diabetes test</string>
     <string name="food_log">Food log</string>
     <string name="time">Time</string>
-
+    <string name="repeat">Repeat</string>
+    <string name="end_repeat">End Repeat</string>
 </resources>

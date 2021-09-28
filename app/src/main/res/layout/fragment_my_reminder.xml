@@ -48,15 +48,30 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvAddTest"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/perform_diabetes_test"
                 android:textAllCaps="false"
                 android:textColor="@color/black_2"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvDiabetesValue"
                 app:layout_constraintStart_toEndOf="@+id/ivAddTest"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDiabetesValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="top"
+                android:paddingTop="@dimen/dp_2"
+                android:text="@string/date"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:textColor="@color/grey_3"
+                app:layout_constraintStart_toEndOf="@+id/ivAddTest"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAddTest" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -97,16 +112,32 @@
 
             <TextView
                 android:id="@+id/tvAddFood"
-                android:layout_width="@dimen/dp_0"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/food_log"
                 android:textAllCaps="false"
                 android:textColor="@color/black_2"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivAddFood"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvFoodValue" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFoodValue"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="top"
+                android:paddingTop="@dimen/dp_2"
+                android:text="@string/date"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:textColor="@color/grey_3"
+                app:layout_constraintStart_toEndOf="@+id/ivAddFood"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAddFood" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

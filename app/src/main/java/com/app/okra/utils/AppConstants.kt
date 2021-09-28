@@ -113,7 +113,11 @@ class AppConstants {
         const val POST_MEDICINE= "POST_MEDICINE"
         const val POST_WORKOUT_TEXT= "Post Workout"
         const val POST_WORKOUT= "POST_WORKOUT"
-
+        const val NEVER = "Never"
+        const val DAILY = "Daily"
+        const val WEEKLY = "Weekly"
+        const val MONTHLY = "Monthly"
+        const val END_REPEAT_DATE = "End repeat date"
     }
 
     object ContentManagementUrl {
