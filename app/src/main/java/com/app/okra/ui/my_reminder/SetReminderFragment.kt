@@ -13,8 +13,6 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.ReminderRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
-import com.app.okra.utils.AppConstants
-import com.app.okra.utils.convertLocalTimeZoneToUTC
 import kotlinx.android.synthetic.main.fragment_set_reminder.*
 import kotlinx.android.synthetic.main.fragment_set_reminder.spinnerRepeat
 import kotlinx.android.synthetic.main.fragment_set_reminder.tvDate
@@ -29,7 +27,7 @@ import android.content.Intent
 
 import android.app.*
 import com.app.okra.R
-import com.app.okra.utils.AlarmReceiver
+import com.app.okra.utils.*
 import java.text.SimpleDateFormat
 
 class SetReminderFragment : BaseFragment() {
@@ -163,58 +161,43 @@ class SetReminderFragment : BaseFragment() {
         }
 
         btnCommon.setOnClickListener {
-            setReminder(hour, min)
-            val startDate: String
-            val timeDate: String
-            val repeatType: String
-            val endRepeatType: String
-            val endDateValue: String
-            val obj = HashMap<String, Any>()
-            if (ivDateSelector.isSelected) {
-                startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
-            } else {
-                val c = Calendar.getInstance().time
-                val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                strDate = df.format(c)
-                startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
+            val c = Calendar.getInstance()
+            if(ivTimeSelector.isSelected && ivDateSelector.isSelected){
+                val date1: Date = c.getTime()
+                val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
+                if(startDate?.before(date1) == true) {
+                    showToast("Your selected time has been passed")
+                }else
+                    hitApi()
+            }else{
+                if(ivDateSelector.isSelected){
+                    val date1: Date = c.getTime()
+                    val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
+                    if(startDate?.before(date1) == true) {
+                        showToast("You can not select today's date")
+                        ivDateSelector.isSelected = false
+                        tvDate.gravity = Gravity.CENTER
+                        tvDateValue.visibility = View.GONE
+                        if (!ivTimeSelector.isSelected)
+                            layout_button.visibility = View.GONE
+                    }else
+                        hitApi()
+                }else if(ivTimeSelector.isSelected){
+                    val date1: Date = c.getTime()
+                    val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    strDate = df.format(date1)
+                    val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
+                    if(startDate?.before(date1) == true) {
+                        showToast("You can not select this time")
+                        ivTimeSelector.isSelected = false
+                        tvTime.gravity = Gravity.CENTER
+                        tvTimeValue.visibility = View.GONE
+                        if (!ivDateSelector.isSelected)
+                            layout_button.visibility = View.GONE
+                    }else
+                        hitApi()
+                }
             }
-            obj.put("reminderType", reminderType)
-            obj.put("startDate", startDate)
-
-            if (ivTimeSelector.isSelected) {
-                timeDate =
-                    convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
-            } else
-                timeDate =
-                    convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
-            obj.put("time", timeDate)
-
-            if (tvSetRepeat.text.toString().equals(AppConstants.NEVER))
-                repeatType = "NEVER"
-            else if (tvSetRepeat.text.toString().equals(AppConstants.DAILY))
-                repeatType = "EVERY_DAY"
-            else if (tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
-                repeatType = "EVERY_MONTH"
-            else if (tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
-                repeatType = "EVERY_WEEK"
-            else
-                repeatType = "SET_UP"
-
-            obj.put("repeatType", repeatType)
-
-            if (tvSetEndRepeat.text.toString().equals(AppConstants.NEVER))
-                endRepeatType = "NEVER"
-            else
-                endRepeatType = "SET_UP"
-
-            obj.put("endRepeatType", endRepeatType)
-
-            if (endRepeatType.equals("SET_UP")) {
-                endDateValue = convertLocalTimeZoneToUTC("yyyy-MM-dd", endDate)
-                obj.put("endDate", endDateValue)
-            }
-
-            viewModel.setReminder(obj)
         }
     }
 
@@ -237,6 +220,61 @@ class SetReminderFragment : BaseFragment() {
         tvSetEndRepeat.text = endRepeatList[0]
     }
 
+    private fun hitApi(){
+        setReminder(hour, min)
+        val startDate: String
+        val timeDate: String
+        val repeatType: String
+        val endRepeatType: String
+        val endDateValue: String
+        val obj = HashMap<String, Any>()
+        if (ivDateSelector.isSelected) {
+            startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
+        } else {
+            val c = Calendar.getInstance().time
+            val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            strDate = df.format(c)
+            startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
+        }
+        obj.put("reminderType", reminderType)
+        obj.put("startDate", startDate)
+
+        if (ivTimeSelector.isSelected) {
+            timeDate =
+                convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
+        } else
+            timeDate =
+                convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
+        obj.put("time", timeDate)
+
+        if (tvSetRepeat.text.toString().equals(AppConstants.NEVER))
+            repeatType = "NEVER"
+        else if (tvSetRepeat.text.toString().equals(AppConstants.DAILY))
+            repeatType = "EVERY_DAY"
+        else if (tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
+            repeatType = "EVERY_MONTH"
+        else if (tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
+            repeatType = "EVERY_WEEK"
+        else
+            repeatType = "SET_UP"
+
+        obj.put("repeatType", repeatType)
+
+        if (tvSetEndRepeat.text.toString().equals(AppConstants.NEVER))
+            endRepeatType = "NEVER"
+        else
+            endRepeatType = "SET_UP"
+
+        obj.put("endRepeatType", endRepeatType)
+
+        if (endRepeatType.equals("SET_UP")) {
+            endDateValue = convertLocalTimeZoneToUTC("yyyy-MM-dd", endDate)
+            obj.put("endDate", endDateValue)
+        }
+
+        viewModel.setReminder(obj)
+    }
+
     private fun selectDate() {
         val c = Calendar.getInstance()
         mYear = c.get(Calendar.YEAR)
@@ -255,6 +293,15 @@ class SetReminderFragment : BaseFragment() {
                     tvDateValue.visibility = View.VISIBLE
                     strDate = date
                     tvDateValue.text = date
+                    if(ivTimeSelector.isSelected){
+                        val date1: Date = c.getTime()
+                        val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
+                        if(startDate?.before(date1) == true) {
+                            ivTimeSelector.isSelected = false
+                            tvTime.gravity = Gravity.CENTER
+                            tvTimeValue.visibility = View.GONE
+                        }
+                    }
                 } else if (time == 2) {
                     endDate = date
                     tvSetEndRepeat.text = date

@@ -995,7 +995,7 @@ fun getMealTime(mealTime: String, forValue: Boolean = true): String {
 }
 
 fun convertLocalTimeZoneToUTC(inputPattern: String?, date: String?): String {
-    val utcDateFormat = SimpleDateFormat(inputPattern, Locale.US)
+    val utcDateFormat: SimpleDateFormat = SimpleDateFormat(inputPattern, Locale.US)
     var localDate: Date? = null
     try {
         localDate = SimpleDateFormat(
@@ -1034,4 +1034,21 @@ fun convertUtc2Local(utcTime: String?,date_formate: String?): String? {
 
     }
     return time
+}
+
+fun getDateFromPattern(inputPattern: String?, date: String?): Date? {
+    val utcDateFormat: SimpleDateFormat = SimpleDateFormat(inputPattern, Locale.US)
+    var localDate: Date? = null
+    try {
+        localDate = SimpleDateFormat(
+            inputPattern,
+            Locale.US
+        ).parse(date) // Local Date Format (By default)
+        utcDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        utcDateFormat.format(localDate)
+        return localDate
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return null
+    }
 }
