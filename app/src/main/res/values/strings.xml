@@ -166,5 +166,10 @@
     <string name="subcription_instruction_3">Log meal on the platform</string>
     <string name="subcription_instruction_4">Generate Blood glucose reports</string>
     <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
     <string name="recurring_monthly_billing">Recurring monthly billing</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="billed_yearly">Billed yearly</string>
+    <string name="cancel_anytime">Cancel anytime</string>
+    <string name="cancel_subscription">To buy the subscription plan you need to click on the “Subscibe” option &amp; you will be redirected to the Okra web page foe the further process. Payment is to be handled by your shopify account. The subscription will get automatically auto renewed unless it is canceled atleast 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage &amp; cancel the subscriptions by going to the shopify account settings after purchase.</string>
 </resources>
