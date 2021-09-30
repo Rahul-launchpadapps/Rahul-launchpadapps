@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/selector_switch.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/drawable/selector_tick.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/layout/activity_add_meal.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/activity_connected_device.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_forgot_pass.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/activity_image_view.xml" value="0.10643115942028986" />
@@ -20,6 +21,7 @@
         <entry key="app/src/main/res/layout/activity_my_reminder.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_otp_verify.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/activity_subscription.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_support_request.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_test_details.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_tutorial.xml" value="0.5" />
@@ -29,6 +31,7 @@
         <entry key="app/src/main/res/layout/dialog_add_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_custom_alert.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/dialog_more_option.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/fragment_connected_devices.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_edit_meal_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_edit_test_details.xml" value="0.33" />

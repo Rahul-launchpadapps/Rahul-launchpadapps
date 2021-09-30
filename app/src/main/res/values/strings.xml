@@ -160,4 +160,11 @@
     <string name="time">Time</string>
     <string name="repeat">Repeat</string>
     <string name="end_repeat">End Repeat</string>
+    <string name="choose_your_plan">Choose your plan to enjoy the various benefits &amp; start your journey with okra</string>
+    <string name="subcription_instruction_1">Track your Blood glucose level</string>
+    <string name="subcription_instruction_2">Track your Insulin level</string>
+    <string name="subcription_instruction_3">Log meal on the platform</string>
+    <string name="subcription_instruction_4">Generate Blood glucose reports</string>
+    <string name="monthly">Monthly</string>
+    <string name="recurring_monthly_billing">Recurring monthly billing</string>
 </resources>

@@ -26,14 +26,8 @@ import java.util.*
 import android.content.Context
 
 import android.content.Intent
-import android.media.RingtoneManager
 
 import android.app.*
-import android.graphics.Color
-
-import android.net.Uri
-import android.os.Build
-import androidx.core.app.NotificationCompat
 import com.app.okra.R
 import com.app.okra.utils.AlarmReceiver
 import java.text.SimpleDateFormat
@@ -50,6 +44,8 @@ class SetReminderFragment : BaseFragment() {
     private var endDate: String = ""
     private var timeValue: String = ""
     private var reminderType: Int = 0
+    private var min: Int = 0
+    private var hour: Int = 0
 
     private val repeatList by lazy {
         arrayListOf<String>()
@@ -89,9 +85,9 @@ class SetReminderFragment : BaseFragment() {
     private fun getData() {
         arguments?.let { it ->
             var data: String? = it.getString("data")
-            if(data.equals("diabetes")){
+            if (data.equals("diabetes")) {
                 reminderType = 2
-            }else
+            } else
                 reminderType = 1
         }
     }
@@ -167,7 +163,7 @@ class SetReminderFragment : BaseFragment() {
         }
 
         btnCommon.setOnClickListener {
-            setReminder(1,1)
+            setReminder(hour, min)
             val startDate: String
             val timeDate: String
             val repeatType: String
@@ -193,29 +189,29 @@ class SetReminderFragment : BaseFragment() {
                     convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
             obj.put("time", timeDate)
 
-            if(tvSetRepeat.text.toString().equals(AppConstants.NEVER))
+            if (tvSetRepeat.text.toString().equals(AppConstants.NEVER))
                 repeatType = "NEVER"
-            else if(tvSetRepeat.text.toString().equals(AppConstants.DAILY))
+            else if (tvSetRepeat.text.toString().equals(AppConstants.DAILY))
                 repeatType = "EVERY_DAY"
-            else if(tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
+            else if (tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
                 repeatType = "EVERY_MONTH"
-            else if(tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
+            else if (tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
                 repeatType = "EVERY_WEEK"
             else
                 repeatType = "SET_UP"
 
             obj.put("repeatType", repeatType)
 
-            if(tvSetEndRepeat.text.toString().equals(AppConstants.NEVER))
+            if (tvSetEndRepeat.text.toString().equals(AppConstants.NEVER))
                 endRepeatType = "NEVER"
             else
                 endRepeatType = "SET_UP"
 
             obj.put("endRepeatType", endRepeatType)
 
-            if(endRepeatType.equals("SET_UP")) {
+            if (endRepeatType.equals("SET_UP")) {
                 endDateValue = convertLocalTimeZoneToUTC("yyyy-MM-dd", endDate)
-                obj.put("endDate",endDateValue)
+                obj.put("endDate", endDateValue)
             }
 
             viewModel.setReminder(obj)
@@ -251,6 +247,7 @@ class SetReminderFragment : BaseFragment() {
             DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
                 var date =
                     year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
+                mDay = dayOfMonth
                 if (time == 1) {
                     layout_button.visibility = View.VISIBLE
                     ivDateSelector.isSelected = true
@@ -265,7 +262,7 @@ class SetReminderFragment : BaseFragment() {
             }, mYear, mMonth, mDay)
         val c1 = Calendar.getInstance()
         c1.add(Calendar.MONTH, -2)
-        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
         datePickerDialog.show()
     }
 
@@ -314,6 +311,8 @@ class SetReminderFragment : BaseFragment() {
                     }
                 }
                 timeValue = formattedTime
+                hour = hourOfDay
+                min= minute
                 layout_button.visibility = View.VISIBLE
                 ivTimeSelector.isSelected = true
                 tvTime.gravity = Gravity.BOTTOM
@@ -348,12 +347,36 @@ class SetReminderFragment : BaseFragment() {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        alarmMgr.setRepeating(
+
+        if (tvSetRepeat.text.toString().equals(AppConstants.DAILY))
+            alarmMgr.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY * 1,
+                alarmIntent
+            )
+        else if (tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
+            alarmMgr.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY * 30,
+                alarmIntent
+            )
+        else if (tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
+            alarmMgr.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY * 7,
+                alarmIntent
+            )
+        /*else
+            alarmMgr.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * 7,
+            AlarmManager.INTERVAL_HOUR * (1/24),
             alarmIntent
-        )
-        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        )*/
+
+        calendar.add(Calendar.DAY_OF_MONTH, mDay)
     }
 }
