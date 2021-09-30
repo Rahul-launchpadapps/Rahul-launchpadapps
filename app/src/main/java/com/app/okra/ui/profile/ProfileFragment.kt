@@ -1,5 +1,6 @@
 package com.app.okra.ui.profile
 
+import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -31,6 +32,8 @@ import com.app.okra.ui.my_account.setting.SettingsActivity
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
 import com.app.okra.ui.my_reminder.MyReminderActivity
 import com.app.okra.utils.*
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -168,6 +171,13 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
                         Intent(requireContext(), ResetOrChangePasswordActivity::class.java)
                                 .putExtra(AppConstants.SCREEN_TYPE, ProfileFragment::class.java.simpleName)
                 )
+            }
+            6 -> {
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/")))
+                } catch (e: ActivityNotFoundException) {
+                   println("Exception:"+e.printStackTrace())
+                }
             }
             7 -> {
                 requireActivity().navigationOnly(MyReminderActivity())

@@ -52,7 +52,7 @@ class OTPVerifyViewModel(private val repo : OTPVerifyRepo?) : BaseViewModel() {
                 hideProgressBar()
                 when (result) {
                     is ApiResult.Success -> OtpVerifyLiveData.value = result.value
-                    is ApiResult.GenericError -> errorObserver.value = Event(ApiData(message = result.message))
+                    is ApiResult.GenericError -> errorObserver.value = Event(ApiData(statusCode = result.errorCode,message = result.message))
                     is ApiResult.NetworkError -> errorObserver.value = Event(ApiData(message = "Network Issue"))
                     else -> errorObserver.value = Event(ApiData(message = MessageConstants.Errors.an_error_occurred))
                 }

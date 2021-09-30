@@ -9,8 +9,6 @@
         layout="@layout/layout_header"
         app:layout_constraintTop_toTopOf="parent"/>
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clContact"
         android:layout_width="match_parent"

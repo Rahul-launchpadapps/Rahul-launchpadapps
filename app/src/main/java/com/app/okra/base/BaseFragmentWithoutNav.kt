@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.app.okra.data.network.ApiManager
 import com.app.okra.data.network.ApiService
+import com.app.okra.ui.boarding.login.LoginActivity
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.navigateToLogin
 import com.app.okra.utils.showProgressDialog
@@ -47,11 +48,11 @@ abstract class BaseFragmentWithoutNav : Fragment() {
 
                 if (data.message == "Your login session has been expired.") {
                     ActivityCompat.finishAffinity(requireActivity());
-                    /*requireActivity().startActivity(
+                    requireActivity().startActivity(
                         Intent(requireContext(), LoginActivity::class.java)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
-                    )*/
+                    )
                     requireActivity().finish()
                 }
             }
@@ -62,12 +63,12 @@ abstract class BaseFragmentWithoutNav : Fragment() {
 
                 if (data.message == "Your login session has been expired.") {
                     ActivityCompat.finishAffinity(requireActivity());
-                   /* requireActivity().startActivity(
+                    requireActivity().startActivity(
                         Intent(requireContext(), LoginActivity::class.java)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
 
-                    )*/
+                    )
                     requireActivity().finish()
                 }
             }

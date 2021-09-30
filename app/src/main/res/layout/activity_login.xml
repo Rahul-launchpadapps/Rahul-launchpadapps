@@ -125,7 +125,6 @@
         android:layout_marginTop="@dimen/dp_5"
         android:fontFamily="@font/axiforma_medium"
         android:lineSpacingExtra="@dimen/dp_5"
-        android:maxLines="2"
         android:paddingStart="@dimen/dp_25"
         android:paddingEnd="@dimen/dp_25"
         tools:text="@string/enter_ur_password"

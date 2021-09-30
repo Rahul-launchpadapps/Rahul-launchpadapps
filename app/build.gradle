@@ -108,6 +108,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'com.google.firebase:firebase-invites:17.0.0'
     annotationProcessor "com.github.bumptech.glide:compiler:4.11.0"
 
 

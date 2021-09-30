@@ -62,7 +62,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
     }
 
     private fun setObserver() {
-        setBaseObservers(viewModel, this, this)
+        setBaseObservers(viewModel, this, this,observeToast = false)
         viewModel._loginLiveData.observe(this) { it ->
             it?.data?.let {
                 //showToast("Login Successfully")
@@ -98,12 +98,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
             if(!checkAndLogout(data.message)){
 
                 when(data.type) {
-                    ResetOrChangePasswordViewModel.FIELD_1-> {
+                    InitialBoardingViewModel.FIELD_EMAIL-> {
                         tvErrorEmail.text = data.message
                         tvErrorEmail.beVisible()
                         etEmail.setErrorView(this)
                     }
-                    ResetOrChangePasswordViewModel.FIELD_2-> {
+                    InitialBoardingViewModel.FIELD_PASS-> {
                         tvErrorPass.text = data.message
                         tvErrorPass.beVisible()
                         etPassword.setErrorView(this)

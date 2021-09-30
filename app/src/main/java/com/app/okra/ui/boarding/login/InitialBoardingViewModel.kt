@@ -118,7 +118,7 @@ class InitialBoardingViewModel(private val repo : InitialBoardingRepo?) : BaseVi
                 false
             }
             !initBoardingRequest.email!!.isEmailValid() -> {
-                toastObserver.value =Event(ToastData(MessageConstants.Errors.invalid_email,FIELD_EMAIL))
+                toastObserver.value =Event(ToastData(MessageConstants.Errors.invalid_email, FIELD_EMAIL))
                 false
             }
             initBoardingRequest.password.isNullOrBlank() -> {

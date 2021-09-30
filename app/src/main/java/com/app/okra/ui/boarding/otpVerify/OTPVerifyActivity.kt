@@ -89,8 +89,31 @@ class OTPVerifyActivity : BaseActivity() {
                 apiSuccess.message?.let { showToast(it) }
             }
         }
-        viewModel._errorObserver.observe(this) {
-            showToast(it.getContent()!!.message!!)
+        viewModel._errorObserver.observe(this) { it ->
+            it.getContent()?.let {
+                showToast(it.message!!)
+                if (it.statusCode == "400"){
+                    tvInvalidCode.visibility = View.VISIBLE
+                    otp_view.setItemBackground(
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.mipmap.otp_error,
+                            null
+                        )
+                    )
+                } else {
+                    otp_view.setItemBackground(
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.mipmap.otp,
+                            null
+                        )
+                    )
+
+                    tvInvalidCode.visibility = View.GONE
+                }
+            }
+
         }
 
         viewModel._toastObserver.observe(this) { it ->
