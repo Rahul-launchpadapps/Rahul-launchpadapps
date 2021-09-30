@@ -83,4 +83,9 @@ interface ApiService {
     @POST("v1/foodrecognition/full")
     suspend fun foodRecognition(@Part file: MultipartBody.Part? = null, @Query("user_key") key:String):
             Response<Any>
+
+    @POST("v1/user/reminder-setup")
+    suspend fun setReminder(@Body  body: HashMap<String,Any>):
+            Response<BaseResponse<Any>>
+
 }

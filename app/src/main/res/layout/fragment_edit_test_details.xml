@@ -292,7 +292,7 @@
                     android:id="@+id/tvSetTestingTime"
                     style="@style/container"
                     android:digits="1234567890!@#$%^&amp;*_-~?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    android:drawableEnd="@mipmap/down_arrow"
+                    android:drawableEnd="@drawable/ic_arrow"
                     android:hint="@string/testing_time"
                     android:imeOptions="actionDone"
                     android:lines="1"

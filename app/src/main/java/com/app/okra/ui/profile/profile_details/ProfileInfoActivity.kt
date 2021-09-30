@@ -35,7 +35,6 @@ import kotlinx.android.synthetic.main.layout_button.*
 import kotlinx.android.synthetic.main.layout_header.*
 import java.io.File
 
-
 class ProfileInfoActivity : BaseActivity(),
         View.OnClickListener,
         TextWatcher,

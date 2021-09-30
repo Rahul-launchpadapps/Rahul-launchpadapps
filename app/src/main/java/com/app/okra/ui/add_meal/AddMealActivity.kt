@@ -25,6 +25,10 @@ import kotlinx.android.synthetic.main.layout_header.*
 import kotlinx.android.synthetic.main.layout_header.tvTitle
 import java.io.File
 import java.util.*
+import org.json.JSONObject
+
+
+
 
 class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     PermissionUtils.IGetPermissionListener,
@@ -190,7 +194,9 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     private fun setObserver() {
         setBaseObservers(viewModel, this,this, observeError = false)
-        viewModel._foodRecognitionLiveData.observe(this) { it ->
+        viewModel._foodRecognitionLiveData.observe(this) { it
+            val jObject = JSONObject(it.toString())
+            val aJsonString = jObject.getString("lang")
             val response =
                 Gson().fromJson(Gson().toJson(it), FoodRecognintionResponse::class.java)
             if(!response.is_food) {
