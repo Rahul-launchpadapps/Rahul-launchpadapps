@@ -88,4 +88,10 @@ interface ApiService {
     suspend fun setReminder(@Body  body: HashMap<String,Any>):
             Response<BaseResponse<Any>>
 
+    @GET("v1/insight")
+    suspend fun getInsight(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<Any>>
+
+    @POST("v1/meals")
+    suspend fun addMeal(@Body params: AddMealRequest): Response<BaseResponse<Any>>
+
 }

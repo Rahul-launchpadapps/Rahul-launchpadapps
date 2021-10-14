@@ -76,6 +76,7 @@ class MeasurementSettingActivity : BaseActivity(), View.OnClickListener{
             if(!etHypoBlood.text.isNullOrEmpty())
                 PreferenceManager.putInt(AppConstants.Pref_Key.HYPO_BLOOD_GLUCOSE_UNIT,
                         etHypoBlood.text.toString().toInt())
+            finish()
         }
     }
 

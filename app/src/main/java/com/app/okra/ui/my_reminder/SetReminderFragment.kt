@@ -92,11 +92,11 @@ class SetReminderFragment : BaseFragment() {
 
     private fun setListener() {
         clDate.setOnClickListener {
+            time = 1
             selectDate()
         }
 
         clTime.setOnClickListener {
-            time = 1
             selectTime()
         }
 
@@ -120,7 +120,6 @@ class SetReminderFragment : BaseFragment() {
                 if (!ivDateSelector.isSelected)
                     layout_button.visibility = View.GONE
             } else {
-                time = 1
                 selectTime()
             }
         }
@@ -130,6 +129,7 @@ class SetReminderFragment : BaseFragment() {
         }
 
         tvSetEndRepeat.setOnClickListener {
+            time = 2
             spinnerEndRepeat.performClick()
         }
 
@@ -166,7 +166,7 @@ class SetReminderFragment : BaseFragment() {
                 val date1: Date = c.getTime()
                 val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
                 if(startDate?.before(date1) == true) {
-                    showToast("Your selected time has been passed")
+                    showToast("Selected time should not be lesser than current time.")
                 }else
                     hitApi()
             }else{
@@ -174,7 +174,7 @@ class SetReminderFragment : BaseFragment() {
                     val date1: Date = c.getTime()
                     val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
                     if(startDate?.before(date1) == true) {
-                        showToast("You can not select today's date")
+                        showToast("You can not select today's date as the default time of 12:00 is already passed.")
                         ivDateSelector.isSelected = false
                         tvDate.gravity = Gravity.CENTER
                         tvDateValue.visibility = View.GONE
@@ -188,7 +188,7 @@ class SetReminderFragment : BaseFragment() {
                     strDate = df.format(date1)
                     val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
                     if(startDate?.before(date1) == true) {
-                        showToast("You can not select this time")
+                        showToast("Selected time should not be lesser than current time.")
                         ivTimeSelector.isSelected = false
                         tvTime.gravity = Gravity.CENTER
                         tvTimeValue.visibility = View.GONE

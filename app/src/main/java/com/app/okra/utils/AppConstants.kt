@@ -67,6 +67,8 @@ class AppConstants {
             const val mealsBefore: String = "mealsBefore"
             const val mealsAfter: String = "mealsAfter"
             const val user_key: String = "user_key"
+            const val type: String = "type"
+            const val timesOfConsideration:String = "timesOfConsideration"
         }
     }
 
@@ -118,6 +120,9 @@ class AppConstants {
         const val WEEKLY = "Weekly"
         const val MONTHLY = "Monthly"
         const val END_REPEAT_DATE = "End repeat date"
+        const val TODAY = "TODAY"
+        const val WEEK = "WEEK"
+        const val MONTH = "MONTH"
     }
 
     object ContentManagementUrl {

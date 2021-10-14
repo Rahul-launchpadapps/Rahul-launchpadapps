@@ -24,13 +24,13 @@
         android:ellipsize="end"
         android:fontFamily="@font/axiforma_semibold"
         android:gravity="start"
-        android:paddingStart="@dimen/dp_20"
         android:maxLines="2"
         tools:text="Support Request Details"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_18"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry" />
 

@@ -126,7 +126,7 @@ class LogbookFragment : BaseFragmentWithoutNav() {
         val textGreyColor =
             activity?.let { it1 -> ContextCompat.getColor(it1, R.color.grey_3) } ?: 0
         val textWhiteColor =
-            activity?.let { it1 -> ContextCompat.getColor(it1, R.color.white) } ?: 0
+            activity?.let { it1 -> ContextCompat.getColor(it1, R.color.bg_grey) } ?: 0
 
         if (value == 0) {
             tv_test_logs.setTextColor(textGreenColor)

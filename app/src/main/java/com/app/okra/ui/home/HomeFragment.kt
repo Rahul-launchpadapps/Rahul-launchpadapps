@@ -1,16 +1,17 @@
-package com.app.okra.ui
+package com.app.okra.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.app.okra.R
+import com.app.okra.base.BaseFragmentWithoutNav
+import com.app.okra.base.BaseViewModel
 
-class InSightFragment : Fragment() {
+class HomeFragment : BaseFragmentWithoutNav() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getViewModel(): BaseViewModel? {
+        return null
     }
 
     override fun onCreateView(
@@ -18,6 +19,6 @@ class InSightFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_in_sight, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 }

@@ -172,4 +172,23 @@
     <string name="billed_yearly">Billed yearly</string>
     <string name="cancel_anytime">Cancel anytime</string>
     <string name="cancel_subscription">To buy the subscription plan you need to click on the “Subscibe” option &amp; you will be redirected to the Okra web page foe the further process. Payment is to be handled by your shopify account. The subscription will get automatically auto renewed unless it is canceled atleast 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage &amp; cancel the subscriptions by going to the shopify account settings after purchase.</string>
+    <string name="hello">Hello,</string>
+    <string name="total_strips_received">Total Strips\nReceived</string>
+    <string name="total_strips_left">Total Strips\nLeft</string>
+    <string name="total_tests">Total Tests</string>
+    <string name="avg_bg">Avg. BG</string>
+    <string name="avg_insulin">Avg. Insulin</string>
+    <string name="hyper_hypos">Hyper/Hypos</string>
+    <string name="est_HbA1c">Est. HbA1c</string>
+    <string name="carbs_counts">Carbs Counts</string>
+    <string name="insights">Insights</string>
+    <string name="insulin">Insulin</string>
+    <string name="blood_glucose_mg_dL">Blood glucose (mg/dL)</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="please_select_image">Please select image</string>
+    <string name="please_select_date">Please select date</string>
+    <string name="please_select_calories">Please select calories</string>
+    <string name="please_select_carbs">Please select carbs</string>
+    <string name="please_select_fat">Please select fat</string>
+    <string name="please_select_protein">Please select protein</string>
 </resources>
