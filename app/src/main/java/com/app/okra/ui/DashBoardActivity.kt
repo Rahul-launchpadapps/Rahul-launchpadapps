@@ -4,18 +4,17 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import androidx.annotation.NonNull
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.dashboard.HomeViewPagerAdapter
+import com.app.okra.ui.home.HomeFragment
+import com.app.okra.ui.insight.InSightFragment
 import com.app.okra.ui.logbook.LogbookFragment
 import com.app.okra.ui.profile.ProfileFragment
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.showAddNewDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener {
@@ -39,7 +38,7 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener {
     }
 
     private fun setFragments() {
-        homeViewPagerAdapter?.addFragment(InSightFragment())
+        homeViewPagerAdapter?.addFragment(HomeFragment())
         homeViewPagerAdapter?.addFragment(LogbookFragment())
         homeViewPagerAdapter?.addFragment(InSightFragment())
         homeViewPagerAdapter?.addFragment(ProfileFragment())

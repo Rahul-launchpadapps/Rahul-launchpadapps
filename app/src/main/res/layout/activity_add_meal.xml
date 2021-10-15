@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/container"
-    android:background="@color/white">
+    android:background="@color/bg_grey">
 
     <include
         android:id="@+id/layoutHeader"
@@ -60,6 +60,7 @@
                     android:padding="@dimen/dp_20">
 
                     <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

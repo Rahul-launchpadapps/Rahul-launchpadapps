@@ -196,6 +196,7 @@ ImageUtils.IChooseImageInterface, Listeners.CustomDialogListener {
 
     }
         private fun setViews() {
+            tvTitle.text = getString(R.string.personal_details)
             cl_profile_edit.beGone()
             cv_profile_view_only.beVisible()
             ivRight.beVisible()

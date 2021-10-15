@@ -82,7 +82,7 @@ class SettingsActivity : BaseActivity(),
 
     private fun setViews() {
         tvTitle.text = getString(R.string.title_my_setting)
-        btnLogin.text = getString(R.string.logout)
+        btnLogin.text = getString(R.string.log_out)
         btnLogin.setTextColor(ContextCompat.getColor(this, R.color.red))
     }
 

@@ -25,11 +25,10 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:overlapAnchor="false"
-            android:gravity="top"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -43,12 +42,12 @@
             android:background="@android:color/transparent"
             android:paddingStart="@dimen/dp_30"
             android:textSize="@dimen/sp_16"
-            android:textColor="@color/red"
+            android:textColor="@color/black_2"
             android:gravity="center_vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:drawableEndCompat="@mipmap/down_arrow"
+            app:drawableEndCompat="@drawable/ic_arrow"
             tools:ignore="RtlSymmetry" />
 
 

@@ -23,21 +23,21 @@ android {
         development {
             def API_BASE_URL = '"https://okradevapi.appskeeper.in/api/"'
             buildConfigField "String", "API_BASE_URL", API_BASE_URL
-            def ADMIN_STATIC_BASE_URL = '"https://okradevapi.appskeeper.in/content/view?types="'
+            def ADMIN_STATIC_BASE_URL = '"https://okradevadmin.appskeeper.in/content-management/view?types="'
             buildConfigField "String", "ADMIN_STATIC_BASE_URL", ADMIN_STATIC_BASE_URL
         }
-
         qa {
             def API_BASE_URL = '"https://okraqaapi.appskeeper.in/api/"'
             buildConfigField "String", "API_BASE_URL", API_BASE_URL
-            def ADMIN_STATIC_BASE_URL = '"https://okraqaapi.appskeeper.in/content/view?types="'
+            def ADMIN_STATIC_BASE_URL = '"https://okraqaadmin.appskeeper.in/content-management/view?types="'
             buildConfigField "String", "ADMIN_STATIC_BASE_URL", ADMIN_STATIC_BASE_URL
 
         }
         staging {
             def API_BASE_URL = '"https://okrastgapi.appskeeper.in/api/"'
             buildConfigField "String", "API_BASE_URL", API_BASE_URL
-            def ADMIN_STATIC_BASE_URL = '"https://okrastgapi.appskeeper.in/content/view?types="'
+            def ADMIN_STATIC_BASE_URL = '"https://okrastgadmin.appskeeper.in/content-management/view?types="'
+
             buildConfigField "String", "ADMIN_STATIC_BASE_URL", ADMIN_STATIC_BASE_URL
         }
 

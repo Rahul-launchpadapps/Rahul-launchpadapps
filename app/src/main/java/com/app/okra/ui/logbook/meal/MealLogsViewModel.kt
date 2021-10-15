@@ -54,7 +54,7 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
         date: String?=null,
         image: String?=null,
         foodItems: ArrayList<FoodItemsRequest>?=null,
-        foodType: CommonData?=null,
+        foodType: String?=null,
         calories: CommonData?=null,
         carbs: CommonData?=null,
         fat: CommonData?=null,

@@ -7,9 +7,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/d_grey_upper_rounded"
     android:elevation="@dimen/dp_10"
-    android:paddingTop="@dimen/dp_30"
+    android:paddingTop="@dimen/dp_50"
     android:paddingBottom="@dimen/dp_30">
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
@@ -33,12 +32,12 @@
         android:id="@+id/tvMessage"
         style="@style/textContainer"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_25"
         android:fontFamily="@font/axiforma_medium"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/dp_5"
-        android:layout_marginStart="@dimen/dp_20"
-        android:layout_marginEnd="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_50"
+        android:layout_marginEnd="@dimen/dp_50"
         android:paddingStart="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
         android:text="@string/upload_image"
@@ -47,15 +46,13 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:ignore="RtlSymmetry" />
 
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPositive"
         style="@style/btn_style"
         android:layout_width="wrap_content"
-        android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_0"
         android:layout_marginTop="@dimen/dp_20"
-        android:background="@mipmap/skip"
+        android:background="@mipmap/get_started_btn"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toStartOf="@+id/btnNegative"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,8 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_0"
-        android:layout_marginEnd="@dimen/dp_20"
-        android:background="@mipmap/skip"
+        android:background="@mipmap/get_started_btn"
         android:textColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnPositive"

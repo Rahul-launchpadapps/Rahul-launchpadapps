@@ -94,7 +94,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 }
 
             data?.foodType?.let {
-                tvFoodTypeValue.text = it.value?.let { it1 -> getMealTime(it1) }
+                tvFoodTypeValue.text = it.let { it1 -> getMealTime(it1) }
             }
 
             tvCaloriesValue.text = data?.calories?.value + " Cal"

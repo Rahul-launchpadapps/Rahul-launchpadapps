@@ -132,7 +132,7 @@ class EditMealDetailsFragment : BaseFragment() {
                 }
 
             data?.foodType?.let {
-                tvFoodTypeValue.text = it.value?.let { it1 -> getMealTime(it1) }
+                tvFoodTypeValue.text = it.let { it1 -> getMealTime(it1) }
             }
 
             tvCaloriesValue.setText(data?.calories?.value)

@@ -95,11 +95,11 @@ class SetReminderFragment : BaseFragment() {
 
     private fun setListener() {
         clDate.setOnClickListener {
+            time = 1
             selectDate()
         }
 
         clTime.setOnClickListener {
-            time = 1
             selectTime()
         }
 
@@ -123,7 +123,6 @@ class SetReminderFragment : BaseFragment() {
                 if (!ivDateSelector.isSelected)
                     layout_button.visibility = View.GONE
             } else {
-                time = 1
                 selectTime()
             }
         }
@@ -133,6 +132,7 @@ class SetReminderFragment : BaseFragment() {
         }
 
         tvSetEndRepeat.setOnClickListener {
+            time = 2
             spinnerEndRepeat.performClick()
         }
 
@@ -169,7 +169,7 @@ class SetReminderFragment : BaseFragment() {
                 val date1: Date = c.time
                 val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", "$strDate $timeValue")
                 if(startDate?.before(date1) == true) {
-                    showToast("Your selected time has been passed")
+                    showToast("Selected time should not be lesser than current time.")
                 }else
                     hitApi()
             }else{
@@ -178,6 +178,7 @@ class SetReminderFragment : BaseFragment() {
                     val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", "$strDate $defaultTime")
                     if(startDate?.before(date1) == true) {
                         showToast("You can not select today's date as the default time of $defaultTime is already passed.")
+
                         ivDateSelector.isSelected = false
                         tvDate.gravity = Gravity.CENTER
                         tvDateValue.visibility = View.GONE
@@ -192,6 +193,7 @@ class SetReminderFragment : BaseFragment() {
                     val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", "$strDate $timeValue")
                     if(startDate?.before(date1) == true) {
                         showToast(MessageConstants.Errors.selected_time_should_not_be)
+
                         ivTimeSelector.isSelected = false
                         tvTime.gravity = Gravity.CENTER
                         tvTimeValue.visibility = View.GONE

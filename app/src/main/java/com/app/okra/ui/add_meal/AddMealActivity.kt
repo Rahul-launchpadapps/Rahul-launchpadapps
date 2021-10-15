@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.net.toUri
@@ -13,22 +14,26 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.AddMealRepoImpl
+import com.app.okra.data.repo.MealLogsRepoImpl
 import com.app.okra.extension.beVisible
+import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.CommonData
+import com.app.okra.models.FoodItemsRequest
 import com.app.okra.models.FoodRecognintionResponse
+import com.app.okra.ui.logbook.meal.MealLogsViewModel
 import com.app.okra.utils.*
 import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
+import kotlinx.android.synthetic.main.activity_add_meal.cv_image
+import kotlinx.android.synthetic.main.activity_add_meal.tvDate
 import kotlinx.android.synthetic.main.layout_header.*
 import kotlinx.android.synthetic.main.layout_header.tvTitle
 import java.io.File
 import java.util.*
 import org.json.JSONObject
-
-
-
 
 class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     PermissionUtils.IGetPermissionListener,
@@ -49,10 +54,11 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private val viewModel by lazy {
         ViewModelProvider(this,
             viewModelFactory {
-                AddMealViewModel(AddMealRepoImpl(apiServiceCalorieMama))
+                AddMealViewModel(AddMealRepoImpl(apiServiceCalorieMama,apiServiceAuth))
             }
         ).get(AddMealViewModel::class.java)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_meal)
@@ -79,7 +85,44 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         }
 
         btnSave.setOnClickListener {
-           // navController.navigate(R.id.action_editTestDetails_to_successfulUpdatedFragment, null)
+            if (TextUtils.isEmpty(image)) {
+                showToast(getString(R.string.please_select_image))
+            }else if (TextUtils.isEmpty(tvDate.text.toString())) {
+                showToast(getString(R.string.please_select_date))
+            } else if (TextUtils.isEmpty(tvCalories.text.toString())) {
+                showToast(getString(R.string.please_select_calories))
+            } else if (TextUtils.isEmpty(tvCarbs.text.toString())) {
+                showToast(getString(R.string.please_select_carbs))
+            } else if (TextUtils.isEmpty(tvFat.text.toString())) {
+                showToast(getString(R.string.please_select_fat))
+            } else if (TextUtils.isEmpty(tvProtein.text.toString())) {
+                showToast(getString(R.string.please_select_protein))
+            } else {
+                var date = ""
+                var foodItemsRequest: FoodItemsRequest
+                var foodList: ArrayList<FoodItemsRequest> = ArrayList()
+
+                date = tvDate.text.toString()
+
+                foodItemsRequest = FoodItemsRequest(
+                   "jshjksd",
+                    "djhjh",
+                    "1"
+                )
+                foodList.add(foodItemsRequest)
+
+                viewModel.prepareAddRequest(
+                    date = date,
+                    image = image,
+                    foodItems = foodList,
+                    foodType = "djhgdfj",
+                    calories = CommonData(tvCalories.text.toString(), "cal"),
+                    carbs = CommonData(tvCarbs.text.toString(), "gm"),
+                    fat = CommonData(tvFat.text.toString(), "gm"),
+                    protein = CommonData(tvProtein.text.toString(), "gm"),
+                )
+                viewModel.addMeal()
+            }
         }
 
         tvDate.setOnClickListener {
@@ -103,14 +146,14 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     private fun checkCameraPermissions() {
         typeOfAction = AppConstants.PermissionCodes.PERMISSION_CAMERA
-        if(mPermissionUtils.checkAndGetStorageAndCameraPermissions(this)){
+        if (mPermissionUtils.checkAndGetStorageAndCameraPermissions(this)) {
             onPermissionsGiven(AppConstants.PermissionCodes.PERMISSION_CAMERA)
         }
     }
 
     private fun checkStoragePermissions() {
         typeOfAction = AppConstants.PermissionCodes.PERMISSION_STORAGE
-        if(mPermissionUtils.checkAndGetStoragePermissions(this)) {
+        if (mPermissionUtils.checkAndGetStoragePermissions(this)) {
             onPermissionsGiven(AppConstants.PermissionCodes.PERMISSION_STORAGE)
         }
 
@@ -140,7 +183,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == AppCompatActivity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             when (requestCode) {
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                     val result: CropImage.ActivityResult? = CropImage.getActivityResult(data)
@@ -187,43 +230,49 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             .setBorderLineThickness(8f)
             .setGuidelines(CropImageView.Guidelines.OFF)
             .setAllowRotation(false)
-            .setRequestedSize(50,50)
+            .setRequestedSize(50, 50)
             .start(this)
 
     }
 
     private fun setObserver() {
-        setBaseObservers(viewModel, this,this, observeError = false)
-        viewModel._foodRecognitionLiveData.observe(this) { it
-            val jObject = JSONObject(it.toString())
-            val aJsonString = jObject.getString("lang")
-            val response =
-                Gson().fromJson(Gson().toJson(it), FoodRecognintionResponse::class.java)
-            if(!response.is_food) {
-                startActivityForResult(Intent(this,ImageViewActivity::class.java)
-                    .putExtra("invalid",true)
-                    .putExtra("image",image)
-                    ,100
-                )
-            }
-            else if(response.results?.size==null || response.results?.size==0) {
-                startActivityForResult(Intent(this,ImageViewActivity::class.java)
-                    .putExtra("invalid",true)
-                    .putExtra("image",image)
-                    ,100
-                )
-            }
-            else {
-                startActivityForResult(Intent(this,ImageViewActivity::class.java)
-                    .putExtra("invalid",false)
-                    .putExtra("image",image)
-                    .putExtra("data",response)
-                    ,100
-                )
+        setBaseObservers(viewModel, this, this, observeError = false)
+        viewModel._foodRecognitionLiveData.observe(this) {
+            iv_image.loadUserImageFromUrl(this, image)
+            try {
+                val jObject = JSONObject(it.toString())
+                val aJsonString = jObject.getString("lang")
+                val response =
+                    Gson().fromJson(Gson().toJson(it), FoodRecognintionResponse::class.java)
+                if (!response.is_food) {
+                    startActivityForResult(
+                        Intent(this, ImageViewActivity::class.java)
+                            .putExtra("invalid", true)
+                            .putExtra("image", image), 100
+                    )
+                } else if (response.results?.size == null || response.results?.size == 0) {
+                    startActivityForResult(
+                        Intent(this, ImageViewActivity::class.java)
+                            .putExtra("invalid", true)
+                            .putExtra("image", image), 100
+                    )
+                } else {
+                    startActivityForResult(
+                        Intent(this, ImageViewActivity::class.java)
+                            .putExtra("invalid", false)
+                            .putExtra("image", image)
+                            .putExtra("data", response), 100
+                    )
+                }
+            }catch (e: Exception){
             }
         }
 
-        viewModel._errorObserver.observe(this){
+        viewModel._addMealLiveData.observe(this) {
+            finish()
+        }
+
+        viewModel._errorObserver.observe(this) {
             val data = it.getContent()!!
             showToast(data.message!!)
         }
@@ -243,7 +292,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             }, mYear, mMonth, mDay)
         val c1 = Calendar.getInstance()
         c1.add(Calendar.MONTH, -2)
-        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
         datePickerDialog.show()
 
     }

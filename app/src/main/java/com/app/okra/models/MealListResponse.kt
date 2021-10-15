@@ -3,11 +3,22 @@ package com.app.okra.models
 import android.os.Parcel
 import android.os.Parcelable
 
+class AddMealRequest(
+    var date: String?=null,
+    var image: String?=null,
+    var foodType: String?=null,
+    var calories: CommonData?=null,
+    var carbs: CommonData?=null,
+    var fat: CommonData?=null,
+    var protien: CommonData?=null,
+    var foodItems: ArrayList<FoodItemsRequest>?=null,
+)
+
 class MealUpdateRequest(
     var mealsId: String?= null,
     var date: String?=null,
     var image: String?=null,
-    var foodType: CommonData?=null,
+    var foodType: String?=null,
     var calories: CommonData?=null,
     var carbs: CommonData?=null,
     var fat: CommonData?=null,
@@ -34,7 +45,7 @@ class MealData(
         var isDeleted: Boolean?=null,
         var date: String?=null,
         var image: String?=null,
-        var foodType: CommonData?=null,
+        var foodType: String?=null,
         var calories: CommonData?=null,
         var carbs: CommonData?=null,
         var fat: CommonData?=null,
@@ -50,7 +61,7 @@ class MealData(
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
         parcel.readString(),
         parcel.readString(),
-        parcel.readParcelable(CommonData::class.java.classLoader),
+        parcel.readString(),
         parcel.readParcelable(CommonData::class.java.classLoader),
         parcel.readParcelable(CommonData::class.java.classLoader),
         parcel.readParcelable(CommonData::class.java.classLoader),
@@ -68,7 +79,7 @@ class MealData(
         parcel.writeValue(isDeleted)
         parcel.writeString(date)
         parcel.writeString(image)
-        parcel.writeParcelable(foodType, flags)
+        parcel.writeString(foodType)
         parcel.writeParcelable(carbs, flags)
         parcel.writeParcelable(calories, flags)
         parcel.writeParcelable(fat, flags)
