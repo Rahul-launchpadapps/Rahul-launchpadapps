@@ -6,6 +6,7 @@ class MessageConstants {
 
         companion object {
 
+           const  val selected_time_should_not_be = "Selected time should not be lesser than current time."
            const  val invalid_age = "Age must be between 35 and 100"
             const val please_enter_decline_reason = "Please enter decline reason."
             const val please_enter_message = "Please enter message"
