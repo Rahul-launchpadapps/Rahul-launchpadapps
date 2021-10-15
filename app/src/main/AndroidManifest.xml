@@ -39,13 +39,16 @@
         tools:targetApi="n">
         <activity
             android:name=".ui.subscription.SubscriptionActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my_reminder.MyReminderActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.add_meal.ImageViewActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.add_meal.AddMealActivity"
             android:exported="true"

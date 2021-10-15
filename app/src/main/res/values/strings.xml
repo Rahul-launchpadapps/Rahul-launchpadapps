@@ -52,6 +52,7 @@
     <string name="lets_get_started">Let\'s get started</string>
     <string name="back_to_signin">Back to sign in</string>
     <string name="logout">Logout</string>
+    <string name="log_out">Log out</string>
     <string name="welcome_to_home">Welcome To Home</string>
     <string name="my_account">My Account</string>
     <string name="view_profile">View Profile</string>
