@@ -9,8 +9,7 @@ import com.app.okra.models.MealData
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.getMealTime
-import kotlinx.android.synthetic.main.row_meal.view.tvDetail
-import kotlinx.android.synthetic.main.row_meal.view.tvGlucoseValue
+import kotlinx.android.synthetic.main.row_meal.view.*
 
 class MealsAdapter (var listener: Listeners.ItemClickListener,
                     private val dataList :  ArrayList<MealData>,

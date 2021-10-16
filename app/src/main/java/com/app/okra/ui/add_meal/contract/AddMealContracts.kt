@@ -1,0 +1,26 @@
+package com.app.okra.ui.add_meal.contract
+
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContract
+import com.app.okra.ui.add_meal.ImageViewActivity
+import com.app.okra.ui.add_meal.MealInput
+import com.app.okra.utils.AppConstants.RequestOrResultCodes.MEAL_ADDED
+
+class AddMealContracts :ActivityResultContract<MealInput, Boolean>() {
+
+    companion object {
+         val data = "data"
+    }
+
+    override fun createIntent(context: Context, mealInput: MealInput): Intent {
+        return Intent(context, ImageViewActivity::class.java)
+            .putExtra(data, mealInput)
+    }
+
+    override fun parseResult(resultCode: Int, intent: Intent?): Boolean {
+        return resultCode == MEAL_ADDED
+    }
+
+
+}

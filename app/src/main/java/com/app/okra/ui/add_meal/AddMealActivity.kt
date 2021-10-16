@@ -14,14 +14,13 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.AddMealRepoImpl
-import com.app.okra.data.repo.MealLogsRepoImpl
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
 import com.app.okra.models.FoodRecognintionResponse
-import com.app.okra.ui.logbook.meal.MealLogsViewModel
+import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.utils.*
 import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
@@ -59,6 +58,12 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         ).get(AddMealViewModel::class.java)
     }
 
+    val activityForResult = registerForActivityResult(AddMealContracts()){ result ->
+        if(result){
+           /* pageNo=1
+            getData(1)*/
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_meal)
@@ -240,31 +245,33 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         viewModel._foodRecognitionLiveData.observe(this) {
             iv_image.loadUserImageFromUrl(this, image)
             try {
-                val jObject = JSONObject(it.toString())
-                val aJsonString = jObject.getString("lang")
-                val response =
-                    Gson().fromJson(Gson().toJson(it), FoodRecognintionResponse::class.java)
-                if (!response.is_food) {
-                    startActivityForResult(
-                        Intent(this, ImageViewActivity::class.java)
-                            .putExtra("invalid", true)
-                            .putExtra("image", image), 100
-                    )
-                } else if (response.results?.size == null || response.results?.size == 0) {
-                    startActivityForResult(
-                        Intent(this, ImageViewActivity::class.java)
-                            .putExtra("invalid", true)
-                            .putExtra("image", image), 100
-                    )
+                println("::: Output: ${it}")
+
+               /* val jObject = JSONObject(it)
+
+                val jsonString = jObject.getString("lang")
+                val response = Gson().fromJson(it, FoodRecognintionResponse::class.java)*/
+                val mealInput  = if (!it.is_food) {
+                    println("::::: Invalid: True ")
+
+                    MealInput(invalid = true, image= image)
+                } else if (it.results == null || it.results!!.size == 0) {
+                    println("::::: Invalid: True, No Data ")
+
+                    MealInput(invalid = true, image= image)
                 } else {
-                    startActivityForResult(
-                        Intent(this, ImageViewActivity::class.java)
-                            .putExtra("invalid", false)
-                            .putExtra("image", image)
-                            .putExtra("data", response), 100
-                    )
+                    MealInput(invalid = false, image= image, data = it)
                 }
+             //   activityForResult.launch(mealInput)
+
+                println("::: Exception NO")
+
+                startActivity(Intent(this, ImageViewActivity::class.java)
+                    .putExtra(AddMealContracts.data,mealInput))
+
             }catch (e: Exception){
+                println("::: Exception: ${e.message}")
+                e.printStackTrace()
             }
         }
 

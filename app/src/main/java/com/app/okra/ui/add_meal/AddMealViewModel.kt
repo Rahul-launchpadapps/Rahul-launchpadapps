@@ -9,8 +9,8 @@ import com.app.okra.data.repo.AddMealRepo
 import com.app.okra.models.AddMealRequest
 import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
-import com.app.okra.models.MealUpdateRequest
-import com.app.okra.utils.*
+import com.app.okra.models.FoodRecognintionResponse
+import com.app.okra.utils.Event
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -19,8 +19,8 @@ import java.net.URLConnection
 
 class AddMealViewModel(private val repo: AddMealRepo?) : BaseViewModel() {
 
-    private var foodRecognitionLiveData = MutableLiveData<Any>()
-    val _foodRecognitionLiveData: LiveData<Any>
+    private var foodRecognitionLiveData = MutableLiveData<FoodRecognintionResponse>()
+    val _foodRecognitionLiveData: LiveData<FoodRecognintionResponse>
         get() = foodRecognitionLiveData
     private lateinit var multipart: MultipartBody.Part
 
@@ -38,7 +38,7 @@ class AddMealViewModel(private val repo: AddMealRepo?) : BaseViewModel() {
             hideProgressBar()
             when (result) {
                 is ApiResult.Success1<*> -> {
-                    foodRecognitionLiveData.value = result.value.toString()
+                    foodRecognitionLiveData.value = result.value as FoodRecognintionResponse
                 }
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))

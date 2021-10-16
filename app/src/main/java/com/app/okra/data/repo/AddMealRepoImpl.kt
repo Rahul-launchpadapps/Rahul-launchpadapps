@@ -5,6 +5,7 @@ import com.app.okra.data.network.ApiResult
 import com.app.okra.data.network.ApiService
 import com.app.okra.data.network.BaseRepo
 import com.app.okra.models.AddMealRequest
+import com.app.okra.models.FoodRecognintionResponse
 import com.app.okra.models.MealUpdateRequest
 import kotlinx.coroutines.Dispatchers
 import okhttp3.MultipartBody
@@ -18,8 +19,8 @@ class AddMealRepoImpl constructor(
     override suspend fun foodRecognition(
         multipart: MultipartBody.Part?,
         key: String
-    ): Any {
-        return safeApiCallWithoutBaseResponse(Dispatchers.IO) {
+    ): ApiResult<FoodRecognintionResponse?> {
+        return safeApiCallWithoutBaseResponse<FoodRecognintionResponse>(Dispatchers.IO) {
             apiService.foodRecognition(multipart, key)
         }
     }

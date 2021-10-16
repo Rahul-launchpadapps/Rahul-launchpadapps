@@ -70,7 +70,7 @@ abstract class ApiExecutor {
     suspend fun <T> safeApiCallWithoutBaseResponse(
         dispatcher: CoroutineDispatcher,
         baseCall: suspend () -> Response<T>
-    ): Any {
+    ): ApiResult<T?> {
         return withContext(dispatcher) {
             try {
                 val result = baseCall.invoke()

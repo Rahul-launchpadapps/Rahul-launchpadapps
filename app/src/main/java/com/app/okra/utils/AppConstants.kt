@@ -44,6 +44,7 @@ class AppConstants {
         const val RESULT_CODE_TEST_LOG_DELETED: Int = 104
         const val RESULT_CODE_MEAL_LOG_UPDATED: Int = 103
         const val RESULT_CODE_MEAL_LOG_DELETED: Int = 106
+        const val MEAL_ADDED: Int = 107
     }
 
     class RequestParam {

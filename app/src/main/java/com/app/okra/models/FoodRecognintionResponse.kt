@@ -78,16 +78,20 @@ class Timing (
 class Results (
     var items: ArrayList<Items>?=null,
     var group: String?= null,
+    var isSelected: Boolean= false,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.createTypedArrayList(Items),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readByte() != 0.toByte(),
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeTypedList(items)
         parcel.writeString(group)
+        parcel.writeByte(if (isSelected) 1 else 0)
+
     }
 
     override fun describeContents(): Int {

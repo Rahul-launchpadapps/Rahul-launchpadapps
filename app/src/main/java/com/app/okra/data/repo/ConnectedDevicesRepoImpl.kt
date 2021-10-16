@@ -12,7 +12,8 @@ class ConnectedDevicesRepoImpl constructor(
     private val apiService: ApiService,
 ) : BaseRepo(apiService),
     ConnectedDevicesRepo {
-    override suspend fun updateNotificationStatus(data: SettingRequest): ApiResult<ApiData<Any>> {
+    override suspend fun updateNotificationStatus(data: SettingRequest)
+    : ApiResult<ApiData<Any>> {
         return safeApiCall(Dispatchers.IO) {
             apiService.modifySettings(data)
         }

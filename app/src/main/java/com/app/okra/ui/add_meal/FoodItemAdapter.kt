@@ -7,17 +7,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.Items
 import com.app.okra.models.Results
+import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.row_item_name.view.*
 import kotlinx.android.synthetic.main.row_meal.view.*
 
-class FoodItemAdapter (private val data : ArrayList<Items>
+class FoodItemAdapter (private val data : ArrayList<Items>, val listener : Listeners.ItemClickListener?=null
 ) : RecyclerView.Adapter<FoodItemAdapter.ItemViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.row_meal, parent, false
+                R.layout.row_item_type, parent, false
             )
         )
     }
@@ -35,6 +36,9 @@ class FoodItemAdapter (private val data : ArrayList<Items>
 
             itemView.tvTitle.text = data[position].name
             itemView.tvDetail.text = data[position].servingSizes?.size.toString() + " Serving"
+            itemView.setOnClickListener{
+                listener?.onSelect(position,null)
+            }
         }
     }
 }
