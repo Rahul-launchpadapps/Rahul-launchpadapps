@@ -116,6 +116,7 @@ class Items (
     var name: String?= null,
     var food_id: String?= null,
     var group: String?= null,
+    var selectedServingSize: ServingSize?= null,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.createTypedArrayList(ServingSize),
@@ -123,7 +124,8 @@ class Items (
         parcel.readParcelable(Nutrition::class.java.classLoader),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readParcelable(ServingSize::class.java.classLoader)
     ) {
     }
 
@@ -134,6 +136,7 @@ class Items (
         parcel.writeString(name)
         parcel.writeString(food_id)
         parcel.writeString(group)
+        parcel.writeParcelable(selectedServingSize, flags)
     }
 
     override fun describeContents(): Int {
@@ -153,17 +156,20 @@ class Items (
 
 class ServingSize (
     var unit: String?= null,
-    var servingWeight: Double?= null
+    var servingWeight: Double?= null,
+    var isServingSelected :Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readValue(Double::class.java.classLoader) as? Double
-    ) {
-    }
+        parcel.readValue(Double::class.java.classLoader) as? Double,
+        parcel.readByte() != 0.toByte(),
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(unit)
         parcel.writeValue(servingWeight)
+        parcel.writeByte(if (isServingSelected) 1 else 0)
+
     }
 
     override fun describeContents(): Int {

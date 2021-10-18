@@ -192,4 +192,9 @@
     <string name="please_select_carbs">Please select carbs</string>
     <string name="please_select_fat">Please select fat</string>
     <string name="please_select_protein">Please select protein</string>
+    <string name="serving_size">Serving Size</string>
+    <string name="no_of_Servings">Number of servings</string>
+    <string name="done">Done</string>
+    <string name="text_to_show">Looks like all food items are logged, you can now save your meal</string>
+    <string name="looks_good">Looks Good</string>
 </resources>

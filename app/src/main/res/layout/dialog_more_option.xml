@@ -31,7 +31,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clCamera"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100"
+        android:layout_height="@dimen/dp_130"
         android:layout_marginTop="@dimen/dp_20"
         android:background="@mipmap/ic_camera_card"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
             android:id="@+id/ivCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/photo_library"
+            android:background="@mipmap/camera"
             android:onClick="onBackClick"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_10"
@@ -74,7 +74,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clLibrary"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100"
+        android:layout_height="@dimen/dp_130"
         android:layout_gravity="center"
         android:background="@mipmap/ic_camera_card"
         app:layout_constraintStart_toStartOf="parent"

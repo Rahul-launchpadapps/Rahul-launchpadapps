@@ -20,6 +20,7 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
 import com.app.okra.models.FoodRecognintionResponse
+import com.app.okra.models.Items
 import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.utils.*
 import com.google.gson.Gson
@@ -45,6 +46,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private var mMonth: Int = 0
     private var mDay: Int = 0
     private var image: String = ""
+    private  lateinit var selectedFoodItem : Items
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -58,10 +60,16 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         ).get(AddMealViewModel::class.java)
     }
 
-    val activityForResult = registerForActivityResult(AddMealContracts()){ result ->
-        if(result){
-           /* pageNo=1
-            getData(1)*/
+    private val activityForResult = registerForActivityResult(AddMealContracts()){ result ->
+        if(result!=null){
+            selectedFoodItem= result
+            tvFoodTypeValue.text = result.name
+            result.nutrition?.let {
+                tvCalories.setText("${it.calories}")
+                tvCarbs.setText("${it.totalCarbs}" )
+                tvFat.setText("${it.totalFat}")
+                tvProtein.setText("${it.protein}")
+            }
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +96,9 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         cv_image.setOnClickListener {
             showOptionDialog(this, this, false)
         }
+        tvUploadImage.setOnClickListener {
+            showOptionDialog(this, this, false)
+        }
 
         btnSave.setOnClickListener {
             if (TextUtils.isEmpty(image)) {
@@ -104,23 +115,32 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                 showToast(getString(R.string.please_select_protein))
             } else {
                 var date = ""
-                var foodItemsRequest: FoodItemsRequest
-                var foodList: ArrayList<FoodItemsRequest> = ArrayList()
+                val foodList: ArrayList<FoodItemsRequest> = ArrayList()
 
                 date = tvDate.text.toString()
 
-                foodItemsRequest = FoodItemsRequest(
-                   "jshjksd",
-                    "djhjh",
+                val foodItemsRequest = if(this::selectedFoodItem.isInitialized){
+                    FoodItemsRequest(
+                        selectedFoodItem.group,
+                        selectedFoodItem.name,
+                        // uncomment this
+                     //   selectedFoodItem.selectedServingSize?.unit
                     "1"
-                )
+                    )
+                }else {
+                    FoodItemsRequest(
+                        "jshjksd",
+                        "djhjh",
+                        "1"
+                    )
+                }
                 foodList.add(foodItemsRequest)
 
                 viewModel.prepareAddRequest(
                     date = date,
                     image = image,
                     foodItems = foodList,
-                    foodType = "djhgdfj",
+                    foodType = tvFoodTypeValue.text.toString(),
                     calories = CommonData(tvCalories.text.toString(), "cal"),
                     carbs = CommonData(tvCarbs.text.toString(), "gm"),
                     fat = CommonData(tvFat.text.toString(), "gm"),
@@ -262,12 +282,12 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                 } else {
                     MealInput(invalid = false, image= image, data = it)
                 }
-             //   activityForResult.launch(mealInput)
+                activityForResult.launch(mealInput)
 
                 println("::: Exception NO")
 
-                startActivity(Intent(this, ImageViewActivity::class.java)
-                    .putExtra(AddMealContracts.data,mealInput))
+                /*startActivity(Intent(this, ImageViewActivity::class.java)
+                    .putExtra(AddMealContracts.data,mealInput))*/
 
             }catch (e: Exception){
                 println("::: Exception: ${e.message}")

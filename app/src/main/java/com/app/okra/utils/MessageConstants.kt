@@ -6,8 +6,8 @@ class MessageConstants {
 
         companion object {
 
-           const  val selected_time_should_not_be = "Selected time should not be lesser than current time."
-           const  val invalid_age = "Age must be between 35 and 100"
+            const  val selected_time_should_not_be = "Selected time should not be lesser than current time."
+            const  val invalid_age = "Age must be between 35 and 100"
             const val please_enter_decline_reason = "Please enter decline reason."
             const val please_enter_message = "Please enter message"
             const val enter_group_name = "Enter group name"
@@ -72,6 +72,7 @@ class MessageConstants {
             const val password_mismatch = "You must type the same password each time"
             const val same_password_issue = "Current password & New password could’nt be same"
             const val invalid_phone = "Invalid Phone No."
+            const val invalid_data = "Invalid data."
             const val fb_login_failed = "Facebook Login Failed."
             const val an_error_occurred = "An error occurred. Please try again later."
             const val please_select_rating = "Please select rating."
@@ -121,7 +122,8 @@ class MessageConstants {
     class Messages {
 
         companion object {
-            val please_enable_your_bluetooth=  "Please enable your bluetooth and retry."
+            const val no_serving_available = "No serving available."
+            const val please_enable_your_bluetooth=  "Please enable your bluetooth and retry."
             const val internet_connection_required ="Internet connection required."
             const val msg_storage_permission ="You have to give storage permission"
             const val msg_camera_permission ="You have to give camera permission"
