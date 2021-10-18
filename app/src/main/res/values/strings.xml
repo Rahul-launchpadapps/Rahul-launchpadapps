@@ -152,6 +152,7 @@
     <string name="successfully_updated_meal_details">Successfully updated meal details</string>
     <string name="your_meal_details_has_been_updated_successfully">Your meal details has been updated successfully</string>
     <string name="invalid_photo">Invalid Photo</string>
+    <string name="unsaved_meal">Unsaved Meal</string>
     <string name="this_does_not_look_like_photo">This does not look like photo. Would you like to retake the photo to get more accurate results?</string>
     <string name="retake">Retake</string>
     <string name="choose_your_food_item">Choose your food item</string>

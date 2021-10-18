@@ -11,7 +11,7 @@
         layout="@layout/layout_header"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/clSpinner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_70"
@@ -25,8 +25,10 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_gravity="top"
+            android:background="@color/bg_grey"
             android:overlapAnchor="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +54,7 @@
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatEditText
         style="@style/edit_text_style"
@@ -78,7 +80,7 @@
         android:id="@+id/etHypoBlood"
         android:layout_height="wrap_content"
         android:background="@mipmap/bg_edittext"
-        android:hint="@string/hyper_blood_glucose"
+        android:hint="@string/hypo_blood_glucose"
         android:singleLine="true"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"

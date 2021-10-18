@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/container"
-    android:background="@color/white">
+    android:background="@color/bg_grey">
 
     <include
         android:id="@+id/layoutHeader"
@@ -75,6 +75,7 @@
                         card_view:cardUseCompatPadding="true">
 
                         <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivFood"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@mipmap/ic_person_placeholder_bg" />
@@ -83,30 +84,32 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvDate"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dp_10"
                         android:ellipsize="end"
                         android:fontFamily="@font/axiforma_medium"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:maxLines="2"
                         android:text="@string/date_time"
                         android:textColor="@color/black_2"
                         android:textSize="@dimen/sp_16"
+                        app:layout_constraintEnd_toStartOf="@+id/tvDateValue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/cv_image" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvDateValue"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
                         android:fontFamily="@font/axiforma_regular"
-                        android:gravity="center"
+                        android:gravity="end"
                         android:textColor="@color/grey_4"
                         android:textSize="@dimen/sp_14"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvDate"
                         app:layout_constraintTop_toBottomOf="@id/cv_image"
                         tools:text="Apr 15 2021" />
 

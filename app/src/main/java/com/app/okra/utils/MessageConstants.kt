@@ -152,6 +152,7 @@ class MessageConstants {
             const val work_in_progress = "Work in progress."
             const val no_data_available = "No data available."
             const val no_device_available = "No device found."
+            const val unsaved_meal_data = "You have unsaved meal details. These meal details will be lost."
 
 
         }
