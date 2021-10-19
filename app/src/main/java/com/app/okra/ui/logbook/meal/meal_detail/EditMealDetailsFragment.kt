@@ -10,6 +10,7 @@ import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MealLogsRepoImpl
 import com.app.okra.extension.beVisible
+import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
@@ -131,8 +132,16 @@ class EditMealDetailsFragment : BaseFragment() {
                     )
                 }
 
+            data?.image?.let {
+                ivFood.loadUserImageFromUrl(
+                    requireContext(),
+                    it,
+                    R.mipmap.ic_person_placeholder_bg
+                )
+            }
+
             data?.foodType?.let {
-                tvFoodTypeValue.text = it.let { it1 -> getMealTime(it1) }
+                tvFoodTypeValue.text = it.let { it }
             }
 
             tvCaloriesValue.setText(data?.calories?.value)

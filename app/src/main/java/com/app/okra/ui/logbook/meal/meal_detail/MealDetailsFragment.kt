@@ -11,6 +11,7 @@ import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MealLogsRepoImpl
+import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MealData
 import com.app.okra.ui.logbook.meal.MealLogsViewModel
@@ -85,22 +86,31 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
         arguments?.let { it ->
             data = it.getParcelable("data")
 
-            tvDateValue.text =
-                data?.createdAt?.let { it1 ->
-                    getDateFromISOInString(
-                        it1,
-                        formatYouWant = "MMM dd yyyy"
+            data?.apply {
+                tvDateValue.text =
+                    createdAt?.let { it1 ->
+                        getDateFromISOInString(
+                            it1,
+                            formatYouWant = "MMM dd yyyy"
+                        )
+                    }
+
+                image?.let {
+                    ivFood.loadUserImageFromUrl(
+                        requireContext(),
+                        it,
+                        R.mipmap.ic_person_placeholder_bg
                     )
                 }
+                foodType?.let {
+                    tvFoodTypeValue.text = it
+                }
 
-            data?.foodType?.let {
-                tvFoodTypeValue.text = it.let { it1 -> getMealTime(it1) }
+                tvCaloriesValue.text = calories?.value + " Cal"
+                tvCarbsValue.text = carbs?.value + " gm"
+                tvFatValue.text = fat?.value + " gm"
+                tvProteinvalue.text = protien?.value + " gm"
             }
-
-            tvCaloriesValue.text = data?.calories?.value + " Cal"
-            tvCarbsValue.text = data?.carbs?.value  + " gm"
-            tvFatValue.text = data?.fat?.value + " gm"
-            tvProteinvalue.text = data?.protien?.value + " gm"
         }
     }
 

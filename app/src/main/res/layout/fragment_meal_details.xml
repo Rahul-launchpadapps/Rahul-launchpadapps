@@ -75,6 +75,7 @@
                         card_view:cardUseCompatPadding="true">
 
                         <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivFood"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@mipmap/ic_person_placeholder_bg" />

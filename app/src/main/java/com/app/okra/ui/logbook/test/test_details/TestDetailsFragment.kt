@@ -62,7 +62,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
     private fun setUpToolbar() {
         tvTitle.text = getString(R.string.test_details)
         ivRight.visibility = View.VISIBLE
-        ivDelete.visibility = View.VISIBLE
+        ivDelete.visibility = View.GONE
     }
 
     private fun setListener() {
