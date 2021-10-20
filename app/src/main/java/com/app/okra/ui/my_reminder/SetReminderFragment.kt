@@ -241,8 +241,8 @@ class SetReminderFragment : BaseFragment() {
             strDate = df.format(c)
             startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
         }
-        obj.put("reminderType", reminderType)
-        obj.put("startDate", startDate)
+        obj["reminderType"] = reminderType
+        obj["startDate"] = startDate
 
         if (ivTimeSelector.isSelected) {
             timeDate =
@@ -252,29 +252,29 @@ class SetReminderFragment : BaseFragment() {
                 convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
         obj.put("time", timeDate)
 
-        if (tvSetRepeat.text.toString().equals(AppConstants.NEVER))
+        if (tvSetRepeat.text.toString() == AppConstants.NEVER)
             repeatType = "NEVER"
-        else if (tvSetRepeat.text.toString().equals(AppConstants.DAILY))
+        else if (tvSetRepeat.text.toString() == AppConstants.DAILY)
             repeatType = "EVERY_DAY"
-        else if (tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
+        else if (tvSetRepeat.text.toString() == AppConstants.MONTHLY)
             repeatType = "EVERY_MONTH"
-        else if (tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
+        else if (tvSetRepeat.text.toString() == AppConstants.WEEKLY)
             repeatType = "EVERY_WEEK"
         else
             repeatType = "SET_UP"
 
-        obj.put("repeatType", repeatType)
+        obj["repeatType"] = repeatType
 
-        if (tvSetEndRepeat.text.toString().equals(AppConstants.NEVER))
-            endRepeatType = "NEVER"
+        endRepeatType = if (tvSetEndRepeat.text.toString() == AppConstants.NEVER)
+            "NEVER"
         else
-            endRepeatType = "SET_UP"
+            "EVERY_DAY"
 
-        obj.put("endRepeatType", endRepeatType)
+        obj["endRepeatType"] = endRepeatType
 
-        if (endRepeatType.equals("SET_UP")) {
+        if (endRepeatType == "EVERY_DAY") {
             endDateValue = convertLocalTimeZoneToUTC("yyyy-MM-dd", endDate)
-            obj.put("endDate", endDateValue)
+            obj["endDate"] = endDateValue
         }
 
         viewModel.setReminder(obj)

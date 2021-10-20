@@ -1,6 +1,8 @@
 package com.app.okra.ui.my_account.setting.measurement
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +28,8 @@ class MeasurementSettingActivity : BaseActivity(), View.OnClickListener{
             SettingsViewModel(SettingRepoImpl(apiServiceAuth))
         }).get(SettingsViewModel::class.java)
     }
+    private var isHypoEdited = false
+    private var isHyperEdited = false
     override fun getViewModel(): BaseViewModel? {
         return viewModel
     }
@@ -84,6 +88,7 @@ class MeasurementSettingActivity : BaseActivity(), View.OnClickListener{
         ivBack.setOnClickListener(this)
         btnCommon.setOnClickListener(this)
         tvSpinner.setOnClickListener(this)
+        setTextChangeListener()
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -93,6 +98,61 @@ class MeasurementSettingActivity : BaseActivity(), View.OnClickListener{
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
         }
+
+    }
+
+    private fun setTextChangeListener() {
+     /*   etHyperBlood.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p0.isNullOrEmpty()) {
+                    var valueToModify = p0.toString()
+                    val unit = tvSpinner.text.toString()
+                    if (!isHyperEdited) {
+                        isHyperEdited = true
+
+                        if (valueToModify.contains(unit)) {
+                            valueToModify = valueToModify.replace(unit, "")
+                        }
+                        val textToSet = "$valueToModify ${tvSpinner.text}"
+                        etHyperBlood.setText(textToSet)
+                 //       etHyperBlood.setText(etHyperBlood.text!!.length)
+                    }else{
+                        isHyperEdited = false
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+
+        etHypoBlood.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                if (!p0.isNullOrEmpty()) {
+                    var valueToModify = p0.toString()
+                    val unit = tvSpinner.text.toString()
+                    if (!isHypoEdited) {
+                        isHypoEdited = true
+
+                        if (valueToModify.contains(unit)) {
+                            valueToModify = valueToModify.replace(unit, "")
+                        }
+                        val textToSet = "$valueToModify ${tvSpinner.text}"
+                        etHypoBlood.setText(textToSet)
+                     //   etHypoBlood.setText(etHypoBlood.text!!.length)
+                    }else{
+                        isHypoEdited = false
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+*/
 
     }
 

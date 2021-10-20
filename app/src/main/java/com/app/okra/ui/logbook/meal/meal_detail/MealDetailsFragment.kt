@@ -16,6 +16,7 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MealData
 import com.app.okra.ui.logbook.meal.MealLogsViewModel
 import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
 import kotlinx.android.synthetic.main.fragment_meal_details.*
 import kotlinx.android.synthetic.main.layout_header.*
 
@@ -91,7 +92,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                     createdAt?.let { it1 ->
                         getDateFromISOInString(
                             it1,
-                            formatYouWant = "MMM dd yyyy"
+                            formatYouWant = DATE_FORMAT_1
                         )
                     }
 

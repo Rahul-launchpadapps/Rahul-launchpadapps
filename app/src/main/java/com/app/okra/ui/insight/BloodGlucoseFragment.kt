@@ -15,6 +15,7 @@ import com.app.okra.data.repo.BloodGlucoseRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.getMealTime
 import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_blood_glucose.*
 import kotlinx.android.synthetic.main.fragment_blood_glucose.spinner
@@ -22,6 +23,8 @@ import kotlinx.android.synthetic.main.fragment_blood_glucose.spinner
 class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
     private val type : String = "BLOOD_GLUCOSE"
+    private var time : String = AppConstants.TODAY
+    private var testingTime : String = AppConstants.BEFORE_MEAL
     private lateinit var customSpinnerAdapter: CustomSpinnerAdapter
 
     private val timingList by lazy {
@@ -49,14 +52,14 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getData(AppConstants.TODAY)
+        getData()
         setObserver()
         setListener()
         setAdapter()
     }
 
-    private fun getData(time: String) {
-        viewModel.prepareRequest(type,"AFTER_MEAL",time)
+    private fun getData() {
+        viewModel.prepareRequest(type,testingTime,time)
         viewModel.getInsight()
     }
 
@@ -95,7 +98,8 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
             tv_this_month.setTextColor(textGreyColor)
             iv_this_month.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
-            getData(AppConstants.TODAY)
+            time = AppConstants.TODAY
+            getData()
         }
         rl_this_week.setOnClickListener {
             tv_this_week.setTextColor(textGreenColor)
@@ -107,7 +111,8 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
             tv_this_month.setTextColor(textGreyColor)
             iv_this_month.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
-            getData(AppConstants.WEEK)
+            time = AppConstants.WEEK
+            getData()
         }
         rl_this_month.setOnClickListener {
             tv_this_month.setTextColor(textGreenColor)
@@ -119,7 +124,8 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
             tv_today.setTextColor(textGreyColor)
             iv_today.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
-            getData(AppConstants.MONTH)
+            time = AppConstants.MONTH
+            getData()
         }
 
         tvSet.setOnClickListener {
@@ -129,6 +135,8 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 tvSet.text = timingList[p2]
+                testingTime = getMealTime(timingList[p2],false)
+                getData()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}

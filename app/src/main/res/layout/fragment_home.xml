@@ -30,12 +30,13 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ivOkra">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/ivOkra"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_hello"
@@ -253,7 +254,7 @@
                         android:layout_marginStart="@dimen/dp_40"
                         android:layout_marginTop="@dimen/dp_5"
                         android:background="@drawable/bg_circle_green"
-                        android:backgroundTint="@color/green_1" />
+                        android:backgroundTint="@color/bg_grey" />
 
                 </RelativeLayout>
 
@@ -283,7 +284,7 @@
                         android:layout_marginStart="@dimen/dp_40"
                         android:layout_marginTop="@dimen/dp_5"
                         android:background="@drawable/bg_circle_green"
-                        android:backgroundTint="@color/green_1" />
+                        android:backgroundTint="@color/bg_grey" />
 
                 </RelativeLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -326,7 +327,7 @@
                             tools:ignore="UsingOnClickInXml" />
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvTotalStepsValue"
+                            android:id="@+id/tvTotalTestValue"
                             style="@style/textContainer"
                             android:layout_width="wrap_content"
                             android:layout_marginStart="@dimen/dp_10"
@@ -354,7 +355,7 @@
                             android:textSize="@dimen/sp_16"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvTotalStepsValue"
+                            app:layout_constraintTop_toBottomOf="@id/tvTotalTestValue"
                             tools:ignore="RtlSymmetry" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

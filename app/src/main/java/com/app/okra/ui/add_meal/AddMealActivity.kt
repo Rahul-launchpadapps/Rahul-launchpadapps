@@ -1,11 +1,13 @@
 package com.app.okra.ui.add_meal
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.net.toUri
@@ -23,6 +25,7 @@ import com.app.okra.models.FoodRecognintionResponse
 import com.app.okra.models.Items
 import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
 import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -45,6 +48,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private var mYear: Int = 0
     private var mMonth: Int = 0
     private var mDay: Int = 0
+    private var mHour: Int = 0
+    private var mMin: Int = 0
     private var image: String = ""
     private  lateinit var selectedFoodItem : Items
 
@@ -65,10 +70,20 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             selectedFoodItem= result
             tvFoodTypeValue.text = result.name
             result.nutrition?.let {
-                tvCalories.setText("${it.calories}")
-                tvCarbs.setText("${it.totalCarbs}" )
-                tvFat.setText("${it.totalFat}")
-                tvProtein.setText("${it.protein}")
+                if(it.calories!=null) {
+                    tvCalories.setText("${it.calories}")
+                }
+                if(it.totalCarbs!=null) {
+                    tvCarbs.setText("${it.totalCarbs}")
+                }
+
+                if(it.totalFat!=null) {
+                    tvFat.setText("${it.totalFat}")
+                }
+
+                if(it.protein!=null) {
+                    tvProtein.setText("${it.protein}")
+                }
             }
         }
     }
@@ -90,7 +105,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         mChooseImageUtils.setCallbacks(this, this)
 
         ivBack.setOnClickListener {
-            finish()
+            checkDataExistence()
+
         }
 
         cv_image.setOnClickListener {
@@ -124,8 +140,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                         selectedFoodItem.group,
                         selectedFoodItem.name,
                         // uncomment this
-                     //   selectedFoodItem.selectedServingSize?.unit
-                    "1"
+                        //   selectedFoodItem.selectedServingSize?.unit
+                        "1"
                     )
                 }else {
                     FoodItemsRequest(
@@ -153,6 +169,33 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         tvDate.setOnClickListener {
             selectDate(tvDate)
         }
+    }
+
+    private fun checkDataExistence() {
+        if(image.isNotEmpty()){
+            showCustomAlertDialog(
+                this,
+                object : Listeners.DialogListener{
+                    override fun onOkClick(dialog: DialogInterface?) {
+                        finish()
+                        dialog?.dismiss()
+                    }
+
+                    override fun onCancelClick(dialog: DialogInterface?) {
+                        dialog?.dismiss()
+                    }
+
+                },
+                MessageConstants.Messages.unsaved_meal_data,
+                true,
+                positiveButtonText = getString(R.string.ok),
+                negativeButtonText = getString(R.string.cancel),
+                title = getString(R.string.unsaved_meal)
+            )
+        }else{
+            finish()
+        }
+
     }
 
     override fun onImageClick(dialog: DialogInterface?) {
@@ -216,9 +259,10 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                     if (result != null && result.uri != null) {
                         val imageUri = result.uri!!
                         val fileSize = getFileSize(imageUri!!)
-                        image = imageUri.path.toString()
+
                         println(":::: File Size: $fileSize")
                         if (fileSize > -1 && fileSize <= AppConstants.ALLOWED_FILE_SIZE) {
+                            image = imageUri.path.toString()
                             viewModel.foodRecognition(imageUri.path)
                         } else {
                             showToast("Selected file exceeds the maximum limit of ${AppConstants.ALLOWED_FILE_SIZE} MB.")
@@ -267,10 +311,10 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
             try {
                 println("::: Output: ${it}")
 
-               /* val jObject = JSONObject(it)
+                /* val jObject = JSONObject(it)
 
-                val jsonString = jObject.getString("lang")
-                val response = Gson().fromJson(it, FoodRecognintionResponse::class.java)*/
+                 val jsonString = jObject.getString("lang")
+                 val response = Gson().fromJson(it, FoodRecognintionResponse::class.java)*/
                 val mealInput  = if (!it.is_food) {
                     println("::::: Invalid: True ")
 
@@ -305,7 +349,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         }
     }
 
-    private fun selectDate(tvFromDate: AppCompatTextView) {
+    private fun selectDate(tvDate: AppCompatTextView) {
         val c = Calendar.getInstance()
         mYear = c.get(Calendar.YEAR)
         mMonth = c.get(Calendar.MONTH)
@@ -313,9 +357,9 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
         val datePickerDialog =
             DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
-                val strDate: String =
+                var strDate: String =
                     year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
-                tvFromDate.text = strDate
+                showTimePicker(tvDate, strDate)
             }, mYear, mMonth, mDay)
         val c1 = Calendar.getInstance()
         c1.add(Calendar.MONTH, -2)
@@ -324,4 +368,29 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     }
 
+    private fun showTimePicker(
+        tvDate: AppCompatTextView,
+        selectedDate: String
+    ) {
+        val c = Calendar.getInstance()
+        mHour = c.get(Calendar.HOUR_OF_DAY)
+        mMin = c.get(Calendar.MINUTE)
+
+        val tpd = TimePickerDialog(
+            this, { timePicker, hour, minute ->
+               val completeDate = "$selectedDate $hour:$minute"
+                tvDate.text =  getDifferentInfoFromDate_String(completeDate,"yyyy-MM-dd hh:mm",DATE_FORMAT_1)
+            },
+            mHour,
+            mMin,
+            true
+        )
+
+        tpd.show()
+
+    }
+
+    override fun onBackPressed() {
+        checkDataExistence()
+    }
 }

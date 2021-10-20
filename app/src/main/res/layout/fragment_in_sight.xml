@@ -27,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="-15dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@mipmap/filter"
@@ -91,13 +92,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_5"
             android:background="@drawable/bg_circle_green"
-            android:backgroundTint="@color/white" />
+            android:backgroundTint="@color/bg_grey" />
 
     </RelativeLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

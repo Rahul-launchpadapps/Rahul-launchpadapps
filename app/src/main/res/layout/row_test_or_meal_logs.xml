@@ -30,7 +30,7 @@
             android:id="@+id/tvDate"
             style="@style/heightWrapOnly"
             android:fontFamily="@font/axiforma_regular"
-            tools:text="@string/camera"
+            tools:text="Oct 18 2021"
             android:maxLines="1"
             android:ellipsize="end"
             android:textAllCaps="false"

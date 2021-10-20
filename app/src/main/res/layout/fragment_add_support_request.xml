@@ -49,6 +49,8 @@
         android:background="@mipmap/description_field"
         android:hint="@string/write_your"
         android:lines="5"
+        android:gravity="start"
+        android:padding="@dimen/dp_30"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"

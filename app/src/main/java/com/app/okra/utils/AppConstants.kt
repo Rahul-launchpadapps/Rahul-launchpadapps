@@ -128,17 +128,15 @@ class AppConstants {
 
     object ContentManagementUrl {
         const val PRIVACY_POLICY_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "PRIVACY_POLICY"
-        const val TERM_AND_COND_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "TERMS_OF_SERVICE_AGREEMENT"
-        const val ABOUT_US_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "CODE_OF_CONDUCT"
-        const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "DWES_CHECK_SIGNED"
+        const val TERM_AND_COND_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "TERMS_AND_CONDITIONS"
+        const val ABOUT_US_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "ABOUT_US"
+        const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "CONTACT_US"
     }
 
-    class Testing_Time {
-        companion object {
-            const val AFTER_MEAL = "AFTER_MEAL"
-            const val BEFORE_MEAL = "BEFORE_MEAL"
-        }
+ object DateFormat {
+        const val DATE_FORMAT_1 = "MMM dd YYYY | hh:mma"
 
     }
+
 
 }
