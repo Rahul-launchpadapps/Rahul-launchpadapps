@@ -198,4 +198,10 @@
     <string name="done">Done</string>
     <string name="text_to_show">Looks like all food items are logged, you can now save your meal</string>
     <string name="looks_good">Looks Good</string>
+    <string name="your_login_session_has_been_expired">Your login session has been expired.</string>
+    <string name="selected_time_should_not_be_lesser_than_current_time">Selected time should not be lesser than current time.</string>
+    <string name="saved_successfully">Saved Successfully</string>
+    <string name="cal">cal</string>
+    <string name="gm">gm</string>
+    <string name="food_logs">Food Logs</string>
 </resources>

@@ -72,7 +72,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
         ivRight.setOnClickListener {
             val bundle = Bundle()
-            bundle.putParcelable("data", arguments?.getParcelable("data"))
+            bundle.putParcelable(AppConstants.DATA, arguments?.getParcelable(AppConstants.DATA))
             navController.navigate(R.id.action_testDetails_to_editTestDetails, bundle)
         }
 
@@ -91,7 +91,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
     private fun getData() {
         arguments?.let { it ->
-            data = it.getParcelable("data")
+            data = it.getParcelable(AppConstants.DATA)
 
             tvDateValue.text =
                 data?.createdAt?.let { it1 ->

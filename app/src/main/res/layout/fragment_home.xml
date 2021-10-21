@@ -712,6 +712,32 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_food_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/axiforma_bold"
+                app:layout_constraintTop_toBottomOf="@id/ll_info3"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/food_logs"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_20"
+                android:textColor="@color/black_2"
+                android:textSize="@dimen/sp_18" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_meal_list"
+                style="@style/subContainer"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingEnd="@dimen/dp_10"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/dp_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_food_log" />
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"

@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_blood_glucose.spinner
 
 class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
-    private val type : String = "BLOOD_GLUCOSE"
+    private val type : String = AppConstants.BLOOD_GLUCOSE
     private var time : String = AppConstants.TODAY
     private var testingTime : String = AppConstants.BEFORE_MEAL
     private lateinit var customSpinnerAdapter: CustomSpinnerAdapter

@@ -85,8 +85,8 @@ class SetReminderFragment : BaseFragment() {
 
     private fun getData() {
         arguments?.let { it ->
-            var data: String? = it.getString("data")
-            if (data.equals("diabetes")) {
+            var data: String? = it.getString(AppConstants.DATA)
+            if (data.equals(AppConstants.DIABETES)) {
                 reminderType = 2
             } else
                 reminderType = 1
@@ -167,15 +167,15 @@ class SetReminderFragment : BaseFragment() {
             val c = Calendar.getInstance()
             if(ivTimeSelector.isSelected && ivDateSelector.isSelected){
                 val date1: Date = c.time
-                val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", "$strDate $timeValue")
+                val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $timeValue")
                 if(startDate?.before(date1) == true) {
-                    showToast("Selected time should not be lesser than current time.")
+                    showToast(getString(R.string.selected_time_should_not_be_lesser_than_current_time))
                 }else
                     hitApi()
             }else{
                 if(ivDateSelector.isSelected){
                     val date1: Date = c.time
-                    val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", "$strDate $defaultTime")
+                    val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $defaultTime")
                     if(startDate?.before(date1) == true) {
                         showToast("You can not select today's date as the default time of $defaultTime is already passed.")
 
@@ -188,9 +188,9 @@ class SetReminderFragment : BaseFragment() {
                         hitApi()
                 }else if(ivTimeSelector.isSelected){
                     val date1: Date = c.time
-                    val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val df = SimpleDateFormat(AppConstants.DateFormat.DATE_FORMAT_3, Locale.getDefault())
                     strDate = df.format(date1)
-                    val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", "$strDate $timeValue")
+                    val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $timeValue")
                     if(startDate?.before(date1) == true) {
                         showToast(MessageConstants.Errors.selected_time_should_not_be)
 
@@ -208,7 +208,7 @@ class SetReminderFragment : BaseFragment() {
 
     private fun setAdapter() {
         btnCommon.text = getString(R.string.save)
-        repeatList.add(AppConstants.NEVER)
+        repeatList.add(AppConstants.NEVER_TEXT)
         repeatList.add(AppConstants.DAILY)
         repeatList.add(AppConstants.WEEKLY)
         repeatList.add(AppConstants.MONTHLY)
@@ -217,7 +217,7 @@ class SetReminderFragment : BaseFragment() {
         spinnerRepeat.adapter = customSpinnerAdapter1
         tvSetRepeat.text = repeatList[0]
 
-        endRepeatList.add(AppConstants.NEVER)
+        endRepeatList.add(AppConstants.NEVER_TEXT)
         endRepeatList.add(AppConstants.END_REPEAT_DATE)
 
         customSpinnerAdapter2 = CustomSpinnerAdapter(requireActivity(), endRepeatList)
@@ -234,47 +234,47 @@ class SetReminderFragment : BaseFragment() {
         val endDateValue: String
         val obj = HashMap<String, Any>()
         if (ivDateSelector.isSelected) {
-            startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
+            startDate = convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_3, strDate)
         } else {
             val c = Calendar.getInstance().time
-            val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val df = SimpleDateFormat(AppConstants.DateFormat.DATE_FORMAT_3, Locale.getDefault())
             strDate = df.format(c)
-            startDate = convertLocalTimeZoneToUTC("yyyy-MM-dd", strDate)
+            startDate = convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_3, strDate)
         }
-        obj["reminderType"] = reminderType
-        obj["startDate"] = startDate
+        obj[AppConstants.RequestParam.reminderType] = reminderType
+        obj[AppConstants.RequestParam.startDate] = startDate
 
         if (ivTimeSelector.isSelected) {
             timeDate =
-                convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
+                convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_2, strDate + " " + timeValue)
         } else
             timeDate =
-                convertLocalTimeZoneToUTC("yyyy-MM-dd hh:mm a", strDate + " " + "12:00 pm")
-        obj.put("time", timeDate)
+                convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_2, strDate + " " + "12:00 pm")
+        obj.put(AppConstants.RequestParam.time, timeDate)
 
-        if (tvSetRepeat.text.toString() == AppConstants.NEVER)
-            repeatType = "NEVER"
+        if (tvSetRepeat.text.toString() == AppConstants.NEVER_TEXT)
+            repeatType = AppConstants.NEVER
         else if (tvSetRepeat.text.toString() == AppConstants.DAILY)
-            repeatType = "EVERY_DAY"
+            repeatType = AppConstants.EVERY_DAY
         else if (tvSetRepeat.text.toString() == AppConstants.MONTHLY)
-            repeatType = "EVERY_MONTH"
+            repeatType = AppConstants.EVERY_MONTH
         else if (tvSetRepeat.text.toString() == AppConstants.WEEKLY)
-            repeatType = "EVERY_WEEK"
+            repeatType = AppConstants.EVERY_WEEK
         else
-            repeatType = "SET_UP"
+            repeatType = AppConstants.SET_UP
 
-        obj["repeatType"] = repeatType
+        obj[AppConstants.RequestParam.repeatType] = repeatType
 
-        endRepeatType = if (tvSetEndRepeat.text.toString() == AppConstants.NEVER)
-            "NEVER"
+        endRepeatType = if (tvSetEndRepeat.text.toString() == AppConstants.NEVER_TEXT)
+            AppConstants.NEVER
         else
-            "EVERY_DAY"
+            AppConstants.EVERY_DAY
 
-        obj["endRepeatType"] = endRepeatType
+        obj[AppConstants.RequestParam.endRepeatType] = endRepeatType
 
-        if (endRepeatType == "EVERY_DAY") {
-            endDateValue = convertLocalTimeZoneToUTC("yyyy-MM-dd", endDate)
-            obj["endDate"] = endDateValue
+        if (endRepeatType == AppConstants.EVERY_DAY) {
+            endDateValue = convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_3, endDate)
+            obj[AppConstants.RequestParam.endDate] = endDateValue
         }
 
         viewModel.setReminder(obj)
@@ -300,7 +300,7 @@ class SetReminderFragment : BaseFragment() {
                     tvDateValue.text = date
                     if(ivTimeSelector.isSelected){
                         val date1: Date = c.getTime()
-                        val startDate = getDateFromPattern("yyyy-MM-dd hh:mm a", strDate + " " + timeValue)
+                        val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, strDate + " " + timeValue)
                         if(startDate?.before(date1) == true) {
                             ivTimeSelector.isSelected = false
                             tvTime.gravity = Gravity.CENTER
@@ -376,7 +376,7 @@ class SetReminderFragment : BaseFragment() {
     private fun setObserver() {
         setBaseObservers(viewModel, this)
         viewModel._setReminderLiveData.observe(viewLifecycleOwner) { it ->
-            showToast("Saved Successfully")
+            showToast(getString(R.string.saved_successfully))
             activity?.finish()
         }
     }
@@ -392,7 +392,7 @@ class SetReminderFragment : BaseFragment() {
         calendar[Calendar.SECOND] = 0
         val alarmMgr = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra("type", "reminder")
+        intent.putExtra(AppConstants.Intent_Constant.TYPE, AppConstants.Intent_Constant.REMINDER)
         val alarmIntent = PendingIntent.getBroadcast(
             context,
             100,

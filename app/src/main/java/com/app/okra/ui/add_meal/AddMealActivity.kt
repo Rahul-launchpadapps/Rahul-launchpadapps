@@ -157,10 +157,10 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                     image = image,
                     foodItems = foodList,
                     foodType = tvFoodTypeValue.text.toString(),
-                    calories = CommonData(tvCalories.text.toString(), "cal"),
-                    carbs = CommonData(tvCarbs.text.toString(), "gm"),
-                    fat = CommonData(tvFat.text.toString(), "gm"),
-                    protein = CommonData(tvProtein.text.toString(), "gm"),
+                    calories = CommonData(tvCalories.text.toString(), getString(R.string.cal)),
+                    carbs = CommonData(tvCarbs.text.toString(), getString(R.string.gm)),
+                    fat = CommonData(tvFat.text.toString(), getString(R.string.gm)),
+                    protein = CommonData(tvProtein.text.toString(), getString(R.string.gm)),
                 )
                 viewModel.addMeal()
             }

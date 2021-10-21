@@ -7,12 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.app.okra.models.Items
 import com.app.okra.ui.add_meal.ImageViewActivity
 import com.app.okra.ui.add_meal.MealInput
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.AppConstants.RequestOrResultCodes.MEAL_ADDED
 
 class AddMealContracts :ActivityResultContract<MealInput, Items?>() {
 
     companion object {
-         val data = "data"
+         val data = AppConstants.DATA
     }
 
     override fun createIntent(context: Context, mealInput: MealInput): Intent {

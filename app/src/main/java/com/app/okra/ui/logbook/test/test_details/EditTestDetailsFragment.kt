@@ -154,7 +154,7 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
 
     private fun getData() {
         arguments?.let {
-            data = it.getParcelable("data")
+            data = it.getParcelable(AppConstants.DATA)
 
             tvDateValue.text =
                 data?.createdAt?.let { it1 ->

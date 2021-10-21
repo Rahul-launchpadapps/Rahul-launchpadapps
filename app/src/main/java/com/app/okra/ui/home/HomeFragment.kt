@@ -7,17 +7,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.HomeRepoImpl
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.MealData
+import com.app.okra.ui.logbook.meal.MealLogsAdapter
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.Listeners
+import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.rv_meal_list
+import kotlinx.android.synthetic.main.fragment_meal_logs.*
 
-class HomeFragment : BaseFragmentWithoutNav() {
+class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
+
+    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var mealLogsAdapter: MealLogsAdapter
+    private var hashMapKeyList  = ArrayList<String>()
+    private var hashMapMealLog = hashMapOf<String,  ArrayList<MealData>>()
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -62,9 +74,18 @@ class HomeFragment : BaseFragmentWithoutNav() {
                 tvTotalTestValue.text = it.totalTest
                 tvAvgBgValue.text = it.avgBloodGlucose
                 tvInsulinValue.text = it.avgInsulin
-                tvHyperValue.text = it.hyper_hypes
+                tvHyperValue.text = it.hyper_hypes?.hyper
                 tvHbaValue.text = it.Est_HbA1c
                 tvCarbsValue.text = it.carbsCount
+                if(it.foodLogs?.size!! >0){
+                    tv_food_log.visibility = View.VISIBLE
+                    rv_meal_list.visibility = View.VISIBLE
+                        // setAdapter()
+                  //  it.data?.let { it1 -> prepareDateWiseData(it1)}
+                }else {
+                    tv_food_log.visibility = View.GONE
+                    rv_meal_list.visibility = View.GONE
+                }
             }
         }
 
@@ -72,12 +93,41 @@ class HomeFragment : BaseFragmentWithoutNav() {
             val data = it.getContent()
             data?.message?.let { it1 -> showToast(it1) }
 
-            if (data?.message == "Your login session has been expired.") {
+            if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
 
                 requireActivity().finish()
             }
         }
+    }
+
+    private fun setAdapter() {
+        mealLogsAdapter = MealLogsAdapter(this, hashMapKeyList, hashMapMealLog)
+        layoutManager = LinearLayoutManager(requireContext())
+        rv_meal_list.layoutManager = layoutManager
+        rv_meal_list.adapter = mealLogsAdapter
+    }
+
+    private fun prepareDateWiseData(testLogData: ArrayList<MealData>) {
+        val hashMap = hashMapOf<String,  ArrayList<MealData>>()
+        if(testLogData.isNotEmpty()) {
+            for ((index, data) in testLogData.withIndex()){
+                val date = data.date
+                date?.let{
+                    val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
+
+                    val list: java.util.ArrayList<MealData> = if(hashMap.containsKey(dateToSet)){
+                        hashMap[dateToSet] as ArrayList<MealData>
+                    }else{
+                        ArrayList()
+                    }
+                    list.add(data)
+                    hashMap[dateToSet]  = list
+                }
+            }
+        }
+        hashMapMealLog.putAll(hashMap)
+        hashMapKeyList.addAll(hashMap.keys.toList())
     }
 
     private fun setListener() {
@@ -144,6 +194,14 @@ class HomeFragment : BaseFragmentWithoutNav() {
             iv_today.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
         }
+    }
+
+    override fun onSelect(o: Any?, o1: Any?) {
+
+    }
+
+    override fun onUnSelect(o: Any?, o1: Any?) {
+
     }
 
 }

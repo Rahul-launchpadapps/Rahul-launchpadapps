@@ -100,7 +100,7 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
             val data = it.getContent()
             data?.message?.let { it1 -> showToast(it1) }
 
-            if (data?.message == "Your login session has been expired.") {
+            if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
 
                 requireActivity().finish()

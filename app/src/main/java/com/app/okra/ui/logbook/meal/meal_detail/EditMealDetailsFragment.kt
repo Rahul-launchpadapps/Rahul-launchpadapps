@@ -16,6 +16,7 @@ import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
 import com.app.okra.models.MealData
 import com.app.okra.ui.logbook.meal.MealLogsViewModel
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.getMealTime
 import kotlinx.android.synthetic.main.fragment_edit_meal_details.*
@@ -111,7 +112,7 @@ class EditMealDetailsFragment : BaseFragment() {
         setBaseObservers(viewModel, this)
         viewModel._updateMealLiveData.observe(viewLifecycleOwner) {
             val bundle = Bundle()
-            bundle.putString("from","meal")
+            bundle.putString(AppConstants.FROM,AppConstants.MEAL)
             navController.navigate(
                 R.id.action_editMealDetails_to_successfulUpdatedFragment,
                 bundle
@@ -121,7 +122,7 @@ class EditMealDetailsFragment : BaseFragment() {
 
     private fun getData() {
         arguments?.let { it ->
-            data = it.getParcelable("data")
+            data = it.getParcelable(AppConstants.DATA)
 
             tvDateValue.text =
                 data?.createdAt?.let { it1 ->
