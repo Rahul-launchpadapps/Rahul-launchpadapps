@@ -39,7 +39,7 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     // private val mealList  = ArrayList<MealData>()
 
     private var hashMapKeyList  = ArrayList<String>()
-    private var hashMapMealLog = hashMapOf<String,  ArrayList<MealData>>()
+    private var hashMapMealLog = LinkedHashMap<String,  ArrayList<MealData>>()
 
 
     override fun getViewModel(): BaseViewModel? {
@@ -120,10 +120,10 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     }
 
     private fun prepareDateWiseData(testLogData: ArrayList<MealData>) {
-        val hashMap = hashMapOf<String,  ArrayList<MealData>>()
+        val hashMap = LinkedHashMap<String,  ArrayList<MealData>>()
         if(testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()){
-                val date = data.date
+                val date = data.createdAt
                 date?.let{
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 

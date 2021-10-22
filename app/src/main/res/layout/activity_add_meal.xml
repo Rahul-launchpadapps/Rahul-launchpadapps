@@ -55,8 +55,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
+                    android:layout_height="match_parent">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_image"
@@ -93,16 +92,19 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvFoodType"
                 style="@style/textContainer"
-                android:layout_width="@dimen/dp_0"
+                android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:ellipsize="end"
                 android:fontFamily="@font/axiforma_medium"
-                android:gravity="center"
+                android:gravity="start"
                 android:maxLines="1"
                 android:text="@string/food_type"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toStartOf="@+id/tvFoodTypeValue"
+                app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvUploadImage"
                 tools:ignore="RtlSymmetry" />
@@ -115,14 +117,33 @@
                 android:layout_marginEnd="@dimen/dp_20"
                 android:ellipsize="end"
                 android:fontFamily="@font/axiforma_medium"
-                android:gravity="center"
+                android:gravity="end"
                 android:maxLines="1"
-                tools:text="@string/food_type"
                 android:textColor="@color/grey_4"
                 android:textSize="@dimen/sp_14"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFoodType"
                 app:layout_constraintTop_toBottomOf="@id/tvUploadImage"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                tools:text="@string/food_type" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDateHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/date_time"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFoodType" />
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDate"
@@ -130,7 +151,7 @@
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:background="@mipmap/bg_edittext"
                 android:drawableEnd="@mipmap/calendar"
@@ -140,79 +161,151 @@
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvFoodType" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDateHeading" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCaloriesHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/calories"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/tvCalories"
                 style="@style/edit_text_style"
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="5"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:background="@mipmap/bg_edittext"
                 android:gravity="center_vertical"
                 android:hint="@string/calories"
+                android:inputType="number"
+                android:maxLength="5"
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tvCaloriesHeading" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCarbHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/carbs"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCalories" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/tvCarbs"
                 style="@style/edit_text_style"
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="5"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:background="@mipmap/bg_edittext"
                 android:gravity="center_vertical"
                 android:hint="@string/carbs"
+                android:inputType="number"
+                android:maxLength="5"
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCalories" />
+                app:layout_constraintTop_toBottomOf="@+id/tvCarbHeading" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFatHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/carbs"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCarbs" />
+
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/tvFat"
                 style="@style/edit_text_style"
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="5"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:background="@mipmap/bg_edittext"
                 android:gravity="center_vertical"
                 android:hint="@string/fats"
+                android:inputType="number"
+                android:maxLength="5"
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCarbs" />
+                app:layout_constraintTop_toBottomOf="@+id/tvFatHeading" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvProteinHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/protein"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFat" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/tvProtein"
                 style="@style/edit_text_style"
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="5"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:background="@mipmap/bg_edittext"
                 android:gravity="center_vertical"
                 android:hint="@string/protein"
+                android:inputType="number"
+                android:maxLength="5"
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvFat" />
+                app:layout_constraintTop_toBottomOf="@+id/tvProteinHeading" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
