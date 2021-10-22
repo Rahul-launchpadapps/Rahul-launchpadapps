@@ -80,8 +80,8 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
                 if(it.foodLogs?.size!! >0){
                     tv_food_log.visibility = View.VISIBLE
                     rv_meal_list.visibility = View.VISIBLE
-                        // setAdapter()
-                  //  it.data?.let { it1 -> prepareDateWiseData(it1)}
+                    it.foodLogs?.let { it1 -> prepareDateWiseData(it1)}
+                    setAdapter()
                 }else {
                     tv_food_log.visibility = View.GONE
                     rv_meal_list.visibility = View.GONE
@@ -109,6 +109,8 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     }
 
     private fun prepareDateWiseData(testLogData: ArrayList<MealData>) {
+        hashMapMealLog.clear()
+        hashMapKeyList.clear()
         val hashMap = hashMapOf<String,  ArrayList<MealData>>()
         if(testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()){
