@@ -171,6 +171,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                     )
                     viewModel.addMeal()
                 }
+
             }
         }
 

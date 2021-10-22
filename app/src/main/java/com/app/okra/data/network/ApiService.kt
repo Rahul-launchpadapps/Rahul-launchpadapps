@@ -94,4 +94,10 @@ interface ApiService {
     @POST("v1/meals")
     suspend fun addMeal(@Body params: AddMealRequest): Response<BaseResponse<Any>>
 
+    @GET("v1/user/dashboard")
+    suspend fun dashboardInfo(@Query("timesOfConsideration")  time:String): Response<BaseResponse<HomeResponse>>
+
+    @GET("v1/user/dashboard/strips-info")
+    suspend fun stripeInfo(): Response<BaseResponse<HomeStripeResponse>>
+
 }

@@ -10,7 +10,7 @@ class AppConstants {
             const val USER_TYPE = "userType"
             const val ACCESS_TOKEN = "accessToken"
             const val USER_ID = "userId"
-            const val EMAIL_ID= "email"
+            const val EMAIL_ID = "email"
             const val IS_LOGGED_IN = "isLoggedIn"
             const val IS_FIRST_TIME = "isFirstTime"
             const val PASSWORD = "password"
@@ -22,7 +22,7 @@ class AppConstants {
             const val HYPER_BLOOD_GLUCOSE_UNIT = "hyperBloodGlucoseValue"
             const val HYPO_BLOOD_GLUCOSE_UNIT = "hypoBloodGlucoseValue"
 
-            const val USER_DATA="user_data"
+            const val USER_DATA = "user_data"
             const val NAME = "Name"
             const val PROFILE_PIC = "profilePic"
             const val DEVICE_TOKEN = "device_token"
@@ -69,7 +69,13 @@ class AppConstants {
             const val mealsAfter: String = "mealsAfter"
             const val user_key: String = "user_key"
             const val type: String = "type"
-            const val timesOfConsideration:String = "timesOfConsideration"
+            const val timesOfConsideration: String = "timesOfConsideration"
+            const val reminderType: String = "reminderType"
+            const val startDate: String = "startDate"
+            const val time: String = "time"
+            const val repeatType: String = "repeatType"
+            const val endRepeatType: String = "endRepeatType"
+            const val endDate: String = "endDate"
         }
     }
 
@@ -79,8 +85,8 @@ class AppConstants {
 
             const val FROM_SCREEN = "fromScreen"
             const val EMAIL: String = "EMAIL"
-
-            const val TYPE ="type"
+            const val TYPE = "type"
+            const val REMINDER = "reminder"
         }
 
     }
@@ -94,29 +100,31 @@ class AppConstants {
 
 
     companion object {
-        const val DATA_LIMIT= 10
+        const val DATA_LIMIT = 10
+        const val DATA = "data"
         const val SCREEN_TYPE = "screen_type"
         const val EMAIL = "email"
         const val android = "Android"
         const val SHOW_TAG = "1"
         const val HIDE_TAG = "2"
         const val LOGIN = "login"
-        const val ALLOWED_FILE_SIZE =10
-        const val ISO_FORMATE= "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-        const val ISO_FORMAT= "yyyy-MM-dd'T'HH:mm:ss"
-        const val SELECT_TESTING_TIME= "Choose Testing Time"
-        const val AFTER_MEAL_TEXT= "After Meal"
-        const val AFTER_MEAL= "AFTER_MEAL"
-        const val DISPLAY_ALL= "DISPLAY_ALL"
-        const val BEFORE_MEAL_TEXT= "Before Meal"
-        const val BEFORE_MEAL= "BEFORE_MEAL"
-        const val CONTROLE_SOLUTION_TEXT= "Control Solution"
-        const val CONTROLE_SOLUTION= "CONTROLE_SOLUTION"
-        const val POST_MEDICINE_TEXT= "Post Medicine"
-        const val POST_MEDICINE= "POST_MEDICINE"
-        const val POST_WORKOUT_TEXT= "Post Workout"
-        const val POST_WORKOUT= "POST_WORKOUT"
-        const val NEVER = "Never"
+        const val ALLOWED_FILE_SIZE = 10
+        const val ISO_FORMATE = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+        const val ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
+        const val SELECT_TESTING_TIME = "Choose Testing Time"
+        const val AFTER_MEAL_TEXT = "After Meal"
+        const val AFTER_MEAL = "AFTER_MEAL"
+        const val DISPLAY_ALL = "DISPLAY_ALL"
+        const val BEFORE_MEAL_TEXT = "Before Meal"
+        const val BEFORE_MEAL = "BEFORE_MEAL"
+        const val CONTROLE_SOLUTION_TEXT = "Control Solution"
+        const val CONTROLE_SOLUTION = "CONTROLE_SOLUTION"
+        const val POST_MEDICINE_TEXT = "Post Medicine"
+        const val POST_MEDICINE = "POST_MEDICINE"
+        const val POST_WORKOUT_TEXT = "Post Workout"
+        const val POST_WORKOUT = "POST_WORKOUT"
+        const val NEVER_TEXT = "Never"
+        const val NEVER = "NEVER"
         const val DAILY = "Daily"
         const val WEEKLY = "Weekly"
         const val MONTHLY = "Monthly"
@@ -124,6 +132,16 @@ class AppConstants {
         const val TODAY = "TODAY"
         const val WEEK = "WEEK"
         const val MONTH = "MONTH"
+        const val FROM = "from"
+        const val MEAL = "meal"
+        const val FOOD = "food"
+        const val DIABETES = "diabetes"
+        const val EVERY_DAY = "EVERY_DAY"
+        const val EVERY_MONTH = "EVERY_MONTH"
+        const val EVERY_WEEK = "EVERY_WEEK"
+        const val SET_UP = "SET_UP"
+        const val BLOOD_GLUCOSE: String = "BLOOD_GLUCOSE"
+        const val INSULIN: String = "INSULIN"
     }
 
     object ContentManagementUrl {
@@ -133,8 +151,10 @@ class AppConstants {
         const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "CONTACT_US"
     }
 
- object DateFormat {
+    object DateFormat {
         const val DATE_FORMAT_1 = "MMM dd YYYY | hh:mma"
+        const val DATE_FORMAT_2 = "yyyy-MM-dd hh:mm a"
+        const val DATE_FORMAT_3 = "yyyy-MM-dd"
 
     }
 

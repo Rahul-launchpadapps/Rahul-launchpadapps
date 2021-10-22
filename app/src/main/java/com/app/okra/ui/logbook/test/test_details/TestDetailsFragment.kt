@@ -14,6 +14,7 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
 import kotlinx.android.synthetic.main.fragment_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
 
@@ -62,7 +63,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
     private fun setUpToolbar() {
         tvTitle.text = getString(R.string.test_details)
         ivRight.visibility = View.VISIBLE
-        ivDelete.visibility = View.VISIBLE
+        ivDelete.visibility = View.GONE
     }
 
     private fun setListener() {
@@ -72,7 +73,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
         ivRight.setOnClickListener {
             val bundle = Bundle()
-            bundle.putParcelable("data", arguments?.getParcelable("data"))
+            bundle.putParcelable(AppConstants.DATA, arguments?.getParcelable(AppConstants.DATA))
             navController.navigate(R.id.action_testDetails_to_editTestDetails, bundle)
         }
 
@@ -91,13 +92,13 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
     private fun getData() {
         arguments?.let { it ->
-            data = it.getParcelable("data")
+            data = it.getParcelable(AppConstants.DATA)
 
             tvDateValue.text =
                 data?.createdAt?.let { it1 ->
                     getDateFromISOInString(
                         it1,
-                        formatYouWant = "MMM dd yyyy"
+                        formatYouWant = DATE_FORMAT_1
                     )
                 }
 

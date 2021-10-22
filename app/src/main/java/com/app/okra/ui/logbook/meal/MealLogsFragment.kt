@@ -112,7 +112,7 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
             val data = it.getContent()
             data?.message?.let { it1 -> showToast(it1) }
 
-            if (data?.message == "Your login session has been expired.") {
+            if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
                 requireActivity().finish()
             }
@@ -154,7 +154,6 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private fun setAdapter() {
         mealLogsAdapter = MealLogsAdapter(this, hashMapKeyList, hashMapMealLog)
-
         layoutManager = LinearLayoutManager(requireContext())
         rv_meal_list.layoutManager = layoutManager
         rv_meal_list.adapter = mealLogsAdapter

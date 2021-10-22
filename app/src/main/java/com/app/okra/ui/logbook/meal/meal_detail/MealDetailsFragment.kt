@@ -53,7 +53,6 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
     }
 
     private fun setUpToolbar() {
-        tvTitle.text = getString(R.string.meal_details)
         ivRight.visibility = View.VISIBLE
         ivDelete.visibility = View.VISIBLE
     }
@@ -65,7 +64,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
         ivRight.setOnClickListener {
             val bundle = Bundle()
-            bundle.putParcelable("data", arguments?.getParcelable("data"))
+            bundle.putParcelable(AppConstants.DATA, arguments?.getParcelable(AppConstants.DATA))
             navController.navigate(R.id.action_mealDetails_to_editMealDetails, bundle)
         }
 
@@ -85,7 +84,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
     private fun getData() {
         arguments?.let { it ->
-            data = it.getParcelable("data")
+            data = it.getParcelable(AppConstants.DATA)
 
             data?.apply {
                 tvDateValue.text =
@@ -107,7 +106,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                     tvFoodTypeValue.text = it
                 }
 
-                tvCaloriesValue.text = calories?.value + " Cal"
+                tvCaloriesValue.text = calories?.value + " cal"
                 tvCarbsValue.text = carbs?.value + " gm"
                 tvFatValue.text = fat?.value + " gm"
                 tvProteinvalue.text = protien?.value + " gm"

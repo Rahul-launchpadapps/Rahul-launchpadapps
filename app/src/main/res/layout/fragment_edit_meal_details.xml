@@ -76,83 +76,100 @@
                 app:layout_constraintTop_toTopOf="parent"
                 card_view:cardUseCompatPadding="true">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivFood"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/add_dish_img"
+                    />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/iv_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:src="@mipmap/add_dish_img"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clDate"
+            style="@style/subContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_image"
+            >
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:layout_marginTop="@dimen/dp_10"
                 android:fontFamily="@font/axiforma_medium"
-                android:gravity="center"
+                android:gravity="start"
                 android:maxLines="2"
                 android:text="@string/date_time"
                 android:textColor="@color/black_2"
                 android:textSize="@dimen/sp_16"
+                app:layout_constraintHorizontal_weight="0.4"
+                app:layout_constraintEnd_toStartOf="@+id/tvDateValue"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cv_image" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDateValue"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/axiforma_regular"
-                android:gravity="center"
+                android:gravity="end"
                 android:layout_marginTop="@dimen/dp_10"
                 android:textColor="@color/grey_4"
                 android:textSize="@dimen/sp_14"
+                app:layout_constraintHorizontal_weight="0.6"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cv_image"
+                app:layout_constraintStart_toEndOf="@id/tvDate"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="Apr 15 2021"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFoodType"
+            style="@style/subContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clDate"
+            >
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvFoodType"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:layout_marginTop="@dimen/dp_15"
                 android:fontFamily="@font/axiforma_medium"
-                android:gravity="center"
+                android:gravity="start"
                 android:maxLines="2"
                 android:text="@string/food_type"
                 android:textColor="@color/black_2"
                 android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toStartOf="@+id/tvFoodTypeValue"
+                app:layout_constraintHorizontal_weight="0.4"
+                app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDate" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvFoodTypeValue"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/axiforma_regular"
-                android:gravity="center"
+                android:gravity="end"
                 android:layout_marginTop="@dimen/dp_15"
                 android:textColor="@color/grey_4"
                 android:textSize="@dimen/sp_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDate"
+                app:layout_constraintHorizontal_weight="0.6"
+                app:layout_constraintStart_toEndOf="@+id/tvFoodType"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="Before Meal"/>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

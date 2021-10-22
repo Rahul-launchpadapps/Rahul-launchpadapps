@@ -73,13 +73,13 @@ class MyReminderFragment : BaseFragment() {
     private fun setListener() {
         clDiabetesTest.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("data", "diabetes")
+            bundle.putString(AppConstants.DATA, AppConstants.DIABETES)
             navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
         }
 
         clAddFood.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("data", "food")
+            bundle.putString(AppConstants.DATA, AppConstants.FOOD)
             navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
         }
     }
