@@ -14,6 +14,7 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
 import kotlinx.android.synthetic.main.fragment_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
 
@@ -97,7 +98,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 data?.createdAt?.let { it1 ->
                     getDateFromISOInString(
                         it1,
-                        formatYouWant = "MMM dd yyyy"
+                        formatYouWant = DATE_FORMAT_1
                     )
                 }
 

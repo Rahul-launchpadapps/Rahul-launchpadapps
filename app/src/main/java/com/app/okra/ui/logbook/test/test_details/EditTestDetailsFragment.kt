@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDateValue
 import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceIdValue
 import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceNameValue
 import kotlinx.android.synthetic.main.fragment_edit_test_details.tvInsulinValue
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvTestingTimeValue
 import kotlinx.android.synthetic.main.layout_header.*
 import kotlinx.android.synthetic.main.layout_header.btnSave
 
@@ -94,7 +93,7 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
                 }
             }
         }
-        //spinner.setSelection(index)
+        spinner.setSelection(index)
         tvSetTestingTime.text = timingList[index]
     }
 
@@ -102,7 +101,6 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         ivRight.beInvisible()
         ivDelete.beGone()
         btnSave.beVisible()
-        tvTitle.text = getString(R.string.edit_test_details)
     }
 
     private fun setObserver() {
@@ -160,12 +158,10 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
                 data?.createdAt?.let { it1 ->
                     getDateFromISOInString(
                         it1,
-                        formatYouWant = "MMM dd yyyy"
+                        AppConstants.DateFormat.DATE_FORMAT_1
                     )
                 }
-            data?.testingTime?.let {
-                tvTestingTimeValue.text = getMealTime(it)
-            }
+
             tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
             tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
             tvInsulinValue.text = data?.insulin ?: ""

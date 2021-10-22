@@ -117,52 +117,61 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         }
 
         btnSave.setOnClickListener {
-            if (TextUtils.isEmpty(image)) {
-                showToast(getString(R.string.please_select_image))
-            }else if (TextUtils.isEmpty(tvDate.text.toString())) {
-                showToast(getString(R.string.please_select_date))
-            } else if (TextUtils.isEmpty(tvCalories.text.toString())) {
-                showToast(getString(R.string.please_select_calories))
-            } else if (TextUtils.isEmpty(tvCarbs.text.toString())) {
-                showToast(getString(R.string.please_select_carbs))
-            } else if (TextUtils.isEmpty(tvFat.text.toString())) {
-                showToast(getString(R.string.please_select_fat))
-            } else if (TextUtils.isEmpty(tvProtein.text.toString())) {
-                showToast(getString(R.string.please_select_protein))
-            } else {
-                var date = ""
-                val foodList: ArrayList<FoodItemsRequest> = ArrayList()
-
-                date = tvDate.text.toString()
-
-                val foodItemsRequest = if(this::selectedFoodItem.isInitialized){
-                    FoodItemsRequest(
-                        selectedFoodItem.group,
-                        selectedFoodItem.name,
-                        // uncomment this
-                        //   selectedFoodItem.selectedServingSize?.unit
-                        "1"
-                    )
-                }else {
-                    FoodItemsRequest(
-                        "jshjksd",
-                        "djhjh",
-                        "1"
-                    )
+            when {
+                TextUtils.isEmpty(image) -> {
+                    showToast(getString(R.string.please_select_image))
                 }
-                foodList.add(foodItemsRequest)
+                TextUtils.isEmpty(tvDate.text.toString()) -> {
+                    showToast(getString(R.string.please_select_date))
+                }
+                TextUtils.isEmpty(tvCalories.text.toString()) -> {
+                    showToast(getString(R.string.please_select_calories))
+                }
+                TextUtils.isEmpty(tvCarbs.text.toString()) -> {
+                    showToast(getString(R.string.please_select_carbs))
+                }
+                TextUtils.isEmpty(tvFat.text.toString()) -> {
+                    showToast(getString(R.string.please_select_fat))
+                }
+                TextUtils.isEmpty(tvProtein.text.toString()) -> {
+                    showToast(getString(R.string.please_select_protein))
+                }
+                else -> {
+                    var date = ""
+                    val foodList: ArrayList<FoodItemsRequest> = ArrayList()
 
-                viewModel.prepareAddRequest(
-                    date = date,
-                    image = image,
-                    foodItems = foodList,
-                    foodType = tvFoodTypeValue.text.toString(),
-                    calories = CommonData(tvCalories.text.toString(), getString(R.string.cal)),
-                    carbs = CommonData(tvCarbs.text.toString(), getString(R.string.gm)),
-                    fat = CommonData(tvFat.text.toString(), getString(R.string.gm)),
-                    protein = CommonData(tvProtein.text.toString(), getString(R.string.gm)),
-                )
-                viewModel.addMeal()
+                    date = tvDate.text.toString()
+
+                    val foodItemsRequest = if(this::selectedFoodItem.isInitialized){
+                        FoodItemsRequest(
+                            selectedFoodItem.group,
+                            selectedFoodItem.name,
+                            selectedFoodItem.selectedServingSize?.unit
+
+                        )
+                    }else {
+                        FoodItemsRequest(
+                            "jshjksd",
+                            "djhjh",
+                            "1"
+                        )
+                    }
+                    foodList.add(foodItemsRequest)
+
+                    val dateToConvert =   getDifferentInfoFromDate(date,DATE_FORMAT_1,DATE_FORMAT_1)
+                    viewModel.prepareAddRequest(
+                        date = getISOFromDateAndTime_inString(dateToConvert),
+                        image = image,
+                        foodItems = foodList,
+                        foodType = tvFoodTypeValue.text.toString(),
+                        calories = CommonData(tvCalories.text.toString(), "cal"),
+                        carbs = CommonData(tvCarbs.text.toString(), "gm"),
+                        fat = CommonData(tvFat.text.toString(), "gm"),
+                        protein = CommonData(tvProtein.text.toString(), "gm"),
+                    )
+                    viewModel.addMeal()
+                }
+
             }
         }
 

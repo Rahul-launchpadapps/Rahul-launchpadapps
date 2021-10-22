@@ -259,7 +259,7 @@ fun getISOFromDateAndTime(year: Int?, month: Int?, day: Int?, hour: Int, min: In
     return result
 }
 
-fun getISOFromDateAndTime(date: Date?): String? {
+fun getISOFromDateAndTime_inString(date: Date?): String? {
     val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
     } else {

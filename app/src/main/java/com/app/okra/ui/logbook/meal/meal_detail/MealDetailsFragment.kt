@@ -53,7 +53,6 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
     }
 
     private fun setUpToolbar() {
-        tvTitle.text = getString(R.string.meal_details)
         ivRight.visibility = View.VISIBLE
         ivDelete.visibility = View.VISIBLE
     }

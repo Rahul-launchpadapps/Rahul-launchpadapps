@@ -32,7 +32,7 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
     private var totalPage: Int = 0
     private var nextHit: Int = 0
     private var hashMapKeyList  = ArrayList<String>()
-    private var hashMapTestLog = hashMapOf<String,  ArrayList<Data>>()
+    private var hashMapTestLog = LinkedHashMap<String,  ArrayList<Data>>()
 
 
     override fun getViewModel(): BaseViewModel? {
@@ -110,10 +110,10 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
     }
 
     private fun prepareDateWiseData(testLogData: ArrayList<Data>) {
-        val hashMap = hashMapOf<String,  ArrayList<Data>>()
+        val hashMap = LinkedHashMap<String,  ArrayList<Data>>()
         if(testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()){
-                val date = data.date
+                val date = data.createdAt
                 date?.let{
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 
