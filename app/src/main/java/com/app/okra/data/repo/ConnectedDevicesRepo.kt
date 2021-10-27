@@ -10,9 +10,7 @@ import com.app.okra.models.SettingRequest
 
 interface ConnectedDevicesRepo {
 
-    suspend fun updateNotificationStatus(data : SettingRequest)
+    suspend fun getPreviouslyConnectedDeviceList()
             : ApiResult<ApiData<Any>>
-    suspend fun contactUs()
-            : ApiResult<ApiData<ContactResponse>>
 
 }

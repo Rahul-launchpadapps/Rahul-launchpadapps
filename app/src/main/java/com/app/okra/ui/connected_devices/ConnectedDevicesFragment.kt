@@ -1,35 +1,43 @@
 package com.app.okra.ui.connected_devices
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
-import com.app.okra.bluetooth.BluetoothController
-import com.app.okra.bluetooth.BluetoothListener
+import com.app.okra.bluetooth.otherlib.BleManager
+import com.app.okra.bluetooth.otherlib.callback.BleScanCallback
+import com.app.okra.bluetooth.otherlib.data.BleDevice
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.*
 import com.app.okra.models.DevicesListModel
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
 import com.app.okra.utils.*
+import com.app.okra.utils.bleValidater.BLEValidaterListener
+import com.app.okra.utils.bleValidater.BleValidate
+import com.app.okra.utils.bleValidater.GPSContract
+import kotlinx.android.synthetic.main.activity_add_meal.*
 import kotlinx.android.synthetic.main.fragment_connected_devices.*
 
 
 class ConnectedDevicesFragment : BaseFragment(),
-        View.OnClickListener,
-        Listeners.ItemClickListener,
-        PermissionUtils.IGetPermissionListener {
+    View.OnClickListener,
+    Listeners.ItemClickListener, BLEValidaterListener {
 
+    private val REQUEST_CODE_OPEN_GPS = 1
     private lateinit var devicesAdapter: ConnectedDevicesAdapter
     private val devicesList = ArrayList<DevicesListModel>()
-    private val mPermissionUtils = PermissionUtils(this)
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory {
@@ -37,13 +45,24 @@ class ConnectedDevicesFragment : BaseFragment(),
         }).get(ConnectedDevicesViewModel::class.java)
     }
 
+
+    private val bleManager by lazy {
+        // Sets up the bluetooth controller.
+        BleManager.getInstance()
+    }
+
+    private val bleValidate by lazy {
+        BleValidate(requireContext(), this)
+    }
+
     override fun getViewModel(): BaseViewModel? {
         return viewModel
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_connected_devices, container, false)
     }
 
@@ -52,7 +71,13 @@ class ConnectedDevicesFragment : BaseFragment(),
         setAdapter()
         setObserver()
         setListener()
+        getPreviousDevices()
     }
+
+    private fun getPreviousDevices() {
+        viewModel.getPreviousDevices()
+    }
+
     private fun setAdapter() {
         devicesAdapter = ConnectedDevicesAdapter(this, devicesList)
         rv_connected_devices.adapter = devicesAdapter
@@ -61,6 +86,23 @@ class ConnectedDevicesFragment : BaseFragment(),
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeToast = false)
+
+        viewModel._connectedDevicesLiveData.observe(viewLifecycleOwner){
+            it.data?.let{
+                devicesList.clear()
+                //  devicesList.addAll(it)
+                devicesAdapter.notifyDataSetChanged()
+            }
+            manageViewVisibility()
+        }
+    }
+
+    private fun manageViewVisibility() {
+        if(devicesList.isNullOrEmpty()){
+            rv_connected_devices.beGone()
+        }else{
+            rv_connected_devices.beVisible()
+        }
     }
 
 
@@ -72,13 +114,17 @@ class ConnectedDevicesFragment : BaseFragment(),
     override fun onClick(p0: View?) {
         when(p0?.id){
             R.id.btnConnect -> {
-                if (mPermissionUtils.checkAndGetLocationPermissions(requireActivity())) {
-                    navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
-                }
+                bleValidate.checkPermissions()
             }
             R.id.tvNeedHelp -> {
-                requireActivity().navigate(Intent(requireContext(), SupportRequestActivity::class.java).apply {
-                    putExtra(AppConstants.SCREEN_TYPE, ConnectedDeviceActivity::class.java.simpleName)
+                requireActivity().navigate(Intent(
+                    requireContext(),
+                    SupportRequestActivity::class.java
+                ).apply {
+                    putExtra(
+                        AppConstants.SCREEN_TYPE,
+                        ConnectedDeviceActivity::class.java.simpleName
+                    )
                 })
             }
         }
@@ -91,33 +137,92 @@ class ConnectedDevicesFragment : BaseFragment(),
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {}
+
+
     override fun onPermissionsGiven(data: Int) {
-        navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
+            //startScan()
+            navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
+
     }
 
     override fun onPermissionsDeny(data: Int) {
         showCustomAlertDialog(
-                requireContext(),
-                object : Listeners.DialogListener {
-                    override fun onOkClick(dialog: DialogInterface?) {
-                        dialog ?. dismiss ()
-                    }
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
 
-                    override fun onCancelClick(dialog: DialogInterface?) {
-                        dialog?.dismiss()
-                    }
-                },
-                MessageConstants.Messages.location_permission_deny_text,
-                false,
-                positiveButtonText = getString(R.string.ok),
-                title = getString(R.string.alert),
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            MessageConstants.Messages.location_permission_deny_text,
+            false,
+            positiveButtonText = getString(R.string.ok),
+            title = getString(R.string.alert),
+        )
+    }
+
+    override fun onBluetoothDisable(msg: String) {
+
+        showCustomAlertDialog(
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    bleManager.enableBluetooth()
+                    dialog ?. dismiss ()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            MessageConstants.Messages.bluetooth_turn_on_permission,
+            true,
+            positiveButtonText = getString(R.string.allow),
+            negativeButtonText = getString(R.string.cancel),
+            title = getString(R.string.bluetooth),
+        )
+    }
+
+    override fun onLocationDisable(msg: String) {
+        showCustomAlertDialog(
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    activityForResult.launch(null)
+                    dialog ?. dismiss ()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            MessageConstants.Messages.please_turn_on_your_location,
+            true,
+            positiveButtonText = getString(R.string.ok),
+            negativeButtonText = getString(R.string.cancel),
+            title = getString(R.string.location),
         )
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
-
     }
+
+    private val activityForResult = registerForActivityResult(GPSContract()){ result ->
+        if(result!=null && result){
+             navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
+        }
+    }
+
+
+
 }

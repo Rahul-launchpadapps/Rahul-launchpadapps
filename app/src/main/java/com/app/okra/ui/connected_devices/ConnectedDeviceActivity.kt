@@ -62,12 +62,12 @@ class ConnectedDeviceActivity : BaseActivity(), View.OnClickListener{
         }
 
 
-        ActivityCompat.requestPermissions(
+      /*  ActivityCompat.requestPermissions(
             this,
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             1
         )
-
+*/
 
 
         println("Discovery" + adapter.startDiscovery())

@@ -100,4 +100,7 @@ interface ApiService {
     @GET("v1/user/dashboard/strips-info")
     suspend fun stripeInfo(): Response<BaseResponse<HomeStripeResponse>>
 
+    @GET("v1/user/device-list")
+    suspend fun getPreviouslyConnectedDevices(): Response<BaseResponse<Any>>
+
 }

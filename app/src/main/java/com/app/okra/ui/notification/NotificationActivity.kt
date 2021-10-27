@@ -1,4 +1,4 @@
-package com.app.okra.ui.my_account.setting.notification
+package com.app.okra.ui.notification
 
 import android.os.Bundle
 import android.view.View
@@ -12,12 +12,10 @@ import com.app.okra.data.repo.SettingRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.my_account.setting.SettingsViewModel
 import com.app.okra.utils.AppConstants
-import kotlinx.android.synthetic.main.activity_notification.*
 import kotlinx.android.synthetic.main.layout_header.*
 
 
 class NotificationActivity : BaseActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory {
@@ -53,14 +51,11 @@ class NotificationActivity : BaseActivity(), View.OnClickListener, CompoundButto
     private fun setListener() {
         ivBack.setOnClickListener(this)
 
-        toggle_push.setOnCheckedChangeListener(this)
-        toggle_inApp.setOnCheckedChangeListener(this)
     }
 
     private fun setViews() {
         tvTitle.text = getString(R.string.title_notification)
-        toggle_inApp.isChecked = inAppStatus
-        toggle_push.isChecked = pushStatus
+
     }
 
     override fun onClick(view: View?) {

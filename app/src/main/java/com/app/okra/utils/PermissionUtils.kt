@@ -18,7 +18,8 @@ import androidx.core.app.ActivityCompat
 import com.app.okra.R
 
 
-class PermissionUtils(val listener: IGetPermissionListener?) {
+class PermissionUtils(val listener: IGetPermissionListener?){
+
 
     interface IGetPermissionListener{
         fun onPermissionsGiven(data: Int)

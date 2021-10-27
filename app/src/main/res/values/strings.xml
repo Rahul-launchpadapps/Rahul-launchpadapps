@@ -56,7 +56,6 @@
     <string name="welcome_to_home">Welcome To Home</string>
     <string name="my_account">My Account</string>
     <string name="view_profile">View Profile</string>
-    <string name="name">Name</string>
     <string name="phone">Phone No</string>
     <string name="age">Age</string>
     <string name="phone_no">Phone No</string>
@@ -78,7 +77,6 @@
     <string name="title_contact_us">Contact us</string>
     <string name="instruction_1">Turn off the meter if it is on.</string>
     <string name="instruction_2">Long press both button on the front of the device at the same time (3 seconds) until bluetooth symbol showup on the meters\'s display.</string>
-    <string name="connect">Connect</string>
     <string name="need_help">Need Help?</string>
     <string name="connected_devices">Connected Devices</string>
     <string name="lets_connect">Let\'s connect your device</string>
@@ -204,4 +202,50 @@
     <string name="cal">cal</string>
     <string name="gm">gm</string>
     <string name="food_logs">Food Logs</string>
+    <string name="no_notification">No Notification</string>
+    <string name="clear">Clear</string>
+    <string name="please_open_blue">Please turn on your bluetooth</string>
+
+
+
+    <!-- BLE -->
+
+    <string name="notifyTitle">Prompt</string>
+    <string name="gpsNotifyMsg">Current mobile phone scanning Bluetooth needs to open the positioning function</string>
+    <string name="setting">Go to settings</string>
+
+    <string name="start_scan">Start scanning</string>
+    <string name="stop_scan">Stop scanning</string>
+    <string name="expand_search_settings">Expand search settings</string>
+    <string name="retrieve_search_settings">Retrieve search settings</string>
+    <string name="connect_fail">connection failed</string>
+    <string name="active_disconnected">disconnect</string>
+    <string name="disconnected">Connection disconnect</string>
+    <string name="select_operation_type">Select operation type</string>
+    <string name="characteristic">Characteristic</string>
+    <string name="data_changed">Data changes:</string>
+    <string name="read">Read</string>
+    <string name="write">Write</string>
+    <string name="open_notification">Open notification</string>
+    <string name="close_notification">Close notification</string>
+    <string name="service_list">Service list</string>
+    <string name="characteristic_list">Characteristic list</string>
+    <string name="console">Console</string>
+    <string name="name">Device broadcast name：</string>
+    <string name="mac">MAC:</string>
+    <string name="service">Service</string>
+    <string name="type">Service type (main service)</string>
+    <string name="scan_setting">Below, you can configure the conditions that you need to scan the device, which can be empty</string>
+    <string name="setting_name">Enter a broadcast name for Bluetooth devices, separated by English commas</string>
+    <string name="setting_mac">Enter Bluetooth device MAC</string>
+    <string name="setting_uuid">Enter Bluetooth device UUID, separated by commas in English</string>
+    <string name="input_hex">Please enter the HEX format command</string>
+    <string name="connect">Connect</string>
+    <string name="connected">Connected</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="enter">Enter</string>
+    <string name="location">Location</string>
+    <string name="no_device_available">No device available.</string>
+
+
 </resources>

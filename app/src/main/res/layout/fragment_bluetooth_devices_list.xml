@@ -76,11 +76,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llList"
         style="@style/container"
-        android:visibility="gone"
         android:background="@color/bg_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoDevice"
+            style="@style/container"
+            android:fontFamily="@font/axiforma_semibold"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_device_available"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="RtlSymmetry" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_devices"

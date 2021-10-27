@@ -23,9 +23,9 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
     private var contactUsLiveData = MutableLiveData<ApiData<ContactResponse>>()
     val _contactUsLiveData: LiveData<ApiData<ContactResponse>> get() = contactUsLiveData
 
-    private var settingLiveData = MutableLiveData<ApiData<Any>>()
-    val _settingLiveData: LiveData<ApiData<Any>>
-        get() = settingLiveData
+    private var connectedDevicesLiveData = MutableLiveData<ApiData<Any>>()
+    val _connectedDevicesLiveData: LiveData<ApiData<Any>>
+        get() = connectedDevicesLiveData
 
     var settingRequest= SettingRequest()
 
@@ -77,14 +77,14 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
 */
 
 
-    fun updateSettings() {
+    fun getPreviousDevices() {
         launchDataLoad {
              showProgressBar()
-                val result = repo?.updateNotificationStatus(settingRequest)
+                val result = repo?.getPreviouslyConnectedDeviceList()
                 hideProgressBar()
                 when (result) {
                     is ApiResult.Success -> {
-                        settingLiveData.value = result.value
+                        connectedDevicesLiveData.value = result.value
                     }
                     is ApiResult.GenericError -> {
                         errorObserver.value = Event(ApiData(message = result.message))
@@ -96,43 +96,5 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
         }
     }
 
-    fun onLogout() {
-        launchDataLoad {
-            showProgressBar()
-            val result = (repo as SettingRepoImpl).onLogout()
-            hideProgressBar()
-            when (result) {
-                is ApiResult.Success<Any> ->{
-                    logoutLiveData.value = result.value
-                }
-                is ApiResult.GenericError -> {
-                    errorObserver.value = Event(ApiData(message = result.message))
-                }
-                is ApiResult.NetworkError -> {
-                    errorObserver.value = Event(ApiData(message = "Network Issue"))
-                }
-            }
-        }
-    }
-
-
-    fun getContactUsApi() {
-        launchDataLoad {
-            showProgressBar()
-            val result = repo?.contactUs()
-            hideProgressBar()
-            when (result) {
-                is ApiResult.Success ->{
-                    contactUsLiveData.value = result.value
-                }
-                is ApiResult.GenericError -> {
-                    errorObserver.value = Event(ApiData(message = result.message))
-                }
-                is ApiResult.NetworkError -> {
-                    errorObserver.value = Event(ApiData(message = "Network Issue"))
-                }
-            }
-        }
-    }
 
 }

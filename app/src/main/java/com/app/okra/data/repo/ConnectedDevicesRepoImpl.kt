@@ -12,16 +12,11 @@ class ConnectedDevicesRepoImpl constructor(
     private val apiService: ApiService,
 ) : BaseRepo(apiService),
     ConnectedDevicesRepo {
-    override suspend fun updateNotificationStatus(data: SettingRequest)
-    : ApiResult<ApiData<Any>> {
+    override suspend fun getPreviouslyConnectedDeviceList(): ApiResult<ApiData<Any>> {
         return safeApiCall(Dispatchers.IO) {
-            apiService.modifySettings(data)
+            apiService.getPreviouslyConnectedDevices()
         }
     }
 
-    override suspend fun contactUs(): ApiResult<ApiData<ContactResponse>> {
-        return safeApiCall(Dispatchers.IO) {
-            apiService.contactUs()
-        }
-    }
+
 }
