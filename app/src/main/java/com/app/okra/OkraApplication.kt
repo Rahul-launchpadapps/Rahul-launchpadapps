@@ -18,6 +18,10 @@ class OkraApplication : Application(){
             return instance!!.applicationContext
         }
 
+        fun getApplicationInstance(): OkraApplication? {
+            return instance
+        }
+
     }
 
 

@@ -13,9 +13,12 @@ import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.HomeRepoImpl
+import com.app.okra.extension.navigate
+import com.app.okra.extension.navigationOnly
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MealData
 import com.app.okra.ui.logbook.meal.MealLogsAdapter
+import com.app.okra.ui.notification.NotificationActivity
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
@@ -153,6 +156,9 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     }
 
     private fun setListener() {
+        ivNotification.setOnClickListener {
+            requireActivity().navigationOnly(NotificationActivity())
+        }
         tvReceivedStrips.setOnClickListener {
             viewModel.stripeInfo()
         }

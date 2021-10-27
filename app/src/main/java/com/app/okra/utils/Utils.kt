@@ -100,7 +100,6 @@ fun Context.openLink(url: String) {
 
 
 fun showAlertDialog(
-
     context: Context?,
     listener: Listeners.DialogListener?,
     msg: String?,

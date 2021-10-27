@@ -1,56 +1,51 @@
 package com.app.okra.ui.connected_devices
 
-import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
+import android.app.Application
 import android.content.DialogInterface
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.app.okra.OkraApplication
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
-import com.app.okra.bluetooth.BluetoothController
-import com.app.okra.bluetooth.BluetoothListener
-import com.app.okra.bluetooth.BroadcastReceiverDelegator
+import com.app.okra.bluetooth.otherlib.BleManager
+import com.app.okra.bluetooth.otherlib.callback.BleScanCallback
+import com.app.okra.bluetooth.otherlib.data.BleDevice
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
-import com.app.okra.extension.navigate
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.DevicesListModel
-import com.app.okra.ui.my_account.support_request.SupportRequestActivity
-import com.app.okra.utils.*
+import com.app.okra.utils.Listeners
+import com.app.okra.utils.MessageConstants
+import com.app.okra.utils.PermissionUtils
+import com.app.okra.utils.bleValidater.BLEValidaterListener
+import com.app.okra.utils.bleValidater.BleValidate
+import com.app.okra.utils.showCustomAlertDialog
 import kotlinx.android.synthetic.main.fragment_bluetooth_devices_list.*
 
 
 class BluetoothDevicesListFragment : BaseFragment(),
         Listeners.ItemClickListener,
-        BluetoothListener,
-        PermissionUtils.IGetPermissionListener
-{
+    PermissionUtils.IGetPermissionListener, BLEValidaterListener {
 
-    private lateinit var broadCastDelegator: BroadcastReceiverDelegator
     private lateinit var devicesAdapter: ConnectedDevicesAdapter
     private val devicesList = ArrayList<DevicesListModel>()
     private val mPermissionUtils by lazy {
         PermissionUtils(this)
     }
 
-    private val bluetooth by lazy {
+    private val bleManager by lazy {
         // Sets up the bluetooth controller.
-        BluetoothController(requireActivity(),
-             BluetoothAdapter.getDefaultAdapter(),
-                this)
+       BleManager.getInstance()
+    }
+
+    private val bleValidate by lazy {
+        BleValidate(requireActivity(), this)
     }
 
     private val viewModel by lazy {
@@ -69,9 +64,11 @@ class BluetoothDevicesListFragment : BaseFragment(),
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_bluetooth_devices_list, container, false)
     }
 
@@ -81,6 +78,13 @@ class BluetoothDevicesListFragment : BaseFragment(),
         setViews()
         setObserver()
         setListener()
+        BleManager.getInstance().init(OkraApplication.getApplicationInstance())
+        BleManager.getInstance()
+            .enableLog(true)
+            .setReConnectCount(1, 5000)
+            .setConnectOverTime(20000).operateTimeout = 5000
+
+        bleValidate.checkPermissions()
        // broadCastDelegator = BroadcastReceiverDelegator(requireActivity(), this)
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
@@ -94,9 +98,6 @@ class BluetoothDevicesListFragment : BaseFragment(),
             checkForBluetooth()
 
         }*/
-
-
-
     }
 
     private fun setAdapter() {
@@ -118,127 +119,145 @@ class BluetoothDevicesListFragment : BaseFragment(),
     }
 
 
-
-
-    private fun checkForBluetooth() {
-        if (!bluetooth.isBluetoothEnabled) {
-            showCustomAlertDialog(
-                    requireContext(),
-                    object : Listeners.DialogListener {
-                        override fun onOkClick(dialog: DialogInterface?) {
-                            bluetooth.turnOnBluetooth()
-                            dialog ?. dismiss ()
-                        }
-
-                        override fun onCancelClick(dialog: DialogInterface?) {
-                            navController.popBackStack()
-                            dialog?.dismiss()
-                        }
-                    },
-                    MessageConstants.Messages.bluetooth_turn_on_permission,
-                    true,
-                    positiveButtonText = getString(R.string.allow),
-                    negativeButtonText = getString(R.string.cancel),
-                    title = getString(R.string.bluetooth),
-            )
+    private fun addDeviceInList(device: BleDevice) {
+        if (!device.name.isNullOrEmpty() && device.name.contains("OKRA")) {
+            devicesList.add(DevicesListModel(name = device.name, address = device.mac))
         }
-        else{
-            discoverDevices()
-        }
+
     }
-    private fun discoverDevices() {
-        if(!bluetooth.isDiscovering) {
-            bluetooth.startDiscovery()
-        } else {
-            bluetooth.cancelDiscovery()
+
+
+
+    override fun onBluetoothDisable(msg: String) {
+        showCustomAlertDialog(
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    navController.popBackStack()
+                    dialog?.dismiss()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            MessageConstants.Messages.bluetooth_turn_on_permission,
+            false,
+            positiveButtonText = getString(R.string.ok),
+            negativeButtonText = getString(R.string.cancel),
+            title = getString(R.string.bluetooth),
+        )
+    }
+
+    override fun onLocationDisable(msg: String) {
+        showCustomAlertDialog(
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    navController.popBackStack()
+                    dialog?.dismiss()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            MessageConstants.Messages.please_turn_on_your_location,
+            false,
+            positiveButtonText = getString(R.string.ok),
+            negativeButtonText = getString(R.string.cancel),
+            title = getString(R.string.location),
+        )
+    }
+
+    override fun onPermissionsGiven(data: Int) {
+        startScan()
+    }
+
+    override fun onPermissionsDeny(data: Int) {
+        showCustomAlertDialog(
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    navController.popBackStack()
+                    dialog?.dismiss()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            MessageConstants.Messages.location_permission_deny_text,
+            false,
+            positiveButtonText = getString(R.string.ok),
+            title = getString(R.string.alert),
+        )
+        Log.d("TAG", "**** onPermissionsDeny -Main Activity.")
+
+    }
+
+    private fun startScan() {
+        BleManager.getInstance().scan(object : BleScanCallback() {
+            override fun onScanStarted(success: Boolean) {
+                devicesList.clear()
+                devicesAdapter.notifyDataSetChanged()
+                manageViewVisibility(true)
+            }
+
+            override fun onLeScan(bleDevice: BleDevice?) {
+                super.onLeScan(bleDevice)
+            }
+
+            override fun onScanning(bleDevice: BleDevice?) {
+                println(":::: Device Found")
+                addDeviceInList(bleDevice!!)
+                devicesAdapter.notifyDataSetChanged()
+                manageViewVisibility(false)
+            }
+
+            override fun onScanFinished(scanResultList: List<BleDevice?>?) {
+                showToast("Scan finished")
+                /* img_loading.clearAnimation()
+                img_loading.setVisibility(View.INVISIBLE)
+                btn_scan.setText(getString(R.string.start_scan))*/
+            }
+        })
+    }
+
+    private fun manageViewVisibility(isDiscovering: Boolean) {
+        if(isDiscovering){
+            llDiscovering.beVisible()
+            llList.beGone()
+        }else{
+            llDiscovering.beGone()
+            llList.beVisible()
+
+            if(devicesList.isNotEmpty()){
+                rv_devices.beVisible()
+                tvNoDevice.beGone()
+            }else{
+                rv_devices.beGone()
+                tvNoDevice.beVisible()
+            }
         }
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-        val pos = o as Int
-        val type = o1 as DevicesListModel
 
     }
 
-    override fun onUnSelect(o: Any?, o1: Any?) {}
-
-    override fun onDeviceDiscovered(device: BluetoothDevice?) {
-        device?.let {
-            var isDuplicate = false
-
-            if (devicesList.isNotEmpty()) {
-                for (data in devicesList) {
-                    if(it.address == data.address){
-                        isDuplicate = true
-                    }
-                }
-            }
-            if(!isDuplicate){
-                addDeviceInList(it)
-            }
-
-            if (devicesList.size > 0) {
-                llDiscovering.beGone()
-                llList.beVisible()
-                devicesAdapter.notifyDataSetChanged()
-            } else {
-                llDiscovering.beVisible()
-                llList.beGone()
-            }
-        }
-    }
-
-    private fun addDeviceInList(device: BluetoothDevice) {
-        if (!device.name.isNullOrEmpty() && device.name.contains("OKRA")) {
-            devicesList.add(DevicesListModel(name = device.name, address = device.address))
-        }
+    override fun onUnSelect(o: Any?, o1: Any?) {
 
     }
 
-    override fun onDeviceDiscoveryStarted() {
-        llDiscovering.beVisible()
-        llList.beGone()
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        startScan()
     }
 
-    override fun setBluetoothController(bluetooth: BluetoothController?) {}
-
-    override fun onDeviceDiscoveryEnd() {
-       /* if(devicesList.isEmpty()){
-            showToast(MessageConstants.Messages.no_device_available)
-            if(this::broadCastDelegator.isInitialized)
-                broadCastDelegator.close()
-        }
-
-        navController.popBackStack()*/
-        Log.d("TAG", "**** Discovery ended -Main Activity.")
-
-    }
-
-    override fun onBluetoothStatusChanged() {
-        if(!bluetooth.isBluetoothEnabled){
-            showToast(MessageConstants.Messages.please_enable_your_bluetooth, requireContext())
-            broadCastDelegator.close()
-        }
-        navController.popBackStack()
-        Log.d("TAG", "**** onBluetoothStatusChanged -Main Activity.")
-
-    }
-
-    override fun onBluetoothTurningOn() {
-        discoverDevices()
-    }
-
-    override fun onDevicePairingEnded() {}
-
-    override fun onPermissionsGiven(data: Int) {
-        checkForBluetooth()
-    }
-
-    override fun onPermissionsDeny(data: Int) {
-        showToast( MessageConstants.Messages.location_permission_deny_text)
-        navController.popBackStack()
-        Log.d("TAG", "**** onPermissionsDeny -Main Activity.")
-
-    }
 
 }

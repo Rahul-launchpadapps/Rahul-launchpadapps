@@ -20,7 +20,7 @@ import com.app.okra.ui.profile.ItemsAdapter
 import com.app.okra.ui.profile.StaticContentActivity
 import com.app.okra.ui.my_account.setting.contactus.ContactUsActivity
 import com.app.okra.ui.my_account.setting.measurement.MeasurementSettingActivity
-import com.app.okra.ui.my_account.setting.notification.NotificationActivity
+import com.app.okra.ui.my_account.setting.notification.NotificationSettingActivity
 import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.Intent_Constant.Companion.TYPE
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -133,7 +133,7 @@ class SettingsActivity : BaseActivity(),
                  })
             }
             4 -> {
-                 navigationOnly(NotificationActivity())
+                 navigationOnly(NotificationSettingActivity())
             }
             5 -> {
                  navigationOnly(MeasurementSettingActivity())

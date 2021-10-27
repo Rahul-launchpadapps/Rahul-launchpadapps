@@ -148,6 +148,7 @@ class MessageConstants {
             const val finish_activity_message = "Are you sure you want to finish the activity as once finished you will no longer be able to edit/add any voice note?"
             const val logout_message = "Are you sure you want to logout from the app?"
             const val bluetooth_turn_on_permission = "Allow Okra to turn on the Bluetooth?"
+            const val please_turn_on_your_location = "Please turn on your location?"
             const val location_permission_deny_text = "Location permission is required for this feature?"
             const val work_in_progress = "Work in progress."
             const val no_data_available = "No data available."
