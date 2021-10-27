@@ -130,7 +130,6 @@
                 card_view:cardUseCompatPadding="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingStart="@dimen/dp_20"
@@ -146,7 +145,7 @@
                         android:fontFamily="@font/axiforma_medium"
                         android:gravity="center"
                         android:maxLines="2"
-                        android:text="@string/blood_glucose_mg_dL"
+                        android:text="@string/insulin_carb"
                         android:textColor="@color/grey_3"
                         android:textSize="@dimen/sp_12"
                         app:layout_constraintStart_toStartOf="parent"
@@ -200,6 +199,51 @@
                                 tools:ignore="RtlSymmetry" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:visibility="invisible"
+                        app:layout_constraintTop_toBottomOf="@id/tvDate"
+                        app:layout_constraintBottom_toTopOf="@id/tv_time"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_marginBottom="@dimen/dp_20"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_no_chart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/axiforma_medium"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/no_chart_data_available"
+                        android:textColor="@color/black_2"
+                        android:visibility="gone"
+                        android:textSize="@dimen/sp_12"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/axiforma_medium"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/number_of_readings"
+                        android:textColor="@color/grey_3"
+                        android:textSize="@dimen/sp_12"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>

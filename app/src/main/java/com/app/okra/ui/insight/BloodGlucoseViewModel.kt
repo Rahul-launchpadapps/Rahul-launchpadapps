@@ -6,13 +6,14 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.network.ApiData
 import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.BloodGlucoseRepo
+import com.app.okra.models.InsightResponse
 import com.app.okra.utils.*
 import java.util.*
 
 class BloodGlucoseViewModel(private val repo: BloodGlucoseRepo?) : BaseViewModel() {
 
-    private var insightLiveData = MutableLiveData<ApiData<Any>>()
-    val _insightLiveData: LiveData<ApiData<Any>>
+    private var insightLiveData = MutableLiveData<ApiData<InsightResponse>>()
+    val _insightLiveData: LiveData<ApiData<InsightResponse>>
         get() = insightLiveData
 
     var params= WeakHashMap<String, Any>()

@@ -204,4 +204,7 @@
     <string name="cal">cal</string>
     <string name="gm">gm</string>
     <string name="food_logs">Food Logs</string>
+    <string name="average_blood_glucose_mg_dL">Average Blood glucose (mg/dL)</string>
+    <string name="no_chart_data_available">No chart data available</string>
+    <string name="number_of_readings">Number of readings</string>
 </resources>

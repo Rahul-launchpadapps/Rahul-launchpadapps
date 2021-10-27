@@ -22,15 +22,27 @@ import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.rv_meal_list
-import kotlinx.android.synthetic.main.fragment_meal_logs.*
+import com.github.mikephil.charting.data.LineDataSet
+
+import com.github.mikephil.charting.data.LineData
+
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+
+import com.app.okra.models.GraphInfo
+import com.github.mikephil.charting.formatter.ValueFormatter
 
 class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var mealLogsAdapter: MealLogsAdapter
-    private var hashMapKeyList  = ArrayList<String>()
-    private var hashMapMealLog = hashMapOf<String,  ArrayList<MealData>>()
-
+    private var hashMapKeyList = ArrayList<String>()
+    private var hashMapMealLog = hashMapOf<String, ArrayList<MealData>>()
+    /*private val DAYS =
+        arrayOf("M", "T", "W", "T", "F", "S", "S")
+*/
     override fun getViewModel(): BaseViewModel? {
         return viewModel
     }
@@ -57,45 +69,53 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         viewModel.dashboardInfo(AppConstants.TODAY)
         viewModel.stripeInfo()
         tv_name.text = PreferenceManager.getString(AppConstants.Pref_Key.NAME)
+        tv_time.text = getString(R.string.time)+" (hr.)"
         setListener()
     }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._stripeInfoLiveData.observe(viewLifecycleOwner) { it ->
-            it.data?.let{
+            it.data?.let {
                 tvReceivedStrips.text = it.totalStripsReceived
                 tvLeftStrips.text = it.totalStripsLeft
             }
         }
 
         viewModel._dashboardLiveData.observe(viewLifecycleOwner) { it ->
-            it.data?.let{
+            it.data?.let {
                 tvTotalTestValue.text = it.totalTest
                 tvAvgBgValue.text = it.avgBloodGlucose
                 tvInsulinValue.text = it.avgInsulin
                 tvHyperValue.text = it.hyper_hypes?.hyper
                 tvHbaValue.text = it.Est_HbA1c
                 tvCarbsValue.text = it.carbsCount
-                if(it.foodLogs?.size!! >0){
+                if (it.foodLogs?.size!! > 0) {
                     tv_food_log.visibility = View.VISIBLE
                     rv_meal_list.visibility = View.VISIBLE
-                    it.foodLogs?.let { it1 -> prepareDateWiseData(it1)}
+                    it.foodLogs?.let { it1 -> prepareDateWiseData(it1) }
                     setAdapter()
-                }else {
+                } else {
                     tv_food_log.visibility = View.GONE
                     rv_meal_list.visibility = View.GONE
+                }
+                if(it.graphInfo?.size!! > 0) {
+                    chart.visibility = View.VISIBLE
+                    tv_no_chart.visibility = View.GONE
+                    setCharts(it.graphInfo!!)
+                }else {
+                    chart.visibility = View.INVISIBLE
+                    tv_no_chart.visibility = View.VISIBLE
                 }
             }
         }
 
-        viewModel._errorObserver.observe(viewLifecycleOwner){
+        viewModel._errorObserver.observe(viewLifecycleOwner) {
             val data = it.getContent()
             data?.message?.let { it1 -> showToast(it1) }
 
             if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
-
                 requireActivity().finish()
             }
         }
@@ -111,20 +131,20 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     private fun prepareDateWiseData(testLogData: ArrayList<MealData>) {
         hashMapMealLog.clear()
         hashMapKeyList.clear()
-        val hashMap = hashMapOf<String,  ArrayList<MealData>>()
-        if(testLogData.isNotEmpty()) {
-            for ((index, data) in testLogData.withIndex()){
+        val hashMap = hashMapOf<String, ArrayList<MealData>>()
+        if (testLogData.isNotEmpty()) {
+            for ((index, data) in testLogData.withIndex()) {
                 val date = data.date
-                date?.let{
+                date?.let {
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 
-                    val list: java.util.ArrayList<MealData> = if(hashMap.containsKey(dateToSet)){
+                    val list: java.util.ArrayList<MealData> = if (hashMap.containsKey(dateToSet)) {
                         hashMap[dateToSet] as ArrayList<MealData>
-                    }else{
+                    } else {
                         ArrayList()
                     }
                     list.add(data)
-                    hashMap[dateToSet]  = list
+                    hashMap[dateToSet] = list
                 }
             }
         }
@@ -144,16 +164,19 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         rl_today.setOnClickListener {
             handleTabsBackground(0)
             viewModel.dashboardInfo(AppConstants.TODAY)
+            tv_time.text = getString(R.string.time)+" (hr.)"
         }
 
         rl_this_week.setOnClickListener {
             handleTabsBackground(1)
             viewModel.dashboardInfo(AppConstants.WEEK)
+            tv_time.text = getString(R.string.time)+" (Weekday)"
         }
 
         rl_this_month.setOnClickListener {
             handleTabsBackground(2)
             viewModel.dashboardInfo(AppConstants.MONTH)
+            tv_time.text = getString(R.string.time)+" (Day of month)"
         }
     }
 
@@ -175,7 +198,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
             tv_this_month.setTextColor(textGreyColor)
             iv_this_month.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
-        } else if(value == 1) {
+        } else if (value == 1) {
             tv_this_week.setTextColor(textGreenColor)
             iv_this_week.backgroundTintList =
                 ColorStateList.valueOf(textGreenColor)
@@ -185,7 +208,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
             tv_this_month.setTextColor(textGreyColor)
             iv_this_month.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
-        }else {
+        } else {
             tv_this_month.setTextColor(textGreenColor)
             iv_this_month.backgroundTintList =
                 ColorStateList.valueOf(textGreenColor)
@@ -204,6 +227,88 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     override fun onUnSelect(o: Any?, o1: Any?) {
 
+    }
+
+    private fun setCharts(graphInfo: ArrayList<GraphInfo>) {
+        chart.getDescription().setEnabled(false)
+        chart.setTouchEnabled(true)
+        chart.setDrawGridBackground(false)
+        chart.setDragEnabled(false)
+        chart.setScaleEnabled(false)
+        chart.setPinchZoom(false)
+
+        var xAxis: XAxis
+        xAxis = chart.getXAxis()
+        /*xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return DAYS[value.toInt()]
+            }
+        }*/
+        xAxis.disableGridDashedLine()
+        xAxis.setDrawAxisLine(false)
+        xAxis.setDrawGridLines(false)
+        xAxis.setDrawLabels(false)
+
+        var yAxis: YAxis
+        yAxis = chart.getAxisLeft()
+        // disable dual axis (only use LEFT axis)
+        chart.getAxisRight().setEnabled(false)
+        yAxis.disableGridDashedLine()
+        yAxis.setDrawAxisLine(false)
+
+        if(graphInfo.size>0)
+            setData(graphInfo.size, graphInfo)
+    }
+
+    private fun setData(count: Int, list: ArrayList<GraphInfo>) {
+        val values: ArrayList<Entry> = ArrayList()
+        for (i in 0 until count) {
+            list[i].bloodGlucose?.toFloat()?.let { Entry(i.toFloat(), it) }?.let { values.add(it) }
+        }
+        val set1: LineDataSet
+        if (chart.data != null &&
+            chart.data.dataSetCount > 0
+        ) {
+            set1 = chart.data.getDataSetByIndex(0) as LineDataSet
+            set1.values = values
+            set1.notifyDataSetChanged()
+            chart.data.notifyDataChanged()
+            chart.notifyDataSetChanged()
+        } else {
+            set1 = LineDataSet(values, "")
+            set1.setDrawIcons(false)
+
+            // draw dashed line
+            set1.disableDashedLine()
+
+            // black lines and points
+            set1.color = ContextCompat.getColor(requireContext(),R.color.green_1)
+            set1.setCircleColor(ContextCompat.getColor(requireContext(),R.color.green_1))
+
+            // line thickness and point size
+            set1.lineWidth = 3f
+
+            // draw points as solid circles
+            set1.setDrawCircleHole(false)
+            set1.setDrawCircles(false)
+
+            // customize legend entry
+            set1.formLineWidth = 0f
+            set1.formSize = 0f
+
+            // text size of values
+            set1.valueTextSize = 0f
+
+            // set the filled area
+            set1.setDrawFilled(false)
+
+            val dataSets: ArrayList<ILineDataSet> = ArrayList()
+            dataSets.add(set1) // add the data sets
+
+            val data = LineData(dataSets)
+
+            chart.data = data
+        }
     }
 
 }

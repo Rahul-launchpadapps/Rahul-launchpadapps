@@ -14,18 +14,11 @@ class HomeResponse(
 class GraphInfo(
         var _id: Int?=null,
         var bloodGlucose: String?=null,
-        var hours: String?=null
+        var hours: String?=null,
+        var day: String?=null
 )
 
 class HyperHypes(
         var hyper: String?=null,
         var hypos: String?=null
-)
-
-class FoodLogs(
-        var _id: String?=null,
-        var calories: CommonData?=null,
-        var carbs: CommonData?=null,
-        var foodItems: ArrayList<FoodItems>?=null,
-        var foodType: String?=null
 )

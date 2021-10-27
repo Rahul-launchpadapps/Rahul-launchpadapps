@@ -6,23 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.app.okra.R
 import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
-import com.app.okra.ui.logbook.ViewPagerBottomBar
+import com.app.okra.data.repo.BloodGlucoseRepoImpl
+import com.app.okra.extension.viewModelFactory
+import com.app.okra.ui.logbook.test.TestLogsFragment
 import kotlinx.android.synthetic.main.fragment_in_sight.*
 
 class InSightFragment : BaseFragmentWithoutNav() {
 
-    private var mPagerAdapter: ViewPagerBottomBar? = null
+    private var mPagerAdapter: ViewPagerInsight? = null
 
     override fun getViewModel(): BaseViewModel? {
-        return null
+        return viewModel
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val viewModel by lazy {
+        ViewModelProvider(this,
+            viewModelFactory {
+                BloodGlucoseViewModel(BloodGlucoseRepoImpl(apiServiceAuth))
+            }
+        ).get(BloodGlucoseViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -40,9 +47,9 @@ class InSightFragment : BaseFragmentWithoutNav() {
     }
 
     private fun setupViewPager() {
-        mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerBottomBar(it) }
-        mPagerAdapter?.addFragment(BloodGlucoseFragment())
-        mPagerAdapter?.addFragment(InsulinFragment())
+        mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerInsight(it) }
+        mPagerAdapter?.addFragment(TestLogsFragment())
+        mPagerAdapter?.addFragment(TestLogsFragment())
         viewPager.adapter = mPagerAdapter
         viewPager.offscreenPageLimit = 1
         viewPager.beginFakeDrag()
@@ -102,5 +109,4 @@ class InSightFragment : BaseFragmentWithoutNav() {
                 ColorStateList.valueOf(textWhiteColor)
         }
     }
-
 }
