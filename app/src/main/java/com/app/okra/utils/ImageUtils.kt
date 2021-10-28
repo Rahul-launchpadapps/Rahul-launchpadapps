@@ -13,6 +13,7 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
@@ -27,12 +28,14 @@ class ImageUtils {
     private var fileName: String?=null
     private var photoURI: Uri? = null
     private var mCurrentPhotoPath: String? = null
+    private var mFragment: Fragment? = null
 
     private lateinit var mActivity: Activity
     private var mCallbacks: IChooseImageInterface? = null
 
-    fun setCallbacks(mActivity: Activity, listener: IChooseImageInterface) {
+    fun setCallbacks(mActivity: Activity, listener: IChooseImageInterface,  mFragment: Fragment? = null) {
         this.mActivity = mActivity
+        this.mFragment = mFragment
         mCallbacks = listener
     }
 
@@ -58,10 +61,18 @@ class ImageUtils {
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     takePictureIntent.putExtra("return-data", true)
-                    mActivity.startActivityForResult(
-                        takePictureIntent,
-                        AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
-                    )
+
+                    if(mFragment!=null) {
+                        mFragment!!.startActivityForResult(
+                            takePictureIntent,
+                            AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
+                        )
+                    }else{
+                        mActivity.startActivityForResult(
+                            takePictureIntent,
+                            AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
+                        )
+                    }
                 }
             }
         }
