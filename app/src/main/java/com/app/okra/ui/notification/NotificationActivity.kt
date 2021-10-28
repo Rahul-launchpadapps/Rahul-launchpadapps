@@ -54,8 +54,7 @@ class NotificationActivity : BaseActivity(), View.OnClickListener, CompoundButto
     }
 
     private fun setViews() {
-        tvTitle.text = getString(R.string.title_notification)
-
+        tvTitle.text = getString(R.string.notification)
     }
 
     override fun onClick(view: View?) {

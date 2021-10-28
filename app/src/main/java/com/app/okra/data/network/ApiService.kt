@@ -89,7 +89,7 @@ interface ApiService {
             Response<BaseResponse<Any>>
 
     @GET("v1/insight")
-    suspend fun getInsight(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<Any>>
+    suspend fun getInsight(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<InsightResponse>>
 
     @POST("v1/meals")
     suspend fun addMeal(@Body params: AddMealRequest): Response<BaseResponse<Any>>
@@ -102,5 +102,8 @@ interface ApiService {
 
     @GET("v1/user/device-list")
     suspend fun getPreviouslyConnectedDevices(): Response<BaseResponse<Any>>
+
+    @GET("v1/user/notification")
+    suspend fun notification(@Query("pageNo")  page:Int, @Query("limit") limit:Int): Response<BaseResponse<NotificationResponse>>
 
 }

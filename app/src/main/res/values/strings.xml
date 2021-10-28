@@ -202,11 +202,14 @@
     <string name="cal">cal</string>
     <string name="gm">gm</string>
     <string name="food_logs">Food Logs</string>
+    <string name="average_blood_glucose_mg_dL">Average Blood glucose (mg/dL)</string>
+    <string name="no_chart_data_available">No chart data available</string>
+    <string name="number_of_readings">Number of readings</string>
     <string name="no_notification">No Notification</string>
     <string name="clear">Clear</string>
     <string name="please_open_blue">Please turn on your bluetooth</string>
-
-
+    <string name="notification">Notification</string>
+    <string name="earlier">Earlier</string>
 
     <!-- BLE -->
 

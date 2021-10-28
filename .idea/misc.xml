@@ -49,6 +49,7 @@
         <entry key="app/src/main/res/layout/fragment_meal_details.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_meal_logs.xml" value="0.14" />
         <entry key="app/src/main/res/layout/fragment_my_reminder.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_set_reminder.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_successful_updated.xml" value="0.21" />
@@ -62,6 +63,7 @@
         <entry key="app/src/main/res/layout/row_dots.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/row_item_name.xml" value="0.21" />
         <entry key="app/src/main/res/layout/row_meal.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/row_notification.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_profile.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/row_support_request.xml" value="0.25" />
         <entry key="app/src/main/res/layout/row_test.xml" value="0.19791666666666666" />
@@ -72,7 +74,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

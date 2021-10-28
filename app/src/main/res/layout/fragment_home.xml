@@ -289,12 +289,99 @@
                 </RelativeLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_chart"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_400"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:elevation="@dimen/dp_5"
+                android:padding="@dimen/dp_10"
+                app:cardBackgroundColor="@color/bg_grey"
+                app:cardCornerRadius="@dimen/dp_10"
+                app:cardElevation="@dimen/dp_8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_time"
+                card_view:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_10">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/axiforma_medium"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/average_blood_glucose_mg_dL"
+                        android:textColor="@color/grey_3"
+                        android:textSize="@dimen/sp_12"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:visibility="invisible"
+                        app:layout_constraintTop_toBottomOf="@id/tv_unit"
+                        app:layout_constraintBottom_toTopOf="@id/tv_time"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_marginBottom="@dimen/dp_20"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_no_chart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/axiforma_medium"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/no_chart_data_available"
+                        android:textColor="@color/black_2"
+                        android:visibility="gone"
+                        android:textSize="@dimen/sp_12"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/axiforma_medium"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/time"
+                        android:textColor="@color/grey_3"
+                        android:textSize="@dimen/sp_12"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/ll_info1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/ll_time">
+                app:layout_constraintTop_toBottomOf="@id/cv_chart">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -336,6 +423,8 @@
                             android:fontFamily="@font/axiforma_medium"
                             android:textColor="@color/black_2"
                             android:textSize="@dimen/sp_20"
+                            android:text="0"
+                            android:maxLength="7"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ivTotalTests"
@@ -402,6 +491,8 @@
                             android:fontFamily="@font/axiforma_medium"
                             android:textColor="@color/black_2"
                             android:textSize="@dimen/sp_20"
+                            android:text="0"
+                            android:maxLength="7"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ivAvgBg"
@@ -477,6 +568,8 @@
                             android:fontFamily="@font/axiforma_medium"
                             android:textColor="@color/black_2"
                             android:textSize="@dimen/sp_20"
+                            android:text="0"
+                            android:maxLength="7"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ivInsulin"
@@ -543,6 +636,8 @@
                             android:fontFamily="@font/axiforma_medium"
                             android:textColor="@color/black_2"
                             android:textSize="@dimen/sp_20"
+                            android:text="0"
+                            android:maxLength="7"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ivHyper"
@@ -618,6 +713,8 @@
                             android:fontFamily="@font/axiforma_medium"
                             android:textColor="@color/black_2"
                             android:textSize="@dimen/sp_20"
+                            android:text="0"
+                            android:maxLength="7"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ivHba"
@@ -684,6 +781,8 @@
                             android:fontFamily="@font/axiforma_medium"
                             android:textColor="@color/black_2"
                             android:textSize="@dimen/sp_20"
+                            android:text="0"
+                            android:maxLength="7"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ivCarbs"

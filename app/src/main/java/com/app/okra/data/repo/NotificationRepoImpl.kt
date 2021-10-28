@@ -5,18 +5,19 @@ import com.app.okra.data.network.ApiResult
 import com.app.okra.data.network.ApiService
 import com.app.okra.data.network.BaseRepo
 import com.app.okra.models.InsightResponse
+import com.app.okra.models.NotificationResponse
 import com.app.okra.models.TestListResponse
 import kotlinx.coroutines.Dispatchers
 import java.util.*
 
-class BloodGlucoseRepoImpl constructor(
+class NotificationRepoImpl constructor(
         private val apiService: ApiService,
 ) : BaseRepo(apiService),
-    BloodGlucoseRepo {
+    NotificationRepo {
 
-    override suspend fun getInsight(params: WeakHashMap<String, Any>): ApiResult<ApiData<InsightResponse>> {
+    override suspend fun getNotification(page:Int, limit:Int): ApiResult<ApiData<NotificationResponse>> {
         return safeApiCall(Dispatchers.IO) {
-            apiService.getInsight(params)
+            apiService.notification(page,limit)
         }
     }
 }

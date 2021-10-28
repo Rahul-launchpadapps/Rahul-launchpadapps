@@ -6,23 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.app.okra.R
 import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
-import com.app.okra.ui.logbook.ViewPagerBottomBar
+import com.app.okra.data.repo.BloodGlucoseRepoImpl
+import com.app.okra.extension.viewModelFactory
 import kotlinx.android.synthetic.main.fragment_in_sight.*
 
 class InSightFragment : BaseFragmentWithoutNav() {
 
-    private var mPagerAdapter: ViewPagerBottomBar? = null
+    private var mPagerAdapter: ViewPagerInsight? = null
 
     override fun getViewModel(): BaseViewModel? {
-        return null
+        return viewModel
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val viewModel by lazy {
+        ViewModelProvider(this,
+            viewModelFactory {
+                BloodGlucoseViewModel(BloodGlucoseRepoImpl(apiServiceAuth))
+            }
+        ).get(BloodGlucoseViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -40,14 +46,14 @@ class InSightFragment : BaseFragmentWithoutNav() {
     }
 
     private fun setupViewPager() {
-        mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerBottomBar(it) }
+        mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerInsight(it) }
         mPagerAdapter?.addFragment(BloodGlucoseFragment())
         mPagerAdapter?.addFragment(InsulinFragment())
-        viewPager.adapter = mPagerAdapter
-        viewPager.offscreenPageLimit = 1
-        viewPager.beginFakeDrag()
+        viewPager1.adapter = mPagerAdapter
+        viewPager1.offscreenPageLimit = 1
+        viewPager1.beginFakeDrag()
 
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager1.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageScrolled(
@@ -66,11 +72,11 @@ class InSightFragment : BaseFragmentWithoutNav() {
     private fun initListeners() {
         rl_blood_glucose.setOnClickListener {
             handleTabsBackground(0)
-            viewPager.currentItem = 0
+            viewPager1.currentItem = 0
         }
         rl_insulin.setOnClickListener {
             handleTabsBackground(1)
-            viewPager.currentItem = 1
+            viewPager1.currentItem = 1
         }
 
         ivFilter.setOnClickListener {
@@ -102,5 +108,4 @@ class InSightFragment : BaseFragmentWithoutNav() {
                 ColorStateList.valueOf(textWhiteColor)
         }
     }
-
 }

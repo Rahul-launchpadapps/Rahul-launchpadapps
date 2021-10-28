@@ -6,12 +6,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/clRowBG"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_120"
+        android:layout_height="@dimen/dp_100"
         android:layout_margin="@dimen/dp_10"
         android:elevation="@dimen/dp_5"
         app:cardBackgroundColor="@color/bg_grey"
@@ -29,12 +27,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
-
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/textContainer"
-                android:fontFamily="@font/axiforma_medium"
                 android:drawableTop="@mipmap/upload_image"
                 android:drawablePadding="@dimen/dp_5"
+                android:fontFamily="@font/axiforma_medium"
                 android:text="@string/clear"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_16"
@@ -42,26 +39,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/clRowFG"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_120"
+        android:layout_height="@dimen/dp_100"
+        android:layout_margin="@dimen/dp_10"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"
         android:elevation="@dimen/dp_5"
         android:padding="@dimen/dp_10"
-        android:layout_margin="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
         app:cardBackgroundColor="@color/bg_grey"
         app:cardCornerRadius="@dimen/dp_10"
         app:cardElevation="@dimen/dp_8"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -90,10 +87,10 @@
                     android:id="@+id/tvNotification"
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_10"
                     android:fontFamily="@font/axiforma_medium"
                     android:text="@string/perform_diabetes_test"
                     android:textAllCaps="false"
-                    android:layout_marginBottom="@dimen/dp_10"
                     android:textColor="@color/black_2"
                     app:layout_constraintBottom_toTopOf="@+id/tvTime"
                     app:layout_constraintEnd_toEndOf="parent"
