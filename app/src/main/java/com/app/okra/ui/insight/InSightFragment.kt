@@ -13,7 +13,6 @@ import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.BloodGlucoseRepoImpl
 import com.app.okra.extension.viewModelFactory
-import com.app.okra.ui.logbook.test.TestLogsFragment
 import kotlinx.android.synthetic.main.fragment_in_sight.*
 
 class InSightFragment : BaseFragmentWithoutNav() {
@@ -48,13 +47,13 @@ class InSightFragment : BaseFragmentWithoutNav() {
 
     private fun setupViewPager() {
         mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerInsight(it) }
-        mPagerAdapter?.addFragment(TestLogsFragment())
-        mPagerAdapter?.addFragment(TestLogsFragment())
-        viewPager.adapter = mPagerAdapter
-        viewPager.offscreenPageLimit = 1
-        viewPager.beginFakeDrag()
+        mPagerAdapter?.addFragment(BloodGlucoseFragment())
+        mPagerAdapter?.addFragment(InsulinFragment())
+        viewPager1.adapter = mPagerAdapter
+        viewPager1.offscreenPageLimit = 1
+        viewPager1.beginFakeDrag()
 
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager1.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageScrolled(
@@ -73,11 +72,11 @@ class InSightFragment : BaseFragmentWithoutNav() {
     private fun initListeners() {
         rl_blood_glucose.setOnClickListener {
             handleTabsBackground(0)
-            viewPager.currentItem = 0
+            viewPager1.currentItem = 0
         }
         rl_insulin.setOnClickListener {
             handleTabsBackground(1)
-            viewPager.currentItem = 1
+            viewPager1.currentItem = 1
         }
 
         ivFilter.setOnClickListener {

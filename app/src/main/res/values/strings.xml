@@ -208,8 +208,8 @@
     <string name="no_notification">No Notification</string>
     <string name="clear">Clear</string>
     <string name="please_open_blue">Please turn on your bluetooth</string>
-
-
+    <string name="notification">Notification</string>
+    <string name="earlier">Earlier</string>
 
     <!-- BLE -->
 

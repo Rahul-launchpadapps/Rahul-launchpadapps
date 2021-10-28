@@ -103,4 +103,7 @@ interface ApiService {
     @GET("v1/user/device-list")
     suspend fun getPreviouslyConnectedDevices(): Response<BaseResponse<Any>>
 
+    @GET("v1/user/notification")
+    suspend fun notification(@Query("pageNo")  page:Int, @Query("limit") limit:Int): Response<BaseResponse<NotificationResponse>>
+
 }

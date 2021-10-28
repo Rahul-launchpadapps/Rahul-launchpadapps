@@ -34,7 +34,6 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
     private var hashMapKeyList  = ArrayList<String>()
     private var hashMapTestLog = LinkedHashMap<String,  ArrayList<Data>>()
 
-
     override fun getViewModel(): BaseViewModel? {
         return viewModel
     }
