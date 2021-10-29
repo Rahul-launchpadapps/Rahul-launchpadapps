@@ -100,7 +100,7 @@ class AppConstants {
 
 
     companion object {
-        const val DATA_LIMIT = 10
+        const val DATA_LIMIT = 90
         const val DATA = "data"
         const val SCREEN_TYPE = "screen_type"
         const val EMAIL = "email"
@@ -115,6 +115,8 @@ class AppConstants {
         const val AFTER_MEAL_TEXT = "After Meal"
         const val AFTER_MEAL = "AFTER_MEAL"
         const val DISPLAY_ALL = "DISPLAY_ALL"
+        const val THIS_WEEK = "WEEK"
+        const val THIS_MONTH = "MONTH"
         const val BEFORE_MEAL_TEXT = "Before Meal"
         const val BEFORE_MEAL = "BEFORE_MEAL"
         const val CONTROLE_SOLUTION_TEXT = "Control Solution"

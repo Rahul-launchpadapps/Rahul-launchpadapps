@@ -42,6 +42,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     PermissionUtils.IGetPermissionListener,
     ImageUtils.IChooseImageInterface {
 
+    private lateinit var amazonImageUrl: String
+    private lateinit var localImageUri: Uri
     private val mPermissionUtils: PermissionUtils = PermissionUtils(this)
     private val mChooseImageUtils: ImageUtils = ImageUtils()
     private var typeOfAction: Int = 0
@@ -50,7 +52,6 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     private var mDay: Int = 0
     private var mHour: Int = 0
     private var mMin: Int = 0
-    private var image: String = ""
     private  lateinit var selectedFoodItem : Items
 
     override fun getViewModel(): BaseViewModel? {
@@ -103,6 +104,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     private fun setListener() {
         mChooseImageUtils.setCallbacks(this, this)
+        viewModel.setAmazonCallback(this)
+
 
         ivBack.setOnClickListener {
             checkDataExistence()
@@ -118,7 +121,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
         btnSave.setOnClickListener {
             when {
-                TextUtils.isEmpty(image) -> {
+                TextUtils.isEmpty(amazonImageUrl) -> {
                     showToast(getString(R.string.please_select_image))
                 }
                 TextUtils.isEmpty(tvDate.text.toString()) -> {
@@ -161,7 +164,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                     val dateToConvert =   getDifferentInfoFromDate(date,DATE_FORMAT_1,DATE_FORMAT_1)
                     viewModel.prepareAddRequest(
                         date = getISOFromDateAndTime_inString(dateToConvert),
-                        image = image,
+                        image = amazonImageUrl,
                         foodItems = foodList,
                         foodType = tvFoodTypeValue.text.toString(),
                         calories = CommonData(tvCalories.text.toString(), "cal"),
@@ -181,7 +184,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
     }
 
     private fun checkDataExistence() {
-        if(image.isNotEmpty()){
+        if(this::localImageUri.isInitialized){
             showCustomAlertDialog(
                 this,
                 object : Listeners.DialogListener{
@@ -271,8 +274,9 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
                         println(":::: File Size: $fileSize")
                         if (fileSize > -1 && fileSize <= AppConstants.ALLOWED_FILE_SIZE) {
-                            image = imageUri.path.toString()
-                            viewModel.foodRecognition(imageUri.path)
+                            localImageUri = imageUri
+                            viewModel.uploadFile(imageUri)
+                          //  viewModel.foodRecognition(imageUri.path)
                         } else {
                             showToast("Selected file exceeds the maximum limit of ${AppConstants.ALLOWED_FILE_SIZE} MB.")
                         }
@@ -315,8 +319,19 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, this, observeError = false)
+
+        viewModel._amazonStatusLiveData.observe(this) {
+            if(it.serverUrl.isNotEmpty()){
+                amazonImageUrl =  it.serverUrl
+                if(this::localImageUri.isInitialized) {
+                    viewModel.foodRecognition(localImageUri.path)
+                }
+            }else{
+                showToast(MessageConstants.Errors.an_error_occurred)
+            }
+        }
         viewModel._foodRecognitionLiveData.observe(this) {
-            iv_image.loadUserImageFromUrl(this, image)
+            iv_image.loadUserImageFromUrl(this, localImageUri.path)
             try {
                 println("::: Output: ${it}")
 
@@ -327,13 +342,13 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
                 val mealInput  = if (!it.is_food) {
                     println("::::: Invalid: True ")
 
-                    MealInput(invalid = true, image= image)
+                    MealInput(invalid = true, image= localImageUri.path!!)
                 } else if (it.results == null || it.results!!.size == 0) {
                     println("::::: Invalid: True, No Data ")
 
-                    MealInput(invalid = true, image= image)
+                    MealInput(invalid = true, image= localImageUri.path!!)
                 } else {
-                    MealInput(invalid = false, image= image, data = it)
+                    MealInput(invalid = false, image= localImageUri.path!!, data = it)
                 }
                 activityForResult.launch(mealInput)
 
@@ -366,7 +381,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
 
         val datePickerDialog =
             DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
-                var strDate: String =
+                val strDate: String =
                     year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
                 showTimePicker(tvDate, strDate)
             }, mYear, mMonth, mDay)

@@ -1,4 +1,4 @@
-package com.app.okra.ui.dashboard
+package com.app.okra.ui.home
 
 import android.content.Context
 import androidx.fragment.app.Fragment

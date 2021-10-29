@@ -77,9 +77,12 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         setListener()
     }
 
-     fun getData(pageNo: Int,fromDate: String?=null,
-                        toDate: String?=null) {
-        viewModel.prepareRequest(pageNo,fromDate,toDate)
+     fun getData(pageNo: Int,
+                 fromDate: String?=null,
+                        toDate: String?=null,
+                        type: String?=null,
+     ) {
+        viewModel.prepareRequest(pageNo,fromDate,toDate, type)
         viewModel.getMealLogs()
     }
 

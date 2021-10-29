@@ -9,9 +9,8 @@ import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
-import com.app.okra.ui.dashboard.HomeViewPagerAdapter
+import com.app.okra.ui.home.HomeViewPagerAdapter
 import com.app.okra.ui.home.HomeFragment
-import com.app.okra.ui.insight.BloodGlucoseFragment
 import com.app.okra.ui.insight.InSightFragment
 import com.app.okra.ui.logbook.LogbookFragment
 import com.app.okra.ui.profile.ProfileFragment

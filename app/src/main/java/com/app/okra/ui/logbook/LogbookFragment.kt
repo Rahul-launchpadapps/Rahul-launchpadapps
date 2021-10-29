@@ -21,6 +21,10 @@ import com.app.okra.ui.logbook.meal.MealLogsFragment
 import com.app.okra.ui.logbook.test.TestLogsFragment
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.AppConstants.Companion.DISPLAY_ALL
+import com.app.okra.utils.AppConstants.Companion.THIS_MONTH
+import com.app.okra.utils.AppConstants.Companion.THIS_WEEK
+import com.app.okra.utils.AppConstants.Companion.TODAY
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.*
@@ -304,16 +308,49 @@ class LogbookFragment : BaseFragmentWithoutNav() {
                 thisMonth = false
             }
             ivToday.setOnClickListener {
+
+                ivMealDisplayAll.isSelected = false
+                displayAll = false
+
+                ivThisWeek.isSelected = false
+                ivThisMonth.isSelected = false
+
+                thisWeek = false
+                thisMonth = false
+
                 ivToday.isSelected = !ivToday.isSelected
-                today = !ivToday.isSelected
+                today = ivToday.isSelected
+
             }
             ivThisWeek.setOnClickListener {
+
+                ivMealDisplayAll.isSelected = false
+                displayAll = false
+
+                ivToday.isSelected = false
+                ivThisMonth.isSelected = false
+
+                today = false
+                thisMonth = false
+
                 ivThisWeek.isSelected = !ivThisWeek.isSelected
-                thisWeek = !ivThisWeek.isSelected
+                thisWeek = ivThisWeek.isSelected
+
             }
             ivThisMonth.setOnClickListener {
+
+                ivMealDisplayAll.isSelected = false
+                displayAll = false
+
+                ivToday.isSelected = false
+                ivThisWeek.isSelected = false
+
+                today = false
+                thisWeek = false
+
                 ivThisMonth.isSelected = !ivThisMonth.isSelected
-                thisMonth = !ivThisMonth.isSelected
+                thisMonth = ivThisMonth.isSelected
+
             }
             tvMealFromDate.setOnClickListener {
                 selectDate(tvMealFromDate)
@@ -326,10 +363,27 @@ class LogbookFragment : BaseFragmentWithoutNav() {
                 val toDate = tvMealToDate.text.toString().trim()
                 val fromDate = tvMealFromDate.text.toString().trim()
                 val filterTiming = getSelectedFilterTiming()
+                var typeToSend :String?=null
+
+                typeToSend = when {
+                    today -> {
+                        TODAY
+                    }
+                    thisWeek -> {
+                        THIS_WEEK
+                    }
+                    thisMonth -> {
+                        THIS_MONTH
+                    }
+                    else -> {
+                        ""
+                    }
+                }
                 mealLogFragment.getData(
                     pageNo = 1,
                     fromDate = fromDate,
                     toDate = toDate,
+                    type = typeToSend
                 )
                 bottomSheetDialog.dismiss()
             }

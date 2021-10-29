@@ -42,7 +42,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var mealLogsAdapter: MealLogsAdapter
     private var hashMapKeyList = ArrayList<String>()
-    private var hashMapMealLog = hashMapOf<String, ArrayList<MealData>>()
+    private var hashMapMealLog = LinkedHashMap<String, ArrayList<MealData>>()
     /*private val DAYS =
         arrayOf("M", "T", "W", "T", "F", "S", "S")
 */
@@ -88,11 +88,26 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         viewModel._dashboardLiveData.observe(viewLifecycleOwner) { it ->
             it.data?.let {
                 tvTotalTestValue.text = it.totalTest
-                tvAvgBgValue.text = it.avgBloodGlucose
-                tvInsulinValue.text = it.avgInsulin
-                tvHyperValue.text = it.hyper_hypes?.hyper
-                tvHbaValue.text = it.Est_HbA1c
-                tvCarbsValue.text = it.carbsCount
+
+                if(it.avgBloodGlucose!=null) {
+                    val valueToSet = String.format("%.2f", it.avgBloodGlucose!!.toBigDecimal()) + "mg/dL"
+                    tvAvgBgValue.text =valueToSet
+                }
+
+                if(it.avgInsulin!=null) {
+                    tvInsulinValue.text = String.format("%.2f", it.avgInsulin!!.toBigDecimal())
+                }
+                val hyperHypoText = "${it.hyper_hypes?.hyper} / ${it.hyper_hypes?.hypos}"
+                tvHyperValue.text = hyperHypoText
+
+                if(it.Est_HbA1c!=null) {
+                    tvHbaValue.text = String.format("%.2f",it.Est_HbA1c!!.toBigDecimal())
+                }
+
+                if(it.carbsCount!=null) {
+                    val valueToSet = String.format("%.2f", it.carbsCount!!.toBigDecimal())+ "mg/dL"
+                    tvCarbsValue.text =  valueToSet
+                }
                 if (it.foodLogs?.size!! > 0) {
                     tv_food_log.visibility = View.VISIBLE
                     rv_meal_list.visibility = View.VISIBLE
@@ -134,10 +149,10 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     private fun prepareDateWiseData(testLogData: ArrayList<MealData>) {
         hashMapMealLog.clear()
         hashMapKeyList.clear()
-        val hashMap = hashMapOf<String, ArrayList<MealData>>()
+        val hashMap = LinkedHashMap<String, ArrayList<MealData>>()
         if (testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()) {
-                val date = data.date
+                val date = data.createdAt
                 date?.let {
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 
@@ -236,14 +251,14 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     }
 
     private fun setCharts(graphInfo: ArrayList<GraphInfo>) {
-        chart.getDescription().setEnabled(false)
+        chart.description.isEnabled = false
         chart.setTouchEnabled(true)
         chart.setDrawGridBackground(false)
-        chart.setDragEnabled(false)
+        chart.isDragEnabled = false
         chart.setScaleEnabled(false)
         chart.setPinchZoom(false)
 
-        var xAxis: XAxis
+        val xAxis: XAxis
         xAxis = chart.getXAxis()
         /*xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -255,7 +270,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(false)
 
-        var yAxis: YAxis
+        val yAxis: YAxis
         yAxis = chart.getAxisLeft()
         // disable dual axis (only use LEFT axis)
         chart.getAxisRight().setEnabled(false)

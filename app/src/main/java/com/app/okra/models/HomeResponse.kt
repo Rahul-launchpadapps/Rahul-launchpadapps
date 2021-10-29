@@ -3,11 +3,11 @@ package com.app.okra.models
 class HomeResponse(
         var graphInfo: ArrayList<GraphInfo>?= null,
         var totalTest: String?=null,
-        var avgBloodGlucose: String?=null,
-        var avgInsulin: String?=null,
+        var avgBloodGlucose: Double?=null,
+        var avgInsulin: Double?=null,
         var hyper_hypes: HyperHypes?=null,
-        var Est_HbA1c: String?=null,
-        var carbsCount: String?=null,
+        var Est_HbA1c: Double?=null,
+        var carbsCount: Double?=null,
         var foodLogs: ArrayList<MealData>?=null
         )
 
