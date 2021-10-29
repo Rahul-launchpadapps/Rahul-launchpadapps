@@ -9,5 +9,16 @@
         android:id="@+id/notificationFragment"
         android:name="com.app.okra.ui.notification.NotificationFragment"
         android:label="NotificationFragment"
-        tools:layout="@layout/fragment_notification"/>
+        tools:layout="@layout/fragment_notification">
+    <action
+        android:id="@+id/action_notificationFragment_to_addSupportRequestFragment"
+        app:destination="@id/addSupportRequestFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addSupportRequestFragment"
+        android:name="com.app.okra.ui.my_account.support_request.AddSupportRequestFragment"
+        android:label="AddSupportRequestFragment"
+        tools:layout="@layout/fragment_add_support_request"/>
+
 </navigation>

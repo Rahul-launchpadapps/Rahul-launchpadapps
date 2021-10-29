@@ -52,6 +52,7 @@ import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 
@@ -1050,4 +1051,90 @@ fun getDateFromPattern(inputPattern: String?, date: String?): Date? {
         e.printStackTrace()
         return null
     }
+}
+
+
+fun getPastTimeString(createdTimestamp: Long?): String {
+    var convertedTime = ""
+    var convertedSecTime = ""
+    val suffix = "ago"
+    try {
+        val nowTime = System.currentTimeMillis()
+
+        if (createdTimestamp != null) {
+            var value = 0L
+            var text = ""
+            val dateDiff = nowTime - createdTimestamp
+            val second = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
+            val minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
+            val hour = TimeUnit.MILLISECONDS.toHours(dateDiff)
+            val day = TimeUnit.MILLISECONDS.toDays(dateDiff)
+            when {
+                second < 60 -> {
+                    convertedSecTime = "Just now"
+                }
+                minute < 2 -> {
+                    value = minute
+                    text = "minute"
+                }
+                minute < 60 -> {
+                    value = minute
+                    text = "minutes"
+                }
+                hour < 2 -> {
+                    value = hour
+                    text = "hour"
+                }
+                hour < 24 -> {
+                    value = hour
+                    text = "hours"
+                }
+                day < 2 -> {
+                    value = day
+                    text = "day"
+                }
+                day < 7 -> {
+                    value = day
+                    text = "days"
+                }
+                else -> {
+                    when {
+                        day < 14 -> {
+                            value = day / 7
+                            text = "week"
+                        }
+                        day < 30 -> {
+                            value = day / 7
+                            text = "weeks"
+                        }
+                        day < 60 -> {
+                            value = day / 30
+                            text = "month"
+                        }
+                        day < 360 -> {
+                            value = day / 30
+                            text = "months"
+                        }
+                        day < 720 -> {
+                            value = day / 360
+                            text = "year"
+                        }
+                        day > 720 -> {
+                            value = day / 360
+                            text = "years"
+                        }
+                    }
+                }
+            }
+
+            convertedTime = if (convertedSecTime.isNotEmpty()) {
+                convertedSecTime
+            } else {
+                "$value $text $suffix"
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return convertedTime
 }

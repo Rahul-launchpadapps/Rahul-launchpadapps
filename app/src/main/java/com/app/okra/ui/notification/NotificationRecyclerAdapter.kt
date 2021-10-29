@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.app.okra.R
 import com.app.okra.models.Notification
+import com.app.okra.utils.getPastTimeString
 import kotlinx.android.synthetic.main.row_notification.view.*
 
 class NotificationRecyclerAdapter internal constructor(
@@ -31,11 +32,7 @@ class NotificationRecyclerAdapter internal constructor(
         fun onBind(position: Int) {
 
             itemView.tvNotification.text = list[position].title
-            itemView.tvTime.text = "dlkhudg"
-
-            itemView.setOnClickListener {
-               // listener?.onSelect(position, null)
-            }
+            itemView.tvTime.text = getPastTimeString(list[position].created)
         }
     }
 }

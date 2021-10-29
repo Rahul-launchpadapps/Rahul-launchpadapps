@@ -43,9 +43,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     private lateinit var mealLogsAdapter: MealLogsAdapter
     private var hashMapKeyList = ArrayList<String>()
     private var hashMapMealLog = hashMapOf<String, ArrayList<MealData>>()
-    /*private val DAYS =
-        arrayOf("M", "T", "W", "T", "F", "S", "S")
-*/
+    private var time:String = AppConstants.TODAY
     override fun getViewModel(): BaseViewModel? {
         return viewModel
     }
@@ -69,7 +67,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObserver()
-        viewModel.dashboardInfo(AppConstants.TODAY)
+        viewModel.dashboardInfo(time)
         viewModel.stripeInfo()
         tv_name.text = PreferenceManager.getString(AppConstants.Pref_Key.NAME)
         tv_time.text = getString(R.string.time)+" (hr.)"
@@ -169,19 +167,22 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
         rl_today.setOnClickListener {
             handleTabsBackground(0)
-            viewModel.dashboardInfo(AppConstants.TODAY)
+            time= AppConstants.TODAY
+            viewModel.dashboardInfo(time)
             tv_time.text = getString(R.string.time)+" (hr.)"
         }
 
         rl_this_week.setOnClickListener {
             handleTabsBackground(1)
-            viewModel.dashboardInfo(AppConstants.WEEK)
+            time= AppConstants.WEEK
+            viewModel.dashboardInfo(time)
             tv_time.text = getString(R.string.time)+" (Weekday)"
         }
 
         rl_this_month.setOnClickListener {
             handleTabsBackground(2)
-            viewModel.dashboardInfo(AppConstants.MONTH)
+            time= AppConstants.MONTH
+            viewModel.dashboardInfo(time)
             tv_time.text = getString(R.string.time)+" (Day of month)"
         }
     }
@@ -245,15 +246,27 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
         var xAxis: XAxis
         xAxis = chart.getXAxis()
-        /*xAxis.valueFormatter = object : ValueFormatter() {
+        val array = arrayOfNulls<String>(graphInfo.size)
+        if(time == AppConstants.TODAY){
+            for(i in 0 until graphInfo.size)
+            array[i] = graphInfo[i].hours+"hr"
+        } else if(time == AppConstants.WEEK){
+            for(i in 0 until graphInfo.size)
+                array[i] = graphInfo[i].day?.substring(0)
+        }else if(time == AppConstants.MONTH){
+            for(i in 0 until graphInfo.size)
+                array[i] = "#"+graphInfo[i]._id.toString()
+        }
+        xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return DAYS[value.toInt()]
+                return array[value.toInt()].toString()
             }
-        }*/
+        }
         xAxis.disableGridDashedLine()
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
-        xAxis.setDrawLabels(false)
+        xAxis.setDrawLabels(true)
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
 
         var yAxis: YAxis
         yAxis = chart.getAxisLeft()

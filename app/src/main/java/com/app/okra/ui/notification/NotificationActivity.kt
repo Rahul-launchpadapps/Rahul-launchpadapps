@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
@@ -12,8 +13,8 @@ import com.app.okra.data.repo.SettingRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.my_account.setting.SettingsViewModel
 import com.app.okra.utils.AppConstants
+import kotlinx.android.synthetic.main.activity_notification.*
 import kotlinx.android.synthetic.main.layout_header.*
-
 
 class NotificationActivity : BaseActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -50,11 +51,16 @@ class NotificationActivity : BaseActivity(), View.OnClickListener, CompoundButto
 
     private fun setListener() {
         ivBack.setOnClickListener(this)
-
+        btnSave.setOnClickListener {
+            val navController = findNavController(R.id.container)
+            /*val fragment = navController.currentDestination. as NotificationFragment
+            fragment?.clearAll()*/
+        }
     }
 
     private fun setViews() {
         tvTitle.text = getString(R.string.notification)
+        btnSave.text = getString(R.string.clear_all)
     }
 
     override fun onClick(view: View?) {
@@ -77,5 +83,12 @@ class NotificationActivity : BaseActivity(), View.OnClickListener, CompoundButto
                 pushNotification = pushStatus
         )
         viewModel.updateSettings()
+    }
+
+    fun showClear(b: Boolean) {
+        if(b)
+            btnSave.visibility = View.VISIBLE
+        else
+            btnSave.visibility = View.GONE
     }
 }

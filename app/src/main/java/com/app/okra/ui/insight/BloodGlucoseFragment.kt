@@ -22,6 +22,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.android.synthetic.main.fragment_blood_glucose.*
 import kotlinx.android.synthetic.main.fragment_blood_glucose.chart
@@ -39,9 +40,9 @@ import kotlinx.android.synthetic.main.fragment_blood_glucose.tv_today
 
 class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
-    private val type : String = AppConstants.BLOOD_GLUCOSE
-    private var time : String = AppConstants.TODAY
-    private var testingTime : String = AppConstants.BEFORE_MEAL
+    private val type: String = AppConstants.BLOOD_GLUCOSE
+    private var time: String = AppConstants.TODAY
+    private var testingTime: String = AppConstants.BEFORE_MEAL
     private lateinit var customSpinnerAdapter: CustomSpinnerAdapter
 
     private val timingList by lazy {
@@ -76,7 +77,7 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
     }
 
     private fun getData() {
-        viewModel.prepareRequest(type,testingTime,time)
+        viewModel.prepareRequest(type, testingTime, time)
         viewModel.getInsight()
     }
 
@@ -95,7 +96,7 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
             }
         }
 
-        viewModel._errorObserver.observe(viewLifecycleOwner){
+        viewModel._errorObserver.observe(viewLifecycleOwner) {
             val data = it.getContent()
             data?.message?.let { it1 -> showToast(it1) }
 
@@ -159,10 +160,10 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
             spinner.performClick()
         }
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 tvSet.text = timingList[p2]
-                testingTime = getMealTime(timingList[p2],false)
+                testingTime = getMealTime(timingList[p2], false)
                 getData()
             }
 
@@ -195,15 +196,19 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
         var xAxis: XAxis
         xAxis = chart.getXAxis()
-        /*xAxis.valueFormatter = object : ValueFormatter() {
+        val array = arrayOfNulls<Int>(graphInfo.size)
+        for (i in 0 until graphInfo.size)
+            array[i] = i
+        xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return DAYS[value.toInt()]
+                return array[value.toInt()].toString()
             }
-        }*/
+        }
         xAxis.disableGridDashedLine()
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
-        xAxis.setDrawLabels(false)
+        xAxis.setDrawLabels(true)
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
 
         var yAxis: YAxis
         yAxis = chart.getAxisLeft()
@@ -212,7 +217,7 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
         yAxis.disableGridDashedLine()
         yAxis.setDrawAxisLine(false)
 
-        if(graphInfo.size>0)
+        if (graphInfo.size > 0)
             setData(graphInfo.size, graphInfo)
     }
 
@@ -238,8 +243,8 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
             set1.disableDashedLine()
 
             // black lines and points
-            set1.color = ContextCompat.getColor(requireContext(),R.color.green_1)
-            set1.setCircleColor(ContextCompat.getColor(requireContext(),R.color.green_1))
+            set1.color = ContextCompat.getColor(requireContext(), R.color.green_1)
+            set1.setCircleColor(ContextCompat.getColor(requireContext(), R.color.green_1))
 
             // line thickness and point size
             set1.lineWidth = 3f

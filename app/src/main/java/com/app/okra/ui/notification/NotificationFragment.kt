@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
@@ -18,20 +16,20 @@ import com.app.okra.models.Notification
 import com.app.okra.utils.*
 import com.app.okra.utils.swipe.RecyclerTouchListener
 import kotlinx.android.synthetic.main.fragment_notification.*
-import kotlinx.android.synthetic.main.fragment_notification.progressBar_loadMore
 import kotlinx.android.synthetic.main.fragment_notification.swipe_request
 
 class NotificationFragment : BaseFragment(),
-        Listeners.ItemClickListener{
+    Listeners.ItemClickListener {
 
-   // private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var notificationAdapterToday: NotificationRecyclerAdapter
     private lateinit var notificationAdapterEarlier: NotificationRecyclerAdapter
-    private var touchListener: RecyclerTouchListener? = null
-    private val notificationToday by lazy {  ArrayList<Notification>() }
-    private val notificationEarlier by lazy {  ArrayList<Notification>() }
+    private var touchListener1: RecyclerTouchListener? = null
+    private var touchListener2: RecyclerTouchListener? = null
+    private val notificationToday by lazy { ArrayList<Notification>() }
+    private val notificationEarlier by lazy { ArrayList<Notification>() }
 
-    private var pageNo :Int = 1
+    private var pageNo: Int = 1
     private var totalPage: Int = 0
     private var nextHit: Int = 0
 
@@ -61,25 +59,25 @@ class NotificationFragment : BaseFragment(),
     }
 
     private fun setAdapter() {
-        notificationAdapterToday = NotificationRecyclerAdapter(requireContext(),notificationToday)
-        notificationAdapterEarlier = NotificationRecyclerAdapter(requireContext(),notificationEarlier)
+        notificationAdapterToday = NotificationRecyclerAdapter(requireContext(), notificationToday)
+        notificationAdapterEarlier =
+            NotificationRecyclerAdapter(requireContext(), notificationEarlier)
 
         rv_today.adapter = notificationAdapterToday
         rv_earlier.adapter = notificationAdapterEarlier
 
-        touchListener = RecyclerTouchListener(requireActivity(), rv_today)
-        touchListener!!.setClickable(object : RecyclerTouchListener.OnRowClickListener {
-                override fun onRowClicked(position: Int) {
-                    Toast.makeText(
-                        requireContext(),"Item Clicked: $position",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+        touchListener1 = RecyclerTouchListener(requireActivity(), rv_today)
+        touchListener2 = RecyclerTouchListener(requireActivity(), rv_earlier)
+        touchListener1!!.setClickable(object : RecyclerTouchListener.OnRowClickListener {
+            override fun onRowClicked(position: Int) {
+                navController.navigate(R.id.action_notificationFragment_to_addSupportRequestFragment, null)
+            }
 
-                override fun onIndependentViewClicked(independentViewID: Int, position: Int) {}
-            })
+            override fun onIndependentViewClicked(independentViewID: Int, position: Int) {}
+        })
             .setSwipeOptionViews(R.id.clRowBG)
-            .setSwipeable(R.id.clRowFG, R.id.clRowBG
+            .setSwipeable(
+                R.id.clRowFG, R.id.clRowBG
             ) { viewID, position ->
                 when (viewID) {
                     R.id.clRowBG -> {
@@ -87,6 +85,15 @@ class NotificationFragment : BaseFragment(),
                             requireContext(),
                             object : Listeners.DialogListener {
                                 override fun onOkClick(dialog: DialogInterface?) {
+                                    notificationToday[position]._id?.let {
+                                        var list = ArrayList<String>()
+                                        list.add(it)
+                                        viewModel.deleteNotification(
+                                            list
+                                        )
+                                        notificationToday.removeAt(position)
+                                        notificationAdapterToday.notifyDataSetChanged()
+                                    }
                                     dialog?.dismiss()
                                 }
 
@@ -94,22 +101,62 @@ class NotificationFragment : BaseFragment(),
                                     dialog?.dismiss()
                                 }
                             },
-                            MessageConstants.Messages.location_permission_deny_text,
-                            false,
+                            getString(R.string.are_you_sure_you_want_to_clear_all_your_notifications),
+                            true,
                             positiveButtonText = getString(R.string.ok),
-                            title = getString(R.string.alert),
+                            getString(R.string.cancel),
+                            title = getString(R.string.clear_notifications),
                         )
-
-                        Toast.makeText(
-                            requireContext(),"Item Deleted",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
             }
-        rv_today.addOnItemTouchListener(touchListener!!)
-    }
 
+        touchListener2!!.setClickable(object : RecyclerTouchListener.OnRowClickListener {
+            override fun onRowClicked(position: Int) {
+                navController.navigate(R.id.action_notificationFragment_to_addSupportRequestFragment, null)
+            }
+
+            override fun onIndependentViewClicked(independentViewID: Int, position: Int) {}
+        })
+            .setSwipeOptionViews(R.id.clRowBG)
+            .setSwipeable(
+                R.id.clRowFG, R.id.clRowBG
+            ) { viewID, position ->
+                when (viewID) {
+                    R.id.clRowBG -> {
+                        showCustomAlertDialog(
+                            requireContext(),
+                            object : Listeners.DialogListener {
+                                override fun onOkClick(dialog: DialogInterface?) {
+                                    notificationEarlier[position]._id?.let {
+                                        var list = ArrayList<String>()
+                                        list.add(it)
+                                        viewModel.deleteNotification(
+                                            list
+                                        )
+                                        notificationEarlier.removeAt(position)
+                                        notificationAdapterEarlier.notifyDataSetChanged()
+                                    }
+                                    dialog?.dismiss()
+                                }
+
+                                override fun onCancelClick(dialog: DialogInterface?) {
+                                    dialog?.dismiss()
+                                }
+                            },
+                            getString(R.string.are_you_sure_you_want_to_clear_all_your_notifications),
+                            true,
+                            positiveButtonText = getString(R.string.ok),
+                            getString(R.string.cancel),
+                            title = getString(R.string.clear_notifications),
+                        )
+                    }
+                }
+            }
+
+        rv_today.addOnItemTouchListener(touchListener1!!)
+        rv_earlier.addOnItemTouchListener(touchListener2!!)
+    }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeToast = false)
@@ -122,31 +169,44 @@ class NotificationFragment : BaseFragment(),
             if (it.nextHit != null) {
                 nextHit = it.nextHit
             }
-            it.data?.let{
+            it.data?.let {
                 if (pageNo == 1) {
                     notificationToday.clear()
                     notificationEarlier.clear()
                 }
 
-                if(it.today?.size!! > 0){
-                    notificationToday.addAll(it.today!!)
-                }else{
+                if (it.today?.size!! == 0 && it.earlier?.size!! == 0) {
+                    (activity as NotificationActivity).showClear(false)
                     tvToday.visibility = View.GONE
                     rv_today.visibility = View.GONE
-                }
-
-                if(it.earlier?.size!! > 0){
-                    notificationEarlier.addAll(it.earlier!!)
-                }else{
                     tvEarlier.visibility = View.GONE
                     rv_earlier.visibility = View.GONE
+                    clNoData.visibility = View.VISIBLE
+                } else {
+                    (activity as NotificationActivity).showClear(true)
+                    clNoData.visibility = View.GONE
+                    if (it.today?.size!! > 0) {
+                        notificationToday.addAll(it.today!!)
+                    } else {
+                        tvToday.visibility = View.GONE
+                        rv_today.visibility = View.GONE
+                    }
+
+                    if (it.earlier?.size!! > 0) {
+                        notificationEarlier.addAll(it.earlier!!)
+                    } else {
+                        tvEarlier.visibility = View.GONE
+                        rv_earlier.visibility = View.GONE
+                    }
                 }
                 notificationAdapterToday.notifyDataSetChanged()
                 notificationAdapterEarlier.notifyDataSetChanged()
             }
         }
-    }
 
+        viewModel._notificationLiveData.observe(viewLifecycleOwner) { it ->
+        }
+    }
 
     private fun setListener() {
         /*rv_today.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -167,7 +227,7 @@ class NotificationFragment : BaseFragment(),
         })*/
 
         swipe_request.setOnRefreshListener {
-            pageNo=1
+            pageNo = 1
             viewModel.getNotification(1)
         }
     }
@@ -177,13 +237,40 @@ class NotificationFragment : BaseFragment(),
 
     override fun onUnSelect(o: Any?, o1: Any?) {}
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
+    fun clearAll() {
+        showCustomAlertDialog(
+            requireContext(),
+            object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    var list = ArrayList<String>()
+                    for (i in 0 until notificationToday.size) {
+                        notificationToday[i]._id?.let { list.add(it) }
+                    }
+                    for (i in 0 until notificationEarlier.size) {
+                        notificationEarlier[i]._id?.let { list.add(it) }
+                    }
+                    viewModel.deleteNotification(
+                        list
+                    )
+                    notificationEarlier.clear()
+                    notificationToday.clear()
+                    notificationAdapterEarlier.notifyDataSetChanged()
+                    notificationAdapterToday.notifyDataSetChanged()
+                    dialog?.dismiss()
+                    (activity as NotificationActivity).showClear(false)
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            },
+            getString(R.string.are_you_sure_you_want_to_clear_all_your_notifications),
+            true,
+            positiveButtonText = getString(R.string.ok),
+            getString(R.string.cancel),
+            title = getString(R.string.clear_notifications),
+        )
 
     }
+
 }

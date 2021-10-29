@@ -106,4 +106,7 @@ interface ApiService {
     @GET("v1/user/notification")
     suspend fun notification(@Query("pageNo")  page:Int, @Query("limit") limit:Int): Response<BaseResponse<NotificationResponse>>
 
+    @PUT("v1/user/notification-status-update")
+    suspend fun deleteNotification(@Body  body: NotificationRequest): Response<BaseResponse<Any>>
+
 }

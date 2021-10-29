@@ -210,6 +210,11 @@
     <string name="please_open_blue">Please turn on your bluetooth</string>
     <string name="notification">Notification</string>
     <string name="earlier">Earlier</string>
+    <string name="clear_notifications">Clear Notifications</string>
+    <string name="are_you_sure_you_want_to_clear_all_your_notifications">Are you sure you want to clear all your notifications?</string>
+    <string name="clear_all">Clear all</string>
+
+
 
     <!-- BLE -->
 
