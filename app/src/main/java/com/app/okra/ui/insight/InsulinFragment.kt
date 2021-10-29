@@ -22,8 +22,11 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import kotlinx.android.synthetic.main.fragment_blood_glucose.*
 import kotlinx.android.synthetic.main.fragment_insulin.*
+import kotlinx.android.synthetic.main.fragment_insulin.chart
 import kotlinx.android.synthetic.main.fragment_insulin.iv_this_month
 import kotlinx.android.synthetic.main.fragment_insulin.iv_this_week
 import kotlinx.android.synthetic.main.fragment_insulin.iv_today
@@ -32,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_insulin.rl_this_week
 import kotlinx.android.synthetic.main.fragment_insulin.rl_today
 import kotlinx.android.synthetic.main.fragment_insulin.spinner
 import kotlinx.android.synthetic.main.fragment_insulin.tvSet
+import kotlinx.android.synthetic.main.fragment_insulin.tv_no_chart
 import kotlinx.android.synthetic.main.fragment_insulin.tv_this_month
 import kotlinx.android.synthetic.main.fragment_insulin.tv_this_week
 import kotlinx.android.synthetic.main.fragment_insulin.tv_today
@@ -194,15 +198,19 @@ class InsulinFragment : BaseFragmentWithoutNav() {
 
         var xAxis: XAxis
         xAxis = chart.getXAxis()
-        /*xAxis.valueFormatter = object : ValueFormatter() {
+        val array = arrayOfNulls<Int>(graphInfo.size)
+        for (i in 0 until graphInfo.size)
+            array[i] = i
+        xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return DAYS[value.toInt()]
+                return array[value.toInt()].toString()
             }
-        }*/
+        }
         xAxis.disableGridDashedLine()
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
-        xAxis.setDrawLabels(false)
+        xAxis.setDrawLabels(true)
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
 
         var yAxis: YAxis
         yAxis = chart.getAxisLeft()

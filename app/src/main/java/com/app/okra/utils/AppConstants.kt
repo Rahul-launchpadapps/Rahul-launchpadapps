@@ -100,7 +100,7 @@ class AppConstants {
 
 
     companion object {
-        const val DATA_LIMIT = 90
+        const val DATA_LIMIT = 100
         const val DATA = "data"
         const val SCREEN_TYPE = "screen_type"
         const val EMAIL = "email"
