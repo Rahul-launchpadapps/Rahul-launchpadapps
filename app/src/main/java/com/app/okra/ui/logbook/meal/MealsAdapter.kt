@@ -44,7 +44,7 @@ class MealsAdapter (var listener: Listeners.ItemClickListener,
                     val valToSet = "${it.value} ${it.unit} Carbs"
                     itemView.tvDetail.text = valToSet
                 }
-                it.createdAt?.let{
+                it.date?.let{
                     if(it.isNotEmpty()) {
                         itemView.tvGlucoseValue.text = getDateFromISOInString(it, formatYouWant = "hh:mm a")
                     }

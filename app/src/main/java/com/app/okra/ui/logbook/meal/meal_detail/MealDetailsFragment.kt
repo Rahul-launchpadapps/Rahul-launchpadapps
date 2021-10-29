@@ -88,7 +88,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
             data?.apply {
                 tvDateValue.text =
-                    createdAt?.let { it1 ->
+                    date?.let { it1 ->
                         getDateFromISOInString(
                             it1,
                             formatYouWant = DATE_FORMAT_1

@@ -126,7 +126,7 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         val hashMap = LinkedHashMap<String,  ArrayList<MealData>>()
         if(testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()){
-                val date = data.createdAt
+                val date = data.date
                 date?.let{
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 

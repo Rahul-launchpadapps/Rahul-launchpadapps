@@ -47,7 +47,7 @@ class TestsAdapter (var listener: Listeners.ItemClickListener,
                     itemView.tvDetail.text = getMealTime(it)
                 }
 
-                it.createdAt?.let{
+                it.date?.let{
                     if(it.isNotEmpty()) {
                         itemView.tvTime.text = getDateFromISOInString(it, formatYouWant = "hh:mm a")
                     }

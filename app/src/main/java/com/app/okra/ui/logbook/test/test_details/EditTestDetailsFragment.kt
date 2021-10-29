@@ -155,7 +155,7 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
             data = it.getParcelable(AppConstants.DATA)
 
             tvDateValue.text =
-                data?.createdAt?.let { it1 ->
+                data?.date?.let { it1 ->
                     getDateFromISOInString(
                         it1,
                         AppConstants.DateFormat.DATE_FORMAT_1
