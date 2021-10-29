@@ -116,9 +116,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_400"
-                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:elevation="@dimen/dp_5"
                 android:padding="@dimen/dp_10"
                 app:cardBackgroundColor="@color/bg_grey"
@@ -137,21 +137,22 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvDate"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/dp_0"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dp_15"
                         android:ellipsize="end"
                         android:fontFamily="@font/axiforma_medium"
-                        android:gravity="center"
                         android:maxLines="2"
                         android:text="@string/insulin_carb"
                         android:textColor="@color/grey_3"
                         android:textSize="@dimen/sp_12"
+                        app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+                        app:layout_constraintEnd_toStartOf="@+id/cardView2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView2"
                         android:layout_width="@dimen/dp_170"
                         android:layout_height="@dimen/dp_70"
                         android:elevation="@dimen/dp_5"
@@ -173,8 +174,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp_0"
                                 android:gravity="top"
-                                android:visibility="invisible"
                                 android:overlapAnchor="false"
+                                android:visibility="invisible"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent" />

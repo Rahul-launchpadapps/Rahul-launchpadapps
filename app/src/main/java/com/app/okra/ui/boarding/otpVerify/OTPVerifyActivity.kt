@@ -15,17 +15,21 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.network.ApiData
+import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.extension.navigate
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.InitialBoardingResponse
+import com.app.okra.ui.MessageActivity
+import com.app.okra.ui.boarding.login.LoginActivity
 import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordActivity
+import com.app.okra.ui.boarding.signup.SignUpActivity
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.MessageConstants
 import kotlinx.android.synthetic.main.activity_otp_verify.*
 
 class OTPVerifyActivity : BaseActivity() {
 
-    private lateinit var data: InitialBoardingResponse
+    private  var screenType: String?=null
     private val viewModel: OTPVerifyViewModel by lazy {
         ViewModelProvider(this,
             viewModelFactory {
@@ -34,12 +38,14 @@ class OTPVerifyActivity : BaseActivity() {
         ).get(OTPVerifyViewModel::class.java)
     }
 
+    private var userData : InitialBoardingResponse?=null
+
     override fun getViewModel(): BaseViewModel {
         return viewModel
     }
 
     private var email: String = ""
-
+    private var password: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +58,19 @@ class OTPVerifyActivity : BaseActivity() {
     }
 
     private fun getIntentData() {
+
+        if(intent.hasExtra(AppConstants.Intent_Constant.DATA)){
+            userData = intent.getParcelableExtra(AppConstants.Intent_Constant.DATA)
+        }
+        if(intent.hasExtra(AppConstants.Intent_Constant.FROM_SCREEN)){
+            screenType = intent.getStringExtra(AppConstants.Intent_Constant.FROM_SCREEN).toString()
+        }
+
         if(intent.hasExtra(AppConstants.Intent_Constant.EMAIL))
             email = intent.getStringExtra(AppConstants.Intent_Constant.EMAIL).toString()
+
+        if(intent.hasExtra(AppConstants.Intent_Constant.PASS))
+            password = intent.getStringExtra(AppConstants.Intent_Constant.PASS).toString()
 
     }
 
@@ -61,22 +78,56 @@ class OTPVerifyActivity : BaseActivity() {
         val subText = "${getString(R.string.we_have_sent_a)} $email.\n${getString(R.string.verify_your_otp)} "
         tvSubHeader.text = subText
 
-
         val span = SpannableString(tvResendCode.text)
         span.setSpan(UnderlineSpan(), 0, tvResendCode.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         tvResendCode.text = span
         tvResendCode.movementMethod = LinkMovementMethod.getInstance()
-
     }
 
     private fun setObserver() {
-        viewModel._OtpVerifyLiveData.observe(this) { it ->
-            navigate(
-                Intent(this, ResetOrChangePasswordActivity::class.java)
-                    .putExtra(AppConstants.EMAIL, email)
-                        .putExtra(AppConstants.SCREEN_TYPE, OTPVerifyActivity::class.java.simpleName)
+        viewModel._OtpVerifyLiveData.observe(this) {
+            screenType?.let {
+                if(screenType ==  SignUpActivity::class.java.simpleName
+                    || screenType== LoginActivity::class.java.simpleName){
 
-            )
+                    PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_LOGGED_IN, true)
+
+                    userData?.let {
+                        saveDataInPreference(
+                            name = it.name,
+                            email = it.email,
+                            accessToken = it.accessToken,
+                            userType = it.userType,
+                            userId = it.userId,
+                            password = password,
+                            age = it.age,
+                            phone = it.mobileNo,
+                            isApproved = true,
+                            isVerify = false,
+                            profilePicture = it.profilePicture,
+                            pushNotificationStatus = it.pushNotificationStatus
+                        )
+                    }
+
+                    navigate(
+                        Intent(this, MessageActivity::class.java)
+                            .putExtra(AppConstants.Intent_Constant.NAME, userData?.name)
+                            .putExtra(AppConstants.SCREEN_TYPE,
+                                SignUpActivity::class.java.simpleName
+                            )
+                    )
+                }else{
+                    navigate(
+                        Intent(this, ResetOrChangePasswordActivity::class.java)
+                            .putExtra(AppConstants.EMAIL, email)
+                            .putExtra(
+                                AppConstants.SCREEN_TYPE,
+                                OTPVerifyActivity::class.java.simpleName
+                            )
+
+                    )
+                }
+            }
 
         }
 
@@ -140,7 +191,7 @@ class OTPVerifyActivity : BaseActivity() {
                     tvInvalidCode.visibility = View.GONE
                 }
             }
-    }
+        }
 
         viewModel._progressDialog.observe(this) {
             showHideProgress(it.getContent()!!.status);

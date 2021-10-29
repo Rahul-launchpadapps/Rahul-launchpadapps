@@ -42,8 +42,8 @@ abstract class BaseActivity :AppCompatActivity() {
     protected fun makeStatusBarTransparent() {
         val w = window
         w.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
     }
 
@@ -63,12 +63,12 @@ abstract class BaseActivity :AppCompatActivity() {
     }
 
     internal fun setBaseObservers(
-            viewModel: BaseViewModel?,
-            context: FragmentActivity,
-            lifecycleOwner: LifecycleOwner,
-            observeToast :Boolean = true,
-            observeError :Boolean = true,
-            observeProgress :Boolean = true,
+        viewModel: BaseViewModel?,
+        context: FragmentActivity,
+        lifecycleOwner: LifecycleOwner,
+        observeToast :Boolean = true,
+        observeError :Boolean = true,
+        observeProgress :Boolean = true,
     ) {
         viewModel?.apply {
 
@@ -112,11 +112,11 @@ abstract class BaseActivity :AppCompatActivity() {
     fun isInternetAvailable(): Boolean{
         var result = false
         val connectivityManager  =
-                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val networkCapabilities = connectivityManager.activeNetwork ?: return false
             val actNw =
-                    connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
             result = when {
                 actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                 actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
@@ -162,8 +162,8 @@ abstract class BaseActivity :AppCompatActivity() {
     }
 
     internal fun launchDataLoad(
-            dispatcher: CoroutineDispatcher = Dispatchers.Main,
-            block: suspend ((scope: CoroutineScope) -> Unit)
+        dispatcher: CoroutineDispatcher = Dispatchers.Main,
+        block: suspend ((scope: CoroutineScope) -> Unit)
     ) : Job {
         return lifecycleScope.launch(dispatcher) {
             block.invoke(this)
@@ -183,22 +183,30 @@ abstract class BaseActivity :AppCompatActivity() {
     companion object {
         fun saveDataInPreference(
 
-                name: String? = null,
-                profilePicture: String? = null,
-                email: String? = null,
-                userId: String? = null,
-                userType: String? = null,
-                accessToken: String? = null,
-                userData: String? = null,
-                password: String? = null,
-                age: String? = null,
-                phone: String? = null,
-                pushNotificationStatus: Boolean? = null,
-                inAppNotification: Boolean? = null,
+            name: String? = null,
+            profilePicture: String? = null,
+            email: String? = null,
+            userId: String? = null,
+            userType: String? = null,
+            accessToken: String? = null,
+            userData: String? = null,
+            password: String? = null,
+            age: String? = null,
+            phone: String? = null,
+            pushNotificationStatus: Boolean? = null,
+            inAppNotification: Boolean? = null,
+            isApproved: Boolean? = null,
+            isVerify: Boolean? = null,
         ) {
 
             accessToken?.let {
                 PreferenceManager.putString(AppConstants.Pref_Key.ACCESS_TOKEN, accessToken)
+            }
+            isApproved?.let {
+                PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_APPROVED, isApproved)
+            }
+            isVerify?.let {
+                PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_VERIFIED, isVerify)
             }
 
             userId?.let {

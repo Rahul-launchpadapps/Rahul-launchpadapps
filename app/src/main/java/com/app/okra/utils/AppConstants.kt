@@ -9,6 +9,8 @@ class AppConstants {
 
             const val USER_TYPE = "userType"
             const val ACCESS_TOKEN = "accessToken"
+            const val IS_APPROVED = "isApproved"
+            const val IS_VERIFIED = "isVerified"
             const val USER_ID = "userId"
             const val EMAIL_ID = "email"
             const val IS_LOGGED_IN = "isLoggedIn"
@@ -84,9 +86,12 @@ class AppConstants {
         companion object {
 
             const val FROM_SCREEN = "fromScreen"
-            const val EMAIL: String = "EMAIL"
+            const val EMAIL: String = "email"
+            const val NAME: String = "name"
+            const val PASS: String = "pass"
             const val TYPE = "type"
             const val REMINDER = "reminder"
+            const val DATA = "data"
         }
 
     }
@@ -94,7 +99,7 @@ class AppConstants {
 
     class NotificationConstants {
         companion object {
-
+const val ADMIN_USER_ACCOUNT_VERIFY = "ADMIN_USER_ACCOUNT_VERIFY"
         }
     }
 

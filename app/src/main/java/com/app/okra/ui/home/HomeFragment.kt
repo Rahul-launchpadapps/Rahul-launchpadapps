@@ -13,29 +13,26 @@ import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.HomeRepoImpl
-import com.app.okra.extension.navigate
 import com.app.okra.extension.navigationOnly
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.GraphInfo
 import com.app.okra.models.MealData
+import com.app.okra.models.UserInfo
+import com.app.okra.ui.home.HomeViewModel
 import com.app.okra.ui.logbook.meal.MealLogsAdapter
 import com.app.okra.ui.notification.NotificationActivity
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.rv_meal_list
-import com.github.mikephil.charting.data.LineDataSet
-
-import com.github.mikephil.charting.data.LineData
-
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-
-import com.app.okra.models.GraphInfo
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
@@ -70,11 +67,20 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObserver()
+        getData()
+        setView()
+        setListener()
+    }
+
+    private fun setView() {
+        tv_name.text = PreferenceManager.getString(AppConstants.Pref_Key.NAME)
+        val textToSet = "${getString(R.string.time)} (hr.)"
+        tv_time.text = textToSet
+    }
+
+    private fun getData() {
         viewModel.dashboardInfo(time)
         viewModel.stripeInfo()
-        tv_name.text = PreferenceManager.getString(AppConstants.Pref_Key.NAME)
-        tv_time.text = getString(R.string.time)+" (hr.)"
-        setListener()
     }
 
     private fun setObserver() {
@@ -87,8 +93,11 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         }
 
         viewModel._dashboardLiveData.observe(viewLifecycleOwner) { it ->
+            swipe_home.isRefreshing = false
             it.data?.let {
                 tvTotalTestValue.text = it.totalTest
+
+                updateUserData(it.userInfo)
 
                 if(it.avgBloodGlucose!=null) {
                     val valueToSet = String.format("%.2f", it.avgBloodGlucose!!.toBigDecimal()) + "mg/dL"
@@ -130,12 +139,24 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         }
 
         viewModel._errorObserver.observe(viewLifecycleOwner) {
+            swipe_home.isRefreshing = false
             val data = it.getContent()
             data?.message?.let { it1 -> showToast(it1) }
 
             if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
                 requireActivity().finish()
+            }
+        }
+    }
+
+    private fun updateUserData(userInfo: UserInfo?) {
+        userInfo?.let{
+            it.isApproved?.let {
+                PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_APPROVED, it)
+            }
+            it.isVerify?.let {
+                PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_VERIFIED, it)
             }
         }
     }
@@ -187,21 +208,28 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
             handleTabsBackground(0)
             time= AppConstants.TODAY
             viewModel.dashboardInfo(time)
-            tv_time.text = getString(R.string.time)+" (hr.)"
+            val timeToSet = "${getString(R.string.time)} (hr.)"
+            tv_time.text = timeToSet
         }
 
         rl_this_week.setOnClickListener {
             handleTabsBackground(1)
             time= AppConstants.WEEK
             viewModel.dashboardInfo(time)
-            tv_time.text = getString(R.string.time)+" (Weekday)"
+            val timeToSet = "${getString(R.string.time)} (Weekday)"
+            tv_time.text = timeToSet
         }
 
         rl_this_month.setOnClickListener {
             handleTabsBackground(2)
             time= AppConstants.MONTH
             viewModel.dashboardInfo(time)
-            tv_time.text = getString(R.string.time)+" (Day of month)"
+            val timeToSet = "${getString(R.string.time)} (Day of month)"
+            tv_time.text = timeToSet
+        }
+
+        swipe_home.setOnRefreshListener {
+            getData()
         }
     }
 
@@ -284,10 +312,9 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(true)
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-        val yAxis: YAxis
-        yAxis = chart.getAxisLeft()
+        val yAxis: YAxis = chart.axisLeft
         // disable dual axis (only use LEFT axis)
         chart.getAxisRight().setEnabled(false)
         yAxis.disableGridDashedLine()

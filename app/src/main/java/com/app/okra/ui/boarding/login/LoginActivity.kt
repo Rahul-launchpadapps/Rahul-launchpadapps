@@ -1,5 +1,6 @@
 package com.app.okra.ui.boarding.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
@@ -21,7 +22,9 @@ import com.app.okra.data.repo.InitialBoardingRepoImpl
 import com.app.okra.extension.*
 import com.app.okra.ui.DashBoardActivity
 import com.app.okra.ui.boarding.forgotPassword.ForgotPassActivity
+import com.app.okra.ui.boarding.otpVerify.OTPVerifyActivity
 import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordViewModel
+import com.app.okra.ui.boarding.signup.SignUpActivity
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.CustomTypefaceSpan
 import com.app.okra.utils.MessageConstants
@@ -31,6 +34,8 @@ import kotlinx.android.synthetic.main.activity_login.etEmail
 import kotlinx.android.synthetic.main.activity_login.etPassword
 import kotlinx.android.synthetic.main.activity_login.iv_eye
 import kotlinx.android.synthetic.main.activity_login.tvErrorEmail
+import kotlinx.android.synthetic.main.activity_login.tvErrorPass
+import kotlinx.android.synthetic.main.activity_signup.*
 import kotlinx.android.synthetic.main.layout_button.*
 
 
@@ -64,11 +69,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
     private fun setObserver() {
         setBaseObservers(viewModel, this, this,observeToast = false)
         viewModel._loginLiveData.observe(this) { it ->
-            it?.data?.let {
-                //showToast("Login Successfully")
-                PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_LOGGED_IN, true)
+            it?.data?.let { it ->
 
-                saveDataInPreference(
+                if(it.isApproved!=null && it.isApproved!!) {
+                    //showToast("Login Successfully")
+                    PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_LOGGED_IN, true)
+
+                    saveDataInPreference(
                         name = it.name,
                         email = it.email,
                         accessToken = it.accessToken,
@@ -76,13 +83,24 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
                         userId = it.userId,
                         password = etPassword.text.toString().trim(),
                         age = it.age,
+                        isApproved = it.isApproved,
+                        isVerify = it.isVerify,
                         phone = it.mobileNo,
                         profilePicture = it.profilePicture,
                         pushNotificationStatus = it.pushNotificationStatus
-                )
-                etEmail.setText("")
-                etPassword.setText("")
-                navigationOnly(DashBoardActivity())
+                    )
+                    etEmail.setText("")
+                    etPassword.setText("")
+                    navigationOnly(DashBoardActivity())
+                }else{
+                    navigate(
+                        Intent(this, OTPVerifyActivity::class.java)
+                        .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, LoginActivity::class.java.simpleName)
+                        .putExtra(AppConstants.Intent_Constant.DATA, it)
+                        .putExtra(AppConstants.Intent_Constant.EMAIL, etEmail.text.toString().trim())
+                        .putExtra(AppConstants.Intent_Constant.PASS, etPassword.text.toString().trim())
+                    )
+                }
             }
         }
 
@@ -131,18 +149,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
 
         val messageClick: ClickableSpan = object : ClickableSpan() {
             override fun onClick(v: View) {
-                /*val userType = PreferenceManager.getString(AppConstants.Pref_Key.USER_TYPE)
-                if (!userType.isNullOrEmpty()) {
-                    navigate(
-                        Intent(this@LoginActivity, SignUpActivity::class.java)
-                            .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
-                    )
-                } else {
-                    navigate(
-                        Intent(this@LoginActivity, WelcomeActivity::class.java)
-                            .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
-                    )
-                }*/
+                navigationOnly(SignUpActivity())
             }
         }
 
@@ -151,14 +158,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
         val span = SpannableString(tvSignUp.text)
         span.setSpan(messageClick, 20, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         span.setSpan(
-                CustomTypefaceSpan(boldTypeface!!),
-                20,
-                tvSignUp.text.length,
-                Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+            CustomTypefaceSpan(boldTypeface!!),
+            20,
+            tvSignUp.text.length,
+            Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
         span.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)),
-                20, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)),
+            20, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
 
         tvSignUp.text = span

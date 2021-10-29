@@ -13,17 +13,39 @@
     <string name="title_my_support_request">My support request</string>
     <string name="title_my_support_request_details">Support request details</string>
     <string name="title_new_support_request">Add new request</string>
+    <string name="title_reports">Generate report</string>
+
+    <!-- Subtitles -->
+    <string name="subtitle_reports">Date range of the report cannot exceed 12 months</string>
+
+    <!-- Reports Activity -->
+    <string name="download">Download</string>
+    <string name="date_Range">Date Range</string>
+    <string-array name="file_type_array">
+        <item>File Type</item>
+        <item>XLSX</item>
+        <item>PDF</item>
+    </string-array>
+    <string name="file_type">File Type</string>
+
+    <!-- Download Dialog Fragment -->
+    <string name="download_progress_title">Download in progress...</string>
 
 
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
     <string name="sign_in_with_okra">Sign in With Okra</string>
+    <string name="create_an_account">Create an account</string>
     <string name="manage_your_account"><![CDATA[Manage your account & get the access to various services provided by the okra.]]></string>
     <string name="email_id">Email ID</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="terms_and_condition_text">By clicking on the Sign Up option you agree
+to the Okra Terms &amp; Conditions</string>
     <string name="sign_in">Sign in</string>
+    <string name="sign_up">Signup</string>
+    <string name="already_have_account">Already have account? Sign in</string>
     <string name="don_t_have_an_account">Don\'t have account? Sign up</string>
     <string name="cancel">Cancel</string>
     <string name="allow">Allow</string>
@@ -50,6 +72,10 @@
     <string name="tutorial_sub_header_1">At Okra, we believe that everyone deserves to be healthy That’s we keep our cost low</string>
     <string name="you_have_successfully">You have successfully updated your Okra account password.</string>
     <string name="lets_get_started">Let\'s get started</string>
+    <string name="lets_get_started_2">Let\'s Get Started</string>
+    <string name="nice_to_meet_you">Nice to meet you</string>
+    <string name="you_have_successfully_created">You have successfully created your Okra account.</string>
+    <string name="unverified_account_message">Your OKRA account is currently unverified. Please contact the admin to verify your account.</string>
     <string name="back_to_signin">Back to sign in</string>
     <string name="logout">Logout</string>
     <string name="log_out">Log out</string>
@@ -64,6 +90,7 @@
     <string name="enter_your_new">Enter your new password below, your new password must be different from the current password</string>
     <string name="current_password">Current Password</string>
     <string name="ok">OK</string>
+
     <string name="camera">Camera</string>
     <string name="photo_library">Photo Library</string>
     <string name="upload_image">Upload Image</string>
@@ -239,7 +266,8 @@
     <string name="service_list">Service list</string>
     <string name="characteristic_list">Characteristic list</string>
     <string name="console">Console</string>
-    <string name="name">Device broadcast name：</string>
+    <string name="device_broadcast_name">Device broadcast name：</string>
+    <string name="name">Name</string>
     <string name="mac">MAC:</string>
     <string name="service">Service</string>
     <string name="type">Service type (main service)</string>
@@ -254,6 +282,10 @@
     <string name="enter">Enter</string>
     <string name="location">Location</string>
     <string name="no_device_available">No device available.</string>
+    <string name="reports">Reports</string>
+    <string name="i_am_new_here">I am new here</string>
+    <string name="i_have_been">I have been here before</string>
+    <string name="unverified_user">Unverified User</string>
 
 
 </resources>

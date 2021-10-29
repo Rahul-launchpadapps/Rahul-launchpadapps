@@ -11,6 +11,7 @@
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:paddingBottom="@dimen/dp_50"
       android:background="@color/bg_grey"
       tools:context=".ui.boarding.login.LoginActivity">
 
@@ -19,7 +20,7 @@
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
         android:fontFamily="@font/axiforma_semibold"
-        android:layout_marginTop="@dimen/dp_130"
+        android:layout_marginTop="@dimen/dp_120"
         android:text="@string/sign_in_with_okra"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_30"
@@ -149,12 +150,13 @@
         android:text="@string/forgot_password"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_25"
-        tools:ignore="OnClick,RelativeOverlap"
+        tools:ignore="OnClick,RelativeOverlap,UsingOnClickInXml"
         app:layout_constraintTop_toBottomOf="@+id/tvErrorPass"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
     <include
+        android:id="@id/layoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         layout="@layout/layout_button"
@@ -188,11 +190,10 @@
         android:text="@string/don_t_have_an_account"
         android:fontFamily="@font/axiforma_medium"
         android:textColor="@color/black"
-        android:visibility="gone"
         android:padding="@dimen/dp_5"
         android:gravity="center"
         android:textSize="@dimen/sp_14"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/layoutButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

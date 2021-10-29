@@ -7,6 +7,7 @@ import android.view.Menu
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
+import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
 import com.app.okra.ui.home.HomeViewPagerAdapter
@@ -14,16 +15,18 @@ import com.app.okra.ui.home.HomeFragment
 import com.app.okra.ui.insight.InSightFragment
 import com.app.okra.ui.logbook.LogbookFragment
 import com.app.okra.ui.profile.ProfileFragment
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.showAddNewDialog
+import com.app.okra.utils.showAlertDialog
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener {
+class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listeners.DialogListener {
 
     private var homeViewPagerAdapter: HomeViewPagerAdapter? = null
 
     override fun getViewModel(): BaseViewModel? {
-     return null
+        return null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,16 +107,34 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener {
         }
     }
 
-    override fun onImageClick(dialog: DialogInterface?) {
-        startActivity(Intent(this, ConnectedDeviceActivity::class.java))
-
+    override fun onFirstOptionClick(dialog: DialogInterface?) {
+        if(PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_VERIFIED)) {
+            startActivity(Intent(this, ConnectedDeviceActivity::class.java))
+        }else{
+            showAlertDialog(
+                this,
+                this,
+                getString(R.string.unverified_account_message),
+                false,
+                getString(R.string.ok),
+                getString(R.string.ok),
+                getString(R.string.alert)
+            )
+        }
     }
 
-    override fun onUploadFromGallery(dialog: DialogInterface?) {
+    override fun onSecondOptionClick(dialog: DialogInterface?) {
         startActivity(Intent(this, AddMealActivity::class.java))
     }
 
-    override fun onCancelOrUploadFromEmail(dialog: DialogInterface?) {
+    override fun onThirdOptionClick(dialog: DialogInterface?) {
+
     }
+
+    override fun onOkClick(dialog: DialogInterface?) {
+        dialog?.dismiss()
+    }
+
+    override fun onCancelClick(dialog: DialogInterface?) {}
 
 }

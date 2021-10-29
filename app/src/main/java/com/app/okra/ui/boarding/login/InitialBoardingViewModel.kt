@@ -26,7 +26,8 @@ class InitialBoardingViewModel(private val repo : InitialBoardingRepo?) : BaseVi
     companion object {
         const val FIELD_EMAIL = "email"
         const val FIELD_PASS = "pass"
-        const val OTHER = "other"
+        const val FIELD_NAME = "name"
+
     }
 
     private var deviceToken :String? = null
@@ -36,6 +37,14 @@ class InitialBoardingViewModel(private val repo : InitialBoardingRepo?) : BaseVi
 
     private val initBoardingRequest  = InitialBoardingRequest()
     fun setLoginValue(email: String, password:String){
+        initBoardingRequest.email =email
+        initBoardingRequest.password =password.trim()
+        initBoardingRequest.deviceId = AppConstants.android
+        initBoardingRequest.deviceToken =deviceToken
+    }
+
+    fun setSignUpValue(name: String, email: String, password:String){
+        initBoardingRequest.name = name
         initBoardingRequest.email =email
         initBoardingRequest.password =password.trim()
         initBoardingRequest.deviceId = AppConstants.android
@@ -64,11 +73,11 @@ class InitialBoardingViewModel(private val repo : InitialBoardingRepo?) : BaseVi
             }
         }
     }
-    fun signUp( isChecked :Boolean){
-        if(validateData(isChecked)){
+    fun signUp( ){
+        if(validateSignUpData()){
             launchDataLoad {
                 showProgressBar()
-                val result = repo?.onLogin(initBoardingRequest)
+                val result = repo?.onSignUp(initBoardingRequest)
                 hideProgressBar()
                 when (result) {
                     is ApiResult.Success<InitialBoardingResponse> -> {
@@ -85,28 +94,29 @@ class InitialBoardingViewModel(private val repo : InitialBoardingRepo?) : BaseVi
         }
     }
 
-    private fun validateData(isChecked :Boolean): Boolean {
+    private fun validateSignUpData(): Boolean {
         return when{
+            initBoardingRequest.name.isNullOrBlank() -> {
+                toastObserver.value =Event(ToastData(MessageConstants.Errors.enter_name,  FIELD_NAME))
+                false
+            }
             initBoardingRequest.email.isNullOrBlank() -> {
-                toastObserver.value =Event(ToastData(MessageConstants.Errors.enter_email))
+                toastObserver.value =Event(ToastData(MessageConstants.Errors.enter_email,  FIELD_EMAIL))
                 false
             }
             !initBoardingRequest.email!!.isEmailValid() -> {
-                toastObserver.value =Event(ToastData(MessageConstants.Errors.invalid_email))
+                toastObserver.value =Event(ToastData(MessageConstants.Errors.invalid_email,  FIELD_EMAIL))
                 false
             }
             initBoardingRequest.password.isNullOrBlank() -> {
-                toastObserver.value =Event(ToastData(MessageConstants.Errors.enter_pass))
+                toastObserver.value =Event(ToastData(MessageConstants.Errors.enter_pass,  FIELD_PASS))
                 false
             }
             !initBoardingRequest.password!!.isPasswordValid() -> {
-                toastObserver.value =Event(ToastData(MessageConstants.Errors.invalid_pass_message))
+                toastObserver.value =Event(ToastData(MessageConstants.Errors.invalid_pass_message, FIELD_PASS))
                 false
             }
-            !isChecked -> {
-                toastObserver.value =Event(ToastData(MessageConstants.Errors.please_agree))
-                false
-            }
+
             else -> true
         }
     }

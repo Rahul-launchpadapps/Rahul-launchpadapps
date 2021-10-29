@@ -39,6 +39,9 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".ui.reports.ReportsActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.subscription.SubscriptionActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
@@ -160,6 +163,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MyAccountLocalActivity"
+            android:screenOrientation="portrait" />
+    <activity
+            android:name=".ui.boarding.signup.SignUpActivity"
+            android:screenOrientation="portrait" />
+    <activity
+        android:name=".ui.boarding.ChooseActivity"
             android:screenOrientation="portrait" />
 
         <service

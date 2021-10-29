@@ -38,7 +38,7 @@ import java.io.File
 import java.util.*
 import org.json.JSONObject
 
-class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
+class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
     PermissionUtils.IGetPermissionListener,
     ImageUtils.IChooseImageInterface {
 
@@ -323,6 +323,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomDialogListener,
         viewModel._amazonStatusLiveData.observe(this) {
             if(it.serverUrl.isNotEmpty()){
                 amazonImageUrl =  it.serverUrl
+
                 if(this::localImageUri.isInitialized) {
                     viewModel.foodRecognition(localImageUri.path)
                 }

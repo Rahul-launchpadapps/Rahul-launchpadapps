@@ -8,7 +8,8 @@ class HomeResponse(
         var hyper_hypes: HyperHypes?=null,
         var Est_HbA1c: Double?=null,
         var carbsCount: Double?=null,
-        var foodLogs: ArrayList<MealData>?=null
+        var foodLogs: ArrayList<MealData>?=null,
+        var userInfo: UserInfo?=null
         )
 
 class GraphInfo(
@@ -16,6 +17,11 @@ class GraphInfo(
         var bloodGlucose: String?=null,
         var hours: String?=null,
         var day: String?=null
+)
+class UserInfo(
+        var _id: String?=null,
+        var isApproved: Boolean?=null,
+        var isVerify: Boolean?=null,
 )
 
 class HyperHypes(

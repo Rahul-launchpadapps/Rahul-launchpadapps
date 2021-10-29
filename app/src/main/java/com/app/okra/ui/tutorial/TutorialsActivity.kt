@@ -15,6 +15,7 @@ import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.extension.navigationOnly
 import com.app.okra.models.TutorialModel
+import com.app.okra.ui.boarding.ChooseActivity
 import com.app.okra.ui.boarding.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_tutorial.*
 
@@ -119,7 +120,7 @@ class TutorialsActivity : BaseActivity() {
     }
 
     fun onGetStartedClick(view: View) {
-        navigationOnly(LoginActivity())
+        navigationOnly(ChooseActivity())
     }
     fun onNextClick(view: View) {
         if(viewPager.currentItem+1<dataList.size){
@@ -127,7 +128,7 @@ class TutorialsActivity : BaseActivity() {
         }
     }
     fun onSkipClick(view: View) {
-        navigationOnly(LoginActivity())
+        navigationOnly(ChooseActivity())
         finish()
     }
 

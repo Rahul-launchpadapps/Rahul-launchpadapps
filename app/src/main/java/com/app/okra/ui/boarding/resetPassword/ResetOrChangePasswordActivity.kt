@@ -88,7 +88,6 @@ class ResetOrChangePasswordActivity : BaseActivity(), View.OnClickListener, Text
             btnResendPass.text = getString(R.string.resend_pass)
             tvHeading.text = getString(R.string.reset_your_password)
         }
-
     }
 
     private fun setObserver() {
@@ -100,8 +99,9 @@ class ResetOrChangePasswordActivity : BaseActivity(), View.OnClickListener, Text
             }
 
             startActivity(
-                    Intent(this, MessageActivity::class.java)
-                            .putExtra(AppConstants.SCREEN_TYPE, screen))
+                Intent(this, MessageActivity::class.java)
+                    .putExtra(AppConstants.SCREEN_TYPE, screen)
+            )
             finish()
         }
         viewModel._toastObserver.observe(this){
