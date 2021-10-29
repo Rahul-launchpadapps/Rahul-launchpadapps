@@ -298,6 +298,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etNotes"
                 style="@style/edit_text_style"
+                android:layout_height="wrap_content"
                 android:background="@mipmap/description_field"
                 android:digits="1234567890!@#$%^&amp;*_-~?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:gravity="start"

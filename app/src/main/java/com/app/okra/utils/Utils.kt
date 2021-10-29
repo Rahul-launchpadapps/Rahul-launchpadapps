@@ -852,7 +852,7 @@ fun getSettingsItems(context: Context?): MutableMap<Int, ItemModel> {
 
     profileHash[3] = ItemModel("Notifications settings", R.mipmap.notifications_settings)
     profileHash[4] = ItemModel("Measurement settings", R.mipmap.measurement_settings)
-    profileHash[5] = ItemModel("FAQ", R.mipmap.my_reminder)
+    profileHash[5] = ItemModel("FAQ", R.mipmap.faq)
     profileHash[6] = ItemModel("Contact us", R.mipmap.contact_us)
 
     return profileHash
