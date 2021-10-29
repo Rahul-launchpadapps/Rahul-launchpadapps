@@ -106,7 +106,7 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
     private fun setListener() {
         tvViewProfile.setOnClickListener(this)
         iv_upload.setOnClickListener(this)
-        mChooseImageUtils.setCallbacks(requireActivity(), this)
+        mChooseImageUtils.setCallbacks(requireActivity(), this, this)
         viewModel.setAmazonCallback(requireActivity())
     }
 
@@ -304,7 +304,7 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
                 .setBorderLineThickness(8f)
                 .setGuidelines(CropImageView.Guidelines.OFF)
                 .setAllowRotation(false)
-                .start(requireActivity())
+                .start(requireActivity(), this)
 
     }
 }
