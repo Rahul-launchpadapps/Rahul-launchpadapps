@@ -109,4 +109,13 @@ interface ApiService {
     @PUT("v1/user/notification-status-update")
     suspend fun deleteNotification(@Body  body: NotificationRequest): Response<BaseResponse<Any>>
 
+    @GET("v1/users/medication")
+    suspend fun getMedicationList(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<MedicationResponse>>
+
+    @PUT("v1/users/medication")
+    suspend fun updateMedication(@Body params: MealUpdateRequest): Response<BaseResponse<Any>>
+
+    @DELETE("v1/users/medication")
+    suspend fun deleteMedication(@Query("medicationId")  id:String): Response<BaseResponse<Any>>
+
 }

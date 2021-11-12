@@ -8,6 +8,7 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.ui.add_meal.AddMealActivity
+import com.app.okra.ui.add_medication.AddMedicationActivity
 import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
 import com.app.okra.ui.dashboard.HomeViewPagerAdapter
 import com.app.okra.ui.home.HomeFragment
@@ -115,6 +116,7 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener {
     }
 
     override fun onCancelOrUploadFromEmail(dialog: DialogInterface?) {
+        startActivity(Intent(this, AddMedicationActivity::class.java))
     }
 
 }

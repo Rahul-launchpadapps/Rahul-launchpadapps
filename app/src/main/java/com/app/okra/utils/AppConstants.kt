@@ -76,6 +76,8 @@ class AppConstants {
             const val repeatType: String = "repeatType"
             const val endRepeatType: String = "endRepeatType"
             const val endDate: String = "endDate"
+            const val from: String = "from"
+            const val to: String = "to"
         }
     }
 
@@ -142,6 +144,8 @@ class AppConstants {
         const val SET_UP = "SET_UP"
         const val BLOOD_GLUCOSE: String = "BLOOD_GLUCOSE"
         const val INSULIN: String = "INSULIN"
+        const val MG = "MG"
+        const val PILLES = "PILLES"
     }
 
     object ContentManagementUrl {

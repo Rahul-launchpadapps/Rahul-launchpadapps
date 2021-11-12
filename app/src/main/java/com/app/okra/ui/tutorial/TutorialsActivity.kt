@@ -1,6 +1,5 @@
 package com.app.okra.ui.tutorial
 
-import android.R.attr.*
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.app.okra.extension.navigationOnly
 import com.app.okra.models.TutorialModel
 import com.app.okra.ui.boarding.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_tutorial.*
-
 
 class TutorialsActivity : BaseActivity() {
 
@@ -55,11 +53,6 @@ class TutorialsActivity : BaseActivity() {
     }
 
     private fun prepareData() {
-        dataList.add(TutorialModel(
-                headerText = getString(R.string.tutorial_header_1),
-                subText = getString(R.string.tutorial_sub_header_1),
-                image = R.mipmap.ic_tutorial
-        ))
         dataList.add(TutorialModel(
                 headerText = getString(R.string.tutorial_header_1),
                 subText = getString(R.string.tutorial_sub_header_1),
