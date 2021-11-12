@@ -21,12 +21,21 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
     val _updateMedicationLiveData: LiveData<ApiData<Any>>
         get() = updateMedicationLiveData
 
+    private var addMedicationLiveData = MutableLiveData<ApiData<Any>>()
+    val _addMedicationLiveData: LiveData<ApiData<Any>>
+        get() = addMedicationLiveData
+
     private var deleteMedicationLiveData = MutableLiveData<ApiData<Any>>()
     val _deleteMedicationLiveData: LiveData<ApiData<Any>>
         get() = deleteMedicationLiveData
 
+    private var searchMedicationLiveData = MutableLiveData<ApiData<Any>>()
+    val _searchMedicationLiveData: LiveData<ApiData<Any>>
+        get() = searchMedicationLiveData
+
     var params = WeakHashMap<String, Any>()
     val updateRequest = MealUpdateRequest()
+    val addRequest = AddMedicationRequest()
 
     fun prepareRequest(
         pageNo: Int,
@@ -108,6 +117,28 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
         }
     }
 
+    fun addMedication(name: String, unit: String, quant: Int) {
+        launchDataLoad {
+            showProgressBar()
+            addRequest.medicineName = name
+            addRequest.unit = unit
+            addRequest.quantity = quant
+            val result = repo?.addMedication(addRequest)
+            hideProgressBar()
+            when (result) {
+                is ApiResult.Success -> {
+                    addMedicationLiveData.value = result.value
+                }
+                is ApiResult.GenericError -> {
+                    errorObserver.value = Event(ApiData(message = result.message))
+                }
+                is ApiResult.NetworkError -> {
+                    errorObserver.value = Event(ApiData(message = "Network Issue"))
+                }
+            }
+        }
+    }
+
     fun updateMedication() {
         launchDataLoad {
             showProgressBar()
@@ -135,6 +166,25 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
             when (result) {
                 is ApiResult.Success -> {
                     deleteMedicationLiveData.value = result.value
+                }
+                is ApiResult.GenericError -> {
+                    errorObserver.value = Event(ApiData(message = result.message))
+                }
+                is ApiResult.NetworkError -> {
+                    errorObserver.value = Event(ApiData(message = "Network Issue"))
+                }
+            }
+        }
+    }
+
+    fun searchMedication(search: String) {
+        launchDataLoad {
+            showProgressBar()
+            val result = repo?.searchMedication(search)
+            hideProgressBar()
+            when (result) {
+                is ApiResult.Success -> {
+                    searchMedicationLiveData.value = result.value
                 }
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))

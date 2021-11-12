@@ -112,10 +112,16 @@ interface ApiService {
     @GET("v1/users/medication")
     suspend fun getMedicationList(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<MedicationResponse>>
 
+    @POST("v1/users/medication")
+    suspend fun addMedication(@Body params: AddMedicationRequest): Response<BaseResponse<Any>>
+
     @PUT("v1/users/medication")
     suspend fun updateMedication(@Body params: MealUpdateRequest): Response<BaseResponse<Any>>
 
     @DELETE("v1/users/medication")
     suspend fun deleteMedication(@Query("medicationId")  id:String): Response<BaseResponse<Any>>
+
+    @GET("v1/users/medication/search")
+    suspend fun searchMedication(@Query("search") serach:String): Response<BaseResponse<Any>>
 
 }

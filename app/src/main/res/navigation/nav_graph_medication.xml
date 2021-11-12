@@ -19,13 +19,14 @@
         android:label="addMedication"
         tools:layout="@layout/fragment_add_medication">
         <action
-            android:id="@+id/action_addMed_to_successfulUpdatedFragment"
-            app:destination="@id/successfulUpdatedFragment" />
+            android:id="@+id/action_addMed_to_saveMed"
+            app:destination="@id/saveMedication" />
     </fragment>
 
     <fragment
-        android:id="@+id/successfulUpdatedFragment"
-        android:name="com.app.okra.ui.logbook.test.test_details.SuccessfulUpdatedFragment"
-        android:label="SuccessfulUpdatedFragment" />
+        android:id="@+id/saveMedication"
+        android:name="com.app.okra.ui.add_medication.SaveMedicationFragment"
+        android:label="saveMedicationFragment"
+        tools:layout="@layout/fragment_save_medication"/>
 
 </navigation>

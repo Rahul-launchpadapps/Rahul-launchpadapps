@@ -49,6 +49,7 @@
         android:fontFamily="@font/axiforma_semibold"
         android:gravity="center"
         android:text="@string/recent_search"
+        android:visibility="gone"
         android:textAllCaps="false"
         android:textSize="@dimen/sp_18"
         android:textColor="@color/black_2"
@@ -56,5 +57,30 @@
         android:layout_marginTop="@dimen/dp_20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAddMed" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMedicine"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:fontFamily="@font/axiforma_semibold"
+        android:gravity="center"
+        android:text="@string/medicines"
+        android:textAllCaps="false"
+        android:textSize="@dimen/sp_18"
+        android:textColor="@color/black_2"
+        android:layout_marginStart="@dimen/dp_25"
+        android:layout_marginTop="@dimen/dp_20"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRecentSearch" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_medication"
+        style="@style/subContainer"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMedicine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

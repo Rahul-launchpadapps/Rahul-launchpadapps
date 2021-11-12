@@ -59,6 +59,7 @@
         <entry key="app/src/main/res/layout/fragment_my_reminder.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_save_medication.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_search_medication.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_set_reminder.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_successful_updated.xml" value="0.21" />

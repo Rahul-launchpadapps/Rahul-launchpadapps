@@ -1,6 +1,5 @@
 package com.app.okra.utils
 
-import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -12,7 +11,6 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.text.InputFilter
 import android.util.Base64
 import android.util.Log
@@ -55,7 +53,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-
 
 fun showAlertDialog(
     context: Context?,

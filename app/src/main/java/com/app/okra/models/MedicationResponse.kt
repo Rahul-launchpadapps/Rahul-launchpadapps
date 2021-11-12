@@ -1,15 +1,9 @@
 package com.app.okra.models
 
-
 class AddMedicationRequest(
-    var date: String?=null,
-    var image: String?=null,
-    var foodType: String?=null,
-    var calories: CommonData?=null,
-    var carbs: CommonData?=null,
-    var fat: CommonData?=null,
-    var protien: CommonData?=null,
-    var foodItems: ArrayList<FoodItemsRequest>?=null,
+    var medicineName: String?=null,
+    var unit: String?=null,
+    var quantity: Int?=null
 )
 
 class MedicationUpdateRequest(

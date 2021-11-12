@@ -230,7 +230,11 @@
     <string name="what_unit_of_measure_would_you_like_to_use">What unit of measure would you like to use?</string>
     <string name="add">Add</string>
     <string name="no_medication">No Medication</string>
-
+    <string name="please_enter_medicine_unit">Please enter medicine unit</string>
+    <string name="details">Details</string>
+    <string name="unit">Unit</string>
+    <string name="quantity">Quantity</string>
+    <string name="medicines">Medicines</string>
 
 
     <!-- BLE -->
