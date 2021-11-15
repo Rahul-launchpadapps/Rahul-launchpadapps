@@ -11,4 +11,7 @@ interface InitialBoardingRepo {
     suspend fun onLogin(request : InitialBoardingRequest)
             : ApiResult<ApiData<InitialBoardingResponse>>
 
+    suspend fun onSignUp(request : InitialBoardingRequest)
+            : ApiResult<ApiData<InitialBoardingResponse>>
+
 }

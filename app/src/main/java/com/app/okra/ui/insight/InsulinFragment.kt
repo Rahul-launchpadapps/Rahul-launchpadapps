@@ -188,7 +188,7 @@ class InsulinFragment : BaseFragmentWithoutNav() {
         tvSet.text = timingList[index]
     }
 
-    private fun setCharts(graphInfo: ArrayList<Int>) {
+    private fun setCharts(graphInfo: ArrayList<Float>) {
         chart.getDescription().setEnabled(false)
         chart.setTouchEnabled(true)
         chart.setDrawGridBackground(false)
@@ -223,7 +223,7 @@ class InsulinFragment : BaseFragmentWithoutNav() {
             setData(graphInfo.size, graphInfo)
     }
 
-    private fun setData(count: Int, list: ArrayList<Int>) {
+    private fun setData(count: Int, list: ArrayList<Float>) {
         val values: ArrayList<Entry> = ArrayList()
         for (i in 0 until count) {
             list[i].toFloat().let { Entry(i.toFloat(), it) }.let { values.add(it) }

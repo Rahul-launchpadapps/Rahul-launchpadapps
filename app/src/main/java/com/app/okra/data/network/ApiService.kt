@@ -2,9 +2,11 @@ package com.app.okra.data.network
 
 import com.app.okra.models.*
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
+import kotlin.collections.HashMap
 
 interface ApiService {
 
@@ -79,6 +81,15 @@ interface ApiService {
     @PUT("v1/meals")
     suspend fun updateMeal(@Body params: MealUpdateRequest): Response<BaseResponse<Any>>
 
+    @GET("v1/test/download")
+    suspend fun getDownloadUrl(@QueryMap queryMap: HashMap<String, String>): Response<BaseResponse<Any>>
+
+    @GET
+    suspend fun reportDownload(@Url url: String): ResponseBody
+
+    @DELETE("v1/test/download")
+    suspend fun deleteReport(@QueryMap queryMap: HashMap<String, String>): Response<BaseResponse<Any>>
+
     @Multipart
     @POST("v1/foodrecognition/full")
     suspend fun foodRecognition(@Part file: MultipartBody.Part? = null, @Query("user_key") key:String):
@@ -122,6 +133,6 @@ interface ApiService {
     suspend fun deleteMedication(@Query("medicationId")  id:String): Response<BaseResponse<Any>>
 
     @GET("v1/users/medication/search")
-    suspend fun searchMedication(@Query("search") serach:String): Response<BaseResponse<Any>>
+    suspend fun searchMedication(@Query("search") search:String): Response<BaseResponse<MedicationSearchResponse>>
 
 }

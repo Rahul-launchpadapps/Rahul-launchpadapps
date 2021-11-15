@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.MedicationData
+import com.app.okra.models.MedicineName
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import kotlinx.android.synthetic.main.row_medication.view.*
 
 class MedicineAdapter(
     var listener: Listeners.ItemClickListener,
-    private val dataList: ArrayList<String>,
+    private val dataList: ArrayList<MedicineName>,
 ) : RecyclerView.Adapter<MedicineAdapter.ItemViewHolder>() {
 
 
@@ -37,14 +38,10 @@ class MedicineAdapter(
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun onBind(data: String?, position: Int) {
+        fun onBind(data: MedicineName?, position: Int) {
 
             data?.let { it ->
-
-                if (it.isNotEmpty()) {
-                    itemView.tvTitle.text = it
-                }
-
+                    itemView.tvTitle.text = it.medicineName
             }
         }
     }

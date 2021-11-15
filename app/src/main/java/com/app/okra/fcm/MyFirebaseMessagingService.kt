@@ -9,9 +9,12 @@ import androidx.core.content.ContextCompat
 import com.app.okra.R
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.AppConstants.NotificationConstants.Companion.ADMIN_USER_ACCOUNT_VERIFY
 import com.app.okra.utils.sendNotification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -23,17 +26,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         println("::: Hi Hah ha ha h ah ha ha h ah ah ah a ha ah} :${body}")
 
         if(!body.isNullOrEmpty()) {
-            val notificationManager = ContextCompat.getSystemService(
-                this,
-                NotificationManager::class.java
-            ) as NotificationManager
+            val jsonObject  = Gson().fromJson(body, JsonObject::class.java)
 
+            if(jsonObject.has("type") &&  jsonObject.get("type").toString() == ADMIN_USER_ACCOUNT_VERIFY ) {
+                PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_VERIFIED, true)
+            }else {
+                val notificationManager = ContextCompat.getSystemService(
+                    this,
+                    NotificationManager::class.java
+                ) as NotificationManager
 
-            notificationManager.sendNotification(
-                body,
-                applicationContext
-            )
+                notificationManager.sendNotification(
+                    body,
+                    applicationContext
+                )
+            }
         }
+
     }
 
     override fun onNewToken(p0: String) {

@@ -22,10 +22,16 @@ class Listeners {
         fun onCancelClick(dialog: DialogInterface?)
     }
 
-    interface CustomDialogListener {
+    interface CustomMediaDialogListener {
         fun onImageClick(dialog: DialogInterface?)
         fun onUploadFromGallery(dialog: DialogInterface?)
         fun onCancelOrUploadFromEmail(dialog: DialogInterface?)
+    }
+
+    interface CustomDialogListener {
+        fun onFirstOptionClick(dialog: DialogInterface?)
+        fun onSecondOptionClick(dialog: DialogInterface?)
+        fun onThirdOptionClick(dialog: DialogInterface?)
     }
 
 

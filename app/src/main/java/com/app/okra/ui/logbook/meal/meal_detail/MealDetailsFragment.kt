@@ -88,7 +88,7 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
             data?.apply {
                 tvDateValue.text =
-                    createdAt?.let { it1 ->
+                    date?.let { it1 ->
                         getDateFromISOInString(
                             it1,
                             formatYouWant = DATE_FORMAT_1
@@ -106,10 +106,10 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                     tvFoodTypeValue.text = it
                 }
 
-                tvCaloriesValue.text = calories?.value + " cal"
-                tvCarbsValue.text = carbs?.value + " gm"
-                tvFatValue.text = fat?.value + " gm"
-                tvProteinvalue.text = protien?.value + " gm"
+                tvCaloriesValue.text = String.format("%.2f",calories?.value!!.toBigDecimal()) + " cal"
+                tvCarbsValue.text =String.format("%.2f",carbs?.value!!.toBigDecimal()) + " gm"
+                tvFatValue.text = String.format("%.2f",fat?.value!!.toBigDecimal())  + " gm"
+                tvProteinvalue.text = String.format("%.2f",protien?.value!!.toBigDecimal())+ " gm"
             }
         }
     }
@@ -122,7 +122,6 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 finish()
             }
         }
-
     }
 
     override fun onOkClick(dialog: DialogInterface?) {

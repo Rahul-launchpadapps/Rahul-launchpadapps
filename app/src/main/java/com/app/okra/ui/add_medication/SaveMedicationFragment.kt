@@ -50,7 +50,12 @@ class SaveMedicationFragment : BaseFragment() {
     private fun getData() {
         arguments?.let { it ->
             tvTitle.text = it.getString(AppConstants.NAME)
-            tvUnitValue.text = it.getString(AppConstants.UNIT)
+            val unit: String
+            if(it.getString(AppConstants.UNIT).equals(AppConstants.MG))
+                unit = getString(R.string.mg)
+            else
+                unit = getString(R.string.pills)
+            tvUnitValue.text = unit
             tvQuantityValue.text = it.getInt(AppConstants.QUANTITY).toString()
             val cal = Calendar.getInstance()
             tvDateValue.text =

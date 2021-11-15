@@ -36,3 +36,14 @@ class MedicationData(
         var unit: String?=null,
         var quantity: Int?=null,
         )
+
+class MedicationSearchResponse(
+        var data: ArrayList<MedicineName>?= null
+)
+
+class MedicineName(
+        var _id: String?= null,
+        var medicineName: String?= null,
+        var medicineNameLower: String?=null,
+        var brandName: String?=null
+)

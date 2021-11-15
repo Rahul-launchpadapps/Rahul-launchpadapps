@@ -29,8 +29,8 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
     val _deleteMedicationLiveData: LiveData<ApiData<Any>>
         get() = deleteMedicationLiveData
 
-    private var searchMedicationLiveData = MutableLiveData<ApiData<Any>>()
-    val _searchMedicationLiveData: LiveData<ApiData<Any>>
+    private var searchMedicationLiveData = MutableLiveData<ApiData<MedicationSearchResponse>>()
+    val _searchMedicationLiveData: LiveData<ApiData<MedicationSearchResponse>>
         get() = searchMedicationLiveData
 
     var params = WeakHashMap<String, Any>()
@@ -179,9 +179,7 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
 
     fun searchMedication(search: String) {
         launchDataLoad {
-            showProgressBar()
             val result = repo?.searchMedication(search)
-            hideProgressBar()
             when (result) {
                 is ApiResult.Success -> {
                     searchMedicationLiveData.value = result.value

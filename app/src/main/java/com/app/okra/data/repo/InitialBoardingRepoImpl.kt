@@ -20,7 +20,11 @@ class InitialBoardingRepoImpl constructor(
         }
     }
 
-
+    override suspend fun onSignUp(request: InitialBoardingRequest): ApiResult<ApiData<InitialBoardingResponse>> {
+        return safeApiCall(Dispatchers.IO) {
+            apiService.signUp(request)
+        }
+    }
 
 
 }

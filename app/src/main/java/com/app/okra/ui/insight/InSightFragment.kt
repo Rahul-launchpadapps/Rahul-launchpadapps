@@ -12,8 +12,12 @@ import com.app.okra.R
 import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.BloodGlucoseRepoImpl
+import com.app.okra.extension.navigationOnly
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.ui.profile.profile_details.ProfileInfoActivity
+import com.app.okra.ui.reports.ReportsActivity
 import kotlinx.android.synthetic.main.fragment_in_sight.*
+import kotlinx.android.synthetic.main.layout_button.*
 
 class InSightFragment : BaseFragmentWithoutNav() {
 
@@ -41,8 +45,13 @@ class InSightFragment : BaseFragmentWithoutNav() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setView()
         setupViewPager()
         initListeners()
+    }
+
+    private fun setView() {
+        btnCommon.text = getString(R.string.reports)
     }
 
     private fun setupViewPager() {
@@ -81,6 +90,10 @@ class InSightFragment : BaseFragmentWithoutNav() {
 
         ivFilter.setOnClickListener {
 
+        }
+
+        btnCommon.setOnClickListener {
+            requireActivity().navigationOnly(ReportsActivity())
         }
     }
 

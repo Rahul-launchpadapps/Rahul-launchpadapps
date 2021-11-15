@@ -8,6 +8,7 @@ import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.MealLogsRepo
 import com.app.okra.models.*
 import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.Companion.DATA_LIMIT
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,10 +36,15 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
 
     fun prepareRequest(pageNo: Int,
                        fromDate: String?=null,
-                       toDate: String?=null){
+                       toDate: String?=null,
+                       type: String?=null,
+    ){
         params.clear()
         params[AppConstants.RequestParam.pageNo] = pageNo
-        params[AppConstants.RequestParam.limit] = AppConstants.DATA_LIMIT
+        params[AppConstants.RequestParam.limit] = DATA_LIMIT
+
+        if(!type.isNullOrEmpty())
+             params[AppConstants.RequestParam.type] = type
 
         if(!fromDate.isNullOrEmpty()){
             params[AppConstants.RequestParam.fromDate] = fromDate

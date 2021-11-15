@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_searchMed_to_addMed"
             app:destination="@id/addMedication" />
+        <action
+            android:id="@+id/action_searchMed_to_saveMed"
+            app:destination="@id/saveMedication" />
     </fragment>
     <fragment
         android:id="@+id/addMedication"

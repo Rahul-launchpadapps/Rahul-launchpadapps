@@ -19,7 +19,7 @@ class MedicationRepoImpl constructor(
         }
     }
 
-    override suspend fun searchMedication(search: String): ApiResult<ApiData<Any>> {
+    override suspend fun searchMedication(search: String): ApiResult<ApiData<MedicationSearchResponse>> {
         return safeApiCall(Dispatchers.IO) {
             apiService.searchMedication(search)
         }

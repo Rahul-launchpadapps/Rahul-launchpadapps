@@ -99,10 +99,10 @@ class EditMealDetailsFragment : BaseFragment() {
                 image = image,
                 foodItems = foodList,
                 foodType = data?.foodType,
-                calories = CommonData(tvCaloriesValue.text.toString(),data?.calories?.value),
-                carbs = CommonData(tvCarbsValue.text.toString(),data?.carbs?.value),
-                fat = CommonData(tvFatValue.text.toString(),data?.fat?.value),
-                protein = CommonData(tvProteinValue.text.toString(),data?.protien?.value),
+                calories = CommonData(tvCaloriesValue.text.toString(),data?.calories?.unit),
+                carbs = CommonData(tvCarbsValue.text.toString(),data?.carbs?.unit),
+                fat = CommonData(tvFatValue.text.toString(),data?.fat?.unit),
+                protein = CommonData(tvProteinValue.text.toString(),data?.protien?.unit),
             )
             viewModel.updateMeal()
         }
@@ -125,7 +125,7 @@ class EditMealDetailsFragment : BaseFragment() {
             data = it.getParcelable(AppConstants.DATA)
 
             tvDateValue.text =
-                data?.createdAt?.let { it1 ->
+                data?.date?.let { it1 ->
                     getDateFromISOInString(
                         it1,
 
@@ -145,10 +145,10 @@ class EditMealDetailsFragment : BaseFragment() {
                 tvFoodTypeValue.text = it.let { it }
             }
 
-            tvCaloriesValue.setText(data?.calories?.value)
-            tvCarbsValue.setText(data?.carbs?.value)
-            tvFatValue.setText(data?.fat?.value)
-            tvProteinValue.setText(data?.protien?.value)
+            tvCaloriesValue.setText(String.format("%.2f",data?.calories?.value!!.toBigDecimal()))
+            tvCarbsValue.setText(String.format("%.2f",data?.carbs?.value!!.toBigDecimal()) )
+            tvFatValue.setText(String.format("%.2f",data?.fat?.value!!.toBigDecimal()))
+            tvProteinValue.setText(String.format("%.2f",data?.protien?.value!!.toBigDecimal()))
         }
     }
 

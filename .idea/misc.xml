@@ -72,10 +72,13 @@
         <entry key="app/src/main/res/layout/row_connected_devices.xml" value="0.1" />
         <entry key="app/src/main/res/layout/row_dots.xml" value="0.10643115942028986" />
         <entry key="app/src/main/res/layout/row_item_name.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/row_item_type.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/row_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_medication.xml" value="0.14990942028985507" />
+        <entry key="app/src/main/res/layout/row_name.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/row_notification.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_profile.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/row_serving.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/row_support_request.xml" value="0.25" />
         <entry key="app/src/main/res/layout/row_test.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/row_test_logs.xml" value="0.21" />

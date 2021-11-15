@@ -1,61 +1,48 @@
 package com.app.okra.ui.add_medication
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
+import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.MedicationRepoImpl
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.MedicineName
 import com.app.okra.ui.logbook.medication.MedicationViewModel
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
+import com.app.okra.utils.dialog
+import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_search_medication.*
 import kotlinx.android.synthetic.main.fragment_search_medication.rv_medication
 import kotlinx.android.synthetic.main.layout_header.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var medicationAdapter: MedicineAdapter
-
-    /*Empagliflozin
-    Ertugliflozin
-    Pioglitazone and Metformin
-    Rosiglitazone and Metformin
-    Rosiglitazone and Glimepiride
-    Pioglitazone and Glimepiride
-    Glyburide and Metformin
-    Empagliflozin and Linagliptin
-    Canagliflozin and Metformin
-    Sitagliptin and Metformin
-    Linagliptin and Metformin
-    Alogliptin and Metformin
-    Saxagliptin and Metformin
-    Glipizide and Metformin
-    Alogliptin and Pioglitazone
-    Repaglinide and Metformin
-    Dapagliflozin and Metformin
-    Lixisenatide
-    Exenatide
-    Exenatide
-    Semaglutide
-    Albiglutide
-    Dulaglutide
-    Liraglutide
-    Pramlintide acetate*/
-    private val medicine = arrayOf("Repaglinide", "Nateglinide", "Miglitol","Acarbose","Pioglitazone","Rosiglitazone","" +
-            "Sitagliptin","Saxagliptin","Alogliptin","Linagliptin","Glimepiride","Glyburide","Chlorpropamide","Glipizide",
-    "Tolbutamide","Tolazamide","Metformin","Bromocriptine","Colesevelam","Dapagliflozin","Canagliflozin")
+    private lateinit var recentMedicationAdapter: RecentMedicineAdapter
+    private val data by lazy { ArrayList<MedicineName>() }
+    private var isMG: Boolean = true
+    private var isPill: Boolean = false
+    private val recentMedicine by lazy { ArrayList<String>() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_medication, container, false)
@@ -67,9 +54,9 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
 
     private val viewModel by lazy {
         ViewModelProvider(this,
-            viewModelFactory {
-                MedicationViewModel(MedicationRepoImpl(apiServiceAuth))
-            }
+                viewModelFactory {
+                    MedicationViewModel(MedicationRepoImpl(apiServiceAuth))
+                }
         ).get(MedicationViewModel::class.java)
     }
 
@@ -78,13 +65,23 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
         setAdapter()
         setViews()
         setListener()
+        setObserver()
     }
 
     private fun setAdapter() {
-      //  medicationAdapter = MedicineAdapter(this, rhjk)
+        val myList = ArrayList(Arrays.asList(PreferenceManager.getString(AppConstants.Pref_Key.RECENT_MEDICINE)?.split(",")))
+        for (i in 0 until (myList[0]?.size ?: 0)){
+            myList[0]?.let { recentMedicine.add(it.get(i)) }
+        }
+        medicationAdapter = MedicineAdapter(this, data)
         layoutManager = LinearLayoutManager(requireContext())
         rv_medication.layoutManager = layoutManager
         rv_medication.adapter = medicationAdapter
+
+        recentMedicationAdapter = RecentMedicineAdapter(this, recentMedicine)
+        layoutManager = LinearLayoutManager(requireContext())
+        rv_recent_medication.layoutManager = layoutManager
+        rv_recent_medication.adapter = recentMedicationAdapter
     }
 
     private fun setViews() {
@@ -106,11 +103,15 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-               /* if(p0?.length!! ==0){
-
-                }else if(p0?.length!! >3){
-
-                }*/
+                if (p0?.length!! == 0) {
+                    tvRecentSearch.visibility = View.VISIBLE
+                    rv_recent_medication.visibility = View.VISIBLE
+                    tvMedicine.visibility = View.GONE
+                    data.clear()
+                    medicationAdapter.notifyDataSetChanged()
+                } else if (p0.length > 2) {
+                    viewModel.searchMedication(p0.toString())
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -120,10 +121,129 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
-
+        val data = o1 as MedicineName
+        data.medicineName?.let { recentMedicine.add(0, it) }
+        PreferenceManager.putString(AppConstants.Pref_Key.RECENT_MEDICINE, recentMedicine.toString())
+        showUnitDialog(data.medicineName)
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {
+        val data = o1 as String
+        showUnitDialog(data.replace("[","").replace("]","").trim())
+    }
 
+    private fun setObserver() {
+        setBaseObservers(viewModel, this, observeError = false)
+        viewModel._searchMedicationLiveData.observe(viewLifecycleOwner) { it ->
+            it.data?.let {
+                if (it.data?.size!! > 0) {
+                    tvRecentSearch.visibility = View.GONE
+                    rv_recent_medication.visibility = View.GONE
+                    tvMedicine.visibility = View.VISIBLE
+                }
+                it.data?.let { it1 ->
+                    data.clear()
+                    data.addAll(it1)
+                }
+                medicationAdapter.notifyDataSetChanged()
+            }
+        }
+
+        viewModel._errorObserver.observe(viewLifecycleOwner) {
+            val data = it.getContent()
+            data?.message?.let { it1 -> showToast(it1) }
+
+            if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
+                navigateToLogin(requireActivity())
+                requireActivity().finish()
+            }
+        }
+    }
+
+    fun showUnitDialog(medicineName: String?) {
+        dialog = activity?.let { Dialog(it, R.style.MyCustomTheme) }
+        val view: View = LayoutInflater.from(activity).inflate(R.layout.dialog_medicine_unit, null)
+        dialog?.apply {
+            setContentView(view)
+            setCanceledOnTouchOutside(false)
+
+            val lp = dialog!!.window!!.attributes
+            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            lp.gravity = Gravity.CENTER
+            lp.dimAmount = 0.5f
+            window?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+            lp.windowAnimations = R.style.DialogAnimation
+            window?.attributes = lp
+
+            val btnAdd: Button = findViewById(R.id.btnAdd)
+            val tvTitle: TextView = findViewById(R.id.tvTitle)
+            val etUnit: EditText = findViewById(R.id.etUnit)
+            val tvMG: TextView = findViewById(R.id.tvMG)
+            val tvPill: TextView = findViewById(R.id.tvPill)
+
+            tvTitle.text = medicineName
+
+            tvMG.setOnClickListener {
+                isMG = true
+                isPill = false
+                etUnit.setMaxLength(4)
+                tvMG.background = resources.getDrawable(R.drawable.bg_button_green)
+                tvMG.setTextColor(ContextCompat.getColor(context, R.color.white))
+                tvPill.background = null
+                tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                etUnit.setText("")
+            }
+
+            tvPill.setOnClickListener {
+                isPill = true
+                isMG = false
+                etUnit.setMaxLength(2)
+                tvPill.background = resources.getDrawable(R.drawable.bg_button_green)
+                tvPill.setTextColor(ContextCompat.getColor(context, R.color.white))
+                tvMG.background = null
+                tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                etUnit.setText("")
+            }
+
+            btnAdd.setOnClickListener {
+                if (etUnit.text.isNullOrEmpty()) {
+                    showToast(getString(R.string.please_enter_medicine_unit))
+                } else {
+                    if (isPill) {
+                        if (etUnit.text.toString().toInt() < 1) {
+                            showToast("Enter atleast 1 pill")
+                        } else if (etUnit.text.toString().toInt() > 10) {
+                            showToast("You can not exceed 10 pills")
+                        } else {
+                            addMedicationApi(etUnit.text.toString().toInt(), medicineName)
+                            dialog?.dismiss()
+                        }
+                    } else {
+                        addMedicationApi(etUnit.text.toString().toInt(), medicineName)
+                        dialog?.dismiss()
+                    }
+                }
+            }
+            show()
+        }
+    }
+
+    fun EditText.setMaxLength(maxLength: Int) {
+        filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
+    }
+
+    private fun addMedicationApi(quant: Int, medicineName: String?) {
+        var unit = ""
+        if (isMG)
+            unit = AppConstants.MG
+        else
+            unit = AppConstants.PILLES
+        val bundle = Bundle()
+        bundle.putString(AppConstants.NAME, medicineName)
+        bundle.putString(AppConstants.UNIT, unit)
+        bundle.putInt(AppConstants.QUANTITY, quant)
+        navController.navigate(R.id.action_searchMed_to_saveMed, bundle)
     }
 }

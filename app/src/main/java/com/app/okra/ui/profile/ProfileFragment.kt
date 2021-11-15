@@ -41,7 +41,7 @@ import java.io.File
 
 class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
         View.OnClickListener,
-        Listeners.CustomDialogListener,
+        Listeners.CustomMediaDialogListener,
         PermissionUtils.IGetPermissionListener,
         ImageUtils.IChooseImageInterface{
 

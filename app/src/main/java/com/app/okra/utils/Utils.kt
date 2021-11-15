@@ -1,6 +1,7 @@
 package com.app.okra.utils
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.app.okra.R
 import com.app.okra.data.preference.PreferenceManager
@@ -859,7 +861,7 @@ fun getSettingsItems(context: Context?): MutableMap<Int, ItemModel> {
 
 fun showOptionDialog(
     context: Context?,
-    listener: Listeners.CustomDialogListener,
+    listener: Listeners.CustomMediaDialogListener,
     isUploadFromEmail: Boolean
 ) {
     dialog = Dialog(context!!, R.style.MyCustomTheme)
@@ -937,18 +939,18 @@ fun showAddNewDialog(
 
 
         clAddTest.setOnClickListener {
-            listener.onImageClick(dialog)
+            listener.onFirstOptionClick(dialog)
             dialog?.dismiss()
         }
 
         clAddMeal.setOnClickListener {
             dialog?.dismiss()
-            listener.onUploadFromGallery(dialog)
+            listener.onSecondOptionClick(dialog)
         }
 
         clAddMed.setOnClickListener {
             dialog?.dismiss()
-            listener.onCancelOrUploadFromEmail(dialog)
+            listener.onThirdOptionClick(dialog)
         }
         show()
     }
@@ -1140,4 +1142,55 @@ fun getPastTimeString(createdTimestamp: Long?): String {
         e.printStackTrace()
     }
     return convertedTime
+}
+
+fun getDatePicker(
+    context: Context,
+    dateSelected: (Long, Boolean) -> Unit,
+    isEndDate: Boolean
+): DatePickerDialog {
+    val calendar = Calendar.getInstance()
+    return DatePickerDialog(context, { _, year, month, dayOfMonth ->
+            calendar.set(year, month, dayOfMonth)
+            val longTime = calendar.timeInMillis
+            dateSelected(longTime, isEndDate)
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+}
+
+fun getDatePicker(
+    context: Context,
+    dateSelected: (Long, Boolean) -> Unit,
+    setDateInMillis: Long,
+    isEndDate: Boolean,
+): DatePickerDialog {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = setDateInMillis
+    return DatePickerDialog(context, { _, year, month, dayOfMonth ->
+            calendar.set(year, month, dayOfMonth)
+            val longTime = calendar.timeInMillis
+            dateSelected(longTime, isEndDate)
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+}
+
+fun getMinDateForReports(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.set(
+        calendar.get(Calendar.YEAR) - 1,
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+    return calendar.timeInMillis
+}
+
+
+fun getPrimaryColor(context: Context): Int{
+    return ContextCompat.getColor(context, R.color.colorPrimary)
 }

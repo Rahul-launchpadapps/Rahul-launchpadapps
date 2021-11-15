@@ -39,7 +39,7 @@ class ProfileInfoActivity : BaseActivity(),
         View.OnClickListener,
         TextWatcher,
 PermissionUtils.IGetPermissionListener,
-ImageUtils.IChooseImageInterface, Listeners.CustomDialogListener {
+ImageUtils.IChooseImageInterface, Listeners.CustomMediaDialogListener {
 
     private  var amazonImageUrl: String?=null
     private var isEditMode: Boolean =false

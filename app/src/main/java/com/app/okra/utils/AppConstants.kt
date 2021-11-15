@@ -9,6 +9,8 @@ class AppConstants {
 
             const val USER_TYPE = "userType"
             const val ACCESS_TOKEN = "accessToken"
+            const val IS_APPROVED = "isApproved"
+            const val IS_VERIFIED = "isVerified"
             const val USER_ID = "userId"
             const val EMAIL_ID = "email"
             const val IS_LOGGED_IN = "isLoggedIn"
@@ -26,6 +28,7 @@ class AppConstants {
             const val NAME = "Name"
             const val PROFILE_PIC = "profilePic"
             const val DEVICE_TOKEN = "device_token"
+            const val RECENT_MEDICINE = "recent_medicine"
         }
     }
 
@@ -86,9 +89,12 @@ class AppConstants {
         companion object {
 
             const val FROM_SCREEN = "fromScreen"
-            const val EMAIL: String = "EMAIL"
+            const val EMAIL: String = "email"
+            const val NAME: String = "name"
+            const val PASS: String = "pass"
             const val TYPE = "type"
             const val REMINDER = "reminder"
+            const val DATA = "data"
         }
 
     }
@@ -96,13 +102,13 @@ class AppConstants {
 
     class NotificationConstants {
         companion object {
-
+const val ADMIN_USER_ACCOUNT_VERIFY = "ADMIN_USER_ACCOUNT_VERIFY"
         }
     }
 
 
     companion object {
-        const val DATA_LIMIT = 10
+        const val DATA_LIMIT = 100
         const val DATA = "data"
         const val SCREEN_TYPE = "screen_type"
         const val EMAIL = "email"
@@ -117,6 +123,8 @@ class AppConstants {
         const val AFTER_MEAL_TEXT = "After Meal"
         const val AFTER_MEAL = "AFTER_MEAL"
         const val DISPLAY_ALL = "DISPLAY_ALL"
+        const val THIS_WEEK = "WEEK"
+        const val THIS_MONTH = "MONTH"
         const val BEFORE_MEAL_TEXT = "Before Meal"
         const val BEFORE_MEAL = "BEFORE_MEAL"
         const val CONTROLE_SOLUTION_TEXT = "Control Solution"

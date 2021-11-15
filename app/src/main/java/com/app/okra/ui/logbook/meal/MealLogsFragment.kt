@@ -77,9 +77,12 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         setListener()
     }
 
-     fun getData(pageNo: Int,fromDate: String?=null,
-                        toDate: String?=null) {
-        viewModel.prepareRequest(pageNo,fromDate,toDate)
+     fun getData(pageNo: Int,
+                 fromDate: String?=null,
+                        toDate: String?=null,
+                        type: String?=null,
+     ) {
+        viewModel.prepareRequest(pageNo,fromDate,toDate, type)
         viewModel.getMealLogs()
     }
 
@@ -123,7 +126,7 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         val hashMap = LinkedHashMap<String,  ArrayList<MealData>>()
         if(testLogData.isNotEmpty()) {
             for ((index, data) in testLogData.withIndex()){
-                val date = data.createdAt
+                val date = data.date
                 date?.let{
                     val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
 

@@ -120,7 +120,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
 
 
     private fun addDeviceInList(device: BleDevice) {
-        if (!device.name.isNullOrEmpty() && device.name.contains("OKRA")) {
+        if (!device.name.isNullOrEmpty()) {
             devicesList.add(DevicesListModel(name = device.name, address = device.mac))
         }
 

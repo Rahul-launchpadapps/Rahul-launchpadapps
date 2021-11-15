@@ -59,7 +59,7 @@ public class ServiceListFragment extends Fragment {
         String mac = bleDevice.getMac();
         BluetoothGatt gatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
 
-        txt_name.setText(String.valueOf(getActivity().getString(R.string.name) + name));
+        txt_name.setText(String.valueOf(getActivity().getString(R.string.device_broadcast_name) + name));
         txt_mac.setText(String.valueOf(getActivity().getString(R.string.mac) + mac));
 
         mResultAdapter.clear();
