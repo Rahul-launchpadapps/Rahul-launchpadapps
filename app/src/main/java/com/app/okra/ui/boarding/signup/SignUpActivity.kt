@@ -196,7 +196,8 @@ class SignUpActivity : BaseActivity(), View.OnClickListener, TextWatcher {
                 viewModel.setSignUpValue(
                     etName.text.toString().trim(),
                     etEmail.text.toString().trim(),
-                    etPassword.text.toString().trim()
+                    etPassword.text.toString().trim(),
+                    etSerialNo.text.toString().trim()
                 )
                 viewModel.signUp()
             }

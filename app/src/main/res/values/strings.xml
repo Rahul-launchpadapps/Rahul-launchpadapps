@@ -39,6 +39,7 @@
     <string name="create_an_account">Create an account</string>
     <string name="manage_your_account"><![CDATA[Manage your account & get the access to various services provided by the okra.]]></string>
     <string name="email_id">Email ID</string>
+    <string name="serial_no">Serial No. (Optional)</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="terms_and_condition_text">By clicking on the Sign Up option you agree
@@ -82,7 +83,7 @@ to the Okra Terms &amp; Conditions</string>
     <string name="welcome_to_home">Welcome To Home</string>
     <string name="my_account">My Account</string>
     <string name="view_profile">View Profile</string>
-    <string name="phone">Phone No</string>
+    <string name="phone">Phone No.</string>
     <string name="age">Age</string>
     <string name="phone_no">Phone No</string>
     <string name="save">Save</string>
@@ -240,7 +241,28 @@ to the Okra Terms &amp; Conditions</string>
     <string name="clear_notifications">Clear Notifications</string>
     <string name="are_you_sure_you_want_to_clear_all_your_notifications">Are you sure you want to clear all your notifications?</string>
     <string name="clear_all">Clear all</string>
-
+    <string name="add_new_medication">Add New Medication</string>
+    <string name="tests">Tests</string>
+    <string name="meals">Meals</string>
+    <string name="medication">Medication</string>
+    <string name="medications">Medications</string>
+    <string name="all">All</string>
+    <string name="pill">Pill</string>
+    <string name="pills">Pills</string>
+    <string name="mg">mg</string>
+    <string name="plus_add_new_medication">+ Add New Medication</string>
+    <string name="recent_search">Recent Search</string>
+    <string name="name_text">Name</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="please_enter_medicine_name">Please enter medicine name</string>
+    <string name="what_unit_of_measure_would_you_like_to_use">What unit of measure would you like to use?</string>
+    <string name="add">Add</string>
+    <string name="no_medication">No Medication</string>
+    <string name="please_enter_medicine_unit">Please enter medicine unit</string>
+    <string name="details">Details</string>
+    <string name="unit">Unit</string>
+    <string name="quantity">Quantity</string>
+    <string name="medicines">Medicines</string>
 
 
     <!-- BLE -->
@@ -286,6 +308,9 @@ to the Okra Terms &amp; Conditions</string>
     <string name="i_am_new_here">I am new here</string>
     <string name="i_have_been">I have been here before</string>
     <string name="unverified_user">Unverified User</string>
+    <string name="add_image">Add Image</string>
+    <string name="tags">Tags</string>
+    <string name="how_to_feel">How to feel after medicine</string>
 
 
 </resources>

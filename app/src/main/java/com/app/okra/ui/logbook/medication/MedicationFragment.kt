@@ -1,0 +1,184 @@
+package com.app.okra.ui.logbook.medication
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.app.okra.R
+import com.app.okra.base.BaseFragmentWithoutNav
+import com.app.okra.base.BaseViewModel
+import com.app.okra.data.repo.MedicationRepoImpl
+import com.app.okra.extension.beGone
+import com.app.okra.extension.beVisible
+import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.MedicationData
+
+import com.app.okra.utils.Listeners
+import com.app.okra.utils.getDateFromISOInString
+import com.app.okra.utils.navigateToLogin
+import kotlinx.android.synthetic.main.fragment_medication.*
+
+class MedicationFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
+
+    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var medicationAdapter: MedicationAdapter
+    private var pageNo :Int = 1
+    private var totalPage: Int = 0
+    private var nextHit: Int = 0
+
+    private var hashMapKeyList  = ArrayList<String>()
+    private var hashMapMealLog = LinkedHashMap<String,  ArrayList<MedicationData>>()
+
+
+    override fun getViewModel(): BaseViewModel? {
+        return viewModel
+    }
+
+    private val viewModel by lazy {
+        ViewModelProvider(this,
+            viewModelFactory {
+                MedicationViewModel(MedicationRepoImpl(apiServiceAuth))
+            }
+        ).get(MedicationViewModel::class.java)
+    }
+
+   /* val activityForResult = registerForActivityResult(MealLogContract()){ result ->
+        if(result){
+            pageNo=1
+            getData(1)
+        }
+    }*/
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_medication, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setAdapter()
+        getData(pageNo)
+        setObserver()
+        setListener()
+    }
+
+     fun getData(pageNo: Int,fromDate: String?=null,
+                        toDate: String?=null,type: String?=null) {
+        viewModel.prepareRequest(pageNo,fromDate,toDate,type)
+        viewModel.getMedicationList()
+    }
+
+    private fun setObserver() {
+        setBaseObservers(viewModel, this, observeError = false)
+        viewModel._medicationLiveData.observe(viewLifecycleOwner) { it ->
+            swipe_request.isRefreshing = false
+
+            if (it.totalPage != null) {
+                totalPage = it.totalPage
+            }
+            if (it.nextHit != null) {
+                nextHit = it.nextHit
+            }
+            it.data?.let{
+                if (pageNo == 1 && hashMapKeyList.size > 0) {
+                    hashMapMealLog.clear()
+                    hashMapKeyList.clear()
+                }
+                it.data?.let { it1 -> prepareDateWiseData(it1)}
+                medicationAdapter.notifyDataSetChanged()
+
+            }
+            manageViewVisibility()
+        }
+
+        viewModel._errorObserver.observe(viewLifecycleOwner){
+            swipe_request.isRefreshing = false
+            val data = it.getContent()
+            data?.message?.let { it1 -> showToast(it1) }
+
+            if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
+                navigateToLogin(requireActivity())
+                requireActivity().finish()
+            }
+        }
+    }
+
+    private fun prepareDateWiseData(testLogData: ArrayList<MedicationData>) {
+        val hashMap = LinkedHashMap<String,  ArrayList<MedicationData>>()
+        if(testLogData.isNotEmpty()) {
+            for ((index, data) in testLogData.withIndex()){
+                val date = data.createdAt
+                date?.let{
+                    val dateToSet = getDateFromISOInString(it, formatYouWant = "dd/MM/yyyy")
+
+                    val list: java.util.ArrayList<MedicationData> = if(hashMap.containsKey(dateToSet)){
+                        hashMap[dateToSet] as ArrayList<MedicationData>
+                    }else{
+                        ArrayList()
+                    }
+                    list.add(data)
+                    hashMap[dateToSet]  = list
+                }
+            }
+        }
+        hashMapMealLog.putAll(hashMap)
+        hashMapKeyList.addAll(hashMap.keys.toList())
+    }
+
+
+    private fun manageViewVisibility() {
+        if(hashMapKeyList.isNullOrEmpty()){
+            tvNoTestLogged.beVisible()
+            rv_medication.beGone()
+        }else{
+            tvNoTestLogged.beGone()
+            rv_medication.beVisible()
+        }
+    }
+
+    private fun setAdapter() {
+        medicationAdapter = MedicationAdapter(this, hashMapKeyList, hashMapMealLog)
+        layoutManager = LinearLayoutManager(requireContext())
+        rv_medication.layoutManager = layoutManager
+        rv_medication.adapter = medicationAdapter
+    }
+
+    private fun setListener() {
+        rv_medication.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val visibleItemCount: Int = rv_medication.childCount
+                val totalItemCount: Int = rv_medication.layoutManager!!.itemCount
+                val firstVisibleItem: Int =layoutManager.findFirstVisibleItemPosition()
+
+                if(nextHit>0) {
+                    if (visibleItemCount + firstVisibleItem >= totalItemCount) {
+                        pageNo += 1
+                        progressBar_loadMore.visibility = View.VISIBLE
+                        getData(pageNo)
+                    }
+                }
+            }
+        })
+
+        swipe_request.setOnRefreshListener {
+            pageNo = 1
+            getData(1)
+        }
+    }
+
+    override fun onSelect(o: Any?, o1: Any?) {
+        val data = o1 as MedicationData
+       // activityForResult.launch(data)
+    }
+
+    override fun onUnSelect(o: Any?, o1: Any?) {
+    }
+
+}

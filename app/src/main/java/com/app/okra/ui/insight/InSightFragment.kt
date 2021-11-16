@@ -57,7 +57,7 @@ class InSightFragment : BaseFragmentWithoutNav() {
     private fun setupViewPager() {
         mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerInsight(it) }
         mPagerAdapter?.addFragment(BloodGlucoseFragment())
-        mPagerAdapter?.addFragment(InsulinFragment())
+       // mPagerAdapter?.addFragment(InsulinFragment())
         viewPager1.adapter = mPagerAdapter
         viewPager1.offscreenPageLimit = 1
         viewPager1.beginFakeDrag()

@@ -133,7 +133,7 @@
           android:layout_marginEnd="@dimen/dp_20"
           android:digits="1234567890!@#$%^&amp;*_-~?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
           android:hint="@string/password"
-          android:imeOptions="actionDone"
+          android:imeOptions="actionNext"
           android:inputType="textPassword"
           android:lines="1"
           android:maxLength="40"
@@ -153,6 +153,23 @@
           android:src="@mipmap/closed_eye" />
 
     </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        style="@style/edit_text_style"
+        android:id="@+id/etSerialNo"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/bg_edittext"
+        android:hint="@string/serial_no"
+        android:singleLine="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLength="50"
+        app:layout_constraintTop_toBottomOf="@+id/tvErrorPass"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvErrorPass"
@@ -184,7 +201,7 @@
         android:layout_marginStart="@dimen/dp_25"
         android:layout_marginEnd="@dimen/dp_20"
         android:lineSpacingExtra="@dimen/dp_5"
-        app:layout_constraintTop_toBottomOf="@+id/tvErrorPass"
+        app:layout_constraintTop_toBottomOf="@+id/etSerialNo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />

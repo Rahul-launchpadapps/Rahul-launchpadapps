@@ -57,14 +57,14 @@ class MyReminderFragment : BaseFragment() {
                     tvDiabetesValue.visibility = View.VISIBLE
                     val startDate = convertUtc2Local(it.diabetesReminder?.startDate, "dd MMM yyyy")
                     val time = convertUtc2Local(it.diabetesReminder?.time,"hh:mm a")
-                    tvDiabetesValue.text = startDate+ ", "+time
+                    tvDiabetesValue.text = startDate+ ", "+time+ ", "+ it.diabetesReminder?.repeatType
                 }
                 if(it.foodReminder?.startDate!=null) {
                     tvAddFood.gravity = Gravity.BOTTOM
                     tvFoodValue.visibility = View.VISIBLE
                     val startDate = convertUtc2Local(it.foodReminder?.startDate, "dd MMM yyyy")
                     val time = convertUtc2Local(it.foodReminder?.time, "hh:mm a")
-                    tvFoodValue.text = startDate+ ", "+time
+                    tvFoodValue.text = startDate+ ", "+time+ ", "+ it.foodReminder?.repeatType
                 }
             }
         }

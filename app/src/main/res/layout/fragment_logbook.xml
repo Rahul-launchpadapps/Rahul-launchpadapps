@@ -37,15 +37,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_30"
         app:layout_constraintTop_toBottomOf="@id/tvLogbook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline">
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_test_logs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/test_logs"
+            android:text="@string/tests"
             android:textSize="@dimen/sp_18"
             android:gravity="center"
             android:textColor="@color/green_1"
@@ -69,14 +69,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_30"
         app:layout_constraintTop_toBottomOf="@id/tvLogbook"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintStart_toEndOf="@id/rl_test_logs"
+        app:layout_constraintEnd_toStartOf="@id/rl_medication" >
 
         <TextView
             android:id="@+id/tv_meal_logs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/meal_logs"
+            android:text="@string/meals"
             android:textSize="@dimen/sp_18"
             android:gravity="center"
             android:textColor="@color/grey_3"
@@ -89,6 +89,38 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_below="@id/tv_meal_logs"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/bg_grey"
+            android:background="@drawable/bg_circle_green" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_medication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_30"
+        app:layout_constraintTop_toBottomOf="@id/tvLogbook"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tv_medication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/medications"
+            android:textSize="@dimen/sp_18"
+            android:gravity="center"
+            android:textColor="@color/grey_3"
+            android:fontFamily="@font/axiforma_bold"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_medication"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="@dimen/dp_15"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_below="@id/tv_medication"
             android:layout_centerInParent="true"
             android:backgroundTint="@color/bg_grey"
             android:background="@drawable/bg_circle_green" />

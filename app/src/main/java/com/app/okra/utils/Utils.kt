@@ -1,6 +1,5 @@
 package com.app.okra.utils
 
-import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -13,7 +12,6 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.text.InputFilter
 import android.util.Base64
 import android.util.Log
@@ -46,6 +44,7 @@ import com.app.okra.utils.AppConstants.Companion.POST_MEDICINE_TEXT
 import com.app.okra.utils.AppConstants.Companion.POST_WORKOUT
 import com.app.okra.utils.AppConstants.Companion.POST_WORKOUT_TEXT
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.android.synthetic.main.dialog_add_new.*
 import java.io.File
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
@@ -56,7 +55,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-
 
 fun showAlertDialog(
     context: Context?,
@@ -948,6 +946,11 @@ fun showAddNewDialog(
         clAddMeal.setOnClickListener {
             dialog?.dismiss()
             listener.onSecondOptionClick(dialog)
+        }
+
+        clAddMed.setOnClickListener {
+            dialog?.dismiss()
+            listener.onThirdOptionClick(dialog)
         }
         show()
     }

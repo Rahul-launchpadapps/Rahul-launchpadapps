@@ -43,12 +43,20 @@ class InitialBoardingViewModel(private val repo : InitialBoardingRepo?) : BaseVi
         initBoardingRequest.deviceToken =deviceToken
     }
 
-    fun setSignUpValue(name: String, email: String, password:String){
+    fun setSignUpValue(
+        name: String,
+        email: String,
+        password:String,
+        serialNo:String?=null,
+    ){
         initBoardingRequest.name = name
         initBoardingRequest.email =email
         initBoardingRequest.password =password.trim()
         initBoardingRequest.deviceId = AppConstants.android
         initBoardingRequest.deviceToken =deviceToken
+        serialNo?.let {
+            initBoardingRequest.serialNo =serialNo
+        }
     }
 
     fun login(){

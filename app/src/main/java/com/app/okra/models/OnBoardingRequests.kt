@@ -14,7 +14,8 @@ class InitialBoardingRequest(
         var password: String? =null,
         var userType: String?=null,
         var deviceId: String? =null,
-        var deviceToken: String? =null
+        var deviceToken: String? =null,
+        var serialNo: String? =null
 )
 
 class ForgotPasswordRequest(

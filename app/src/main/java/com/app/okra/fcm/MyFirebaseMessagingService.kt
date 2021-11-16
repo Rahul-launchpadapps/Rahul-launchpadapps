@@ -28,7 +28,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if(!body.isNullOrEmpty()) {
             val jsonObject  = Gson().fromJson(body, JsonObject::class.java)
 
-            if(jsonObject.has("type") &&  jsonObject.get("type").toString() == ADMIN_USER_ACCOUNT_VERIFY ) {
+            if(jsonObject.has("type") &&  jsonObject.get("type").asString== ADMIN_USER_ACCOUNT_VERIFY ) {
+                println("::: Account Verified")
+
                 PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_VERIFIED, true)
             }else {
                 val notificationManager = ContextCompat.getSystemService(

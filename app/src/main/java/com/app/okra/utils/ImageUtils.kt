@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
@@ -39,9 +40,35 @@ class ImageUtils {
         mCallbacks = listener
     }
 
+    val activityCameraResult by lazy {
+        if(mFragment!=null){
+            mFragment!!.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (photoURI != null) {
+                    val image: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Uri.parse(mCurrentPhotoPath)
+                    } else {
+                        photoURI!!
+                    }
+                    mCallbacks?.setImagePath(image)
+                }
+            }
+        }else{
+            if(this::mActivity.isInitialized){
+                mActivity.registerForActivityResult
+                if (photoURI != null) {
+                    val image: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Uri.parse(mCurrentPhotoPath)
+                    } else {
+                        photoURI!!
+                    }
+                    mCallbacks?.setImagePath(image)
+                }
+            }
+        }
+    }
 
-    fun openCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+    fun openCamera() :Intent {
+       return Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera mActivity to handle the intent
             takePictureIntent.resolveActivity(mActivity.packageManager)?.also {
                 // Create the File where the photo should go
@@ -93,6 +120,17 @@ class ImageUtils {
             // Save a file: path for use with ACTION_VIEW intents
             mCurrentPhotoPath = absolutePath
             fileName = name
+        }
+    }
+
+    fun getCameraImageResult(data: Intent?){
+        if (photoURI != null) {
+            val image: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Uri.parse(mCurrentPhotoPath)
+            } else {
+                photoURI!!
+            }
+            mCallbacks?.setImagePath(image)
         }
     }
 

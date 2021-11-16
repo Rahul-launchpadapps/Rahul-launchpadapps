@@ -18,6 +18,7 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.logbook.meal.MealLogsFragment
+import com.app.okra.ui.logbook.medication.MedicationFragment
 import com.app.okra.ui.logbook.test.TestLogsFragment
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.utils.AppConstants
@@ -36,6 +37,7 @@ import kotlinx.android.synthetic.main.bottomsheet_logs_filter.btnApplyFilter
 import kotlinx.android.synthetic.main.bottomsheet_logs_filter.btnReset
 import kotlinx.android.synthetic.main.bottomsheet_meal_logs_filter.*
 import kotlinx.android.synthetic.main.bottomsheet_meal_logs_filter.ivMealDisplayAll
+import kotlinx.android.synthetic.main.bottomsheet_medication_filter.*
 import kotlinx.android.synthetic.main.fragment_logbook.*
 import java.util.*
 
@@ -55,6 +57,10 @@ class LogbookFragment : BaseFragmentWithoutNav() {
     private var today = false
     private var thisWeek = false
     private var thisMonth = false
+
+    private var all = false
+    private var pills = false
+    private var mg = false
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -86,6 +92,7 @@ class LogbookFragment : BaseFragmentWithoutNav() {
         mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerBottomBar(it) }
         mPagerAdapter?.addFragment(TestLogsFragment())
         mPagerAdapter?.addFragment(MealLogsFragment())
+        mPagerAdapter?.addFragment(MedicationFragment())
         viewPager.adapter = mPagerAdapter
         viewPager.offscreenPageLimit = 1
         viewPager.beginFakeDrag()
@@ -115,12 +122,17 @@ class LogbookFragment : BaseFragmentWithoutNav() {
             handleTabsBackground(1)
             viewPager.currentItem = 1
         }
-
+        rl_medication.setOnClickListener {
+            handleTabsBackground(2)
+            viewPager.currentItem = 2
+        }
         ivFilter.setOnClickListener {
             if (viewPager.currentItem == 0)
                 showTestBottomSheetDialog()
-            else
+            else if (viewPager.currentItem == 1)
                 showMealBottomSheetDialog()
+            else
+                showMedicationBottomSheetDialog()
         }
     }
 
@@ -139,10 +151,27 @@ class LogbookFragment : BaseFragmentWithoutNav() {
             tv_meal_logs.setTextColor(textGreyColor)
             iv_meal_logs.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
-        } else {
+            tv_medication.setTextColor(textGreyColor)
+            iv_medication.backgroundTintList =
+                ColorStateList.valueOf(textWhiteColor)
+        } else if (value == 1){
             tv_meal_logs.setTextColor(textGreenColor)
             iv_meal_logs.backgroundTintList =
                 ColorStateList.valueOf(textGreenColor)
+            tv_test_logs.setTextColor(textGreyColor)
+            iv_test_logs.backgroundTintList =
+                ColorStateList.valueOf(textWhiteColor)
+            tv_medication.setTextColor(textGreyColor)
+            iv_medication.backgroundTintList =
+                ColorStateList.valueOf(textWhiteColor)
+        }
+        else if (value == 2){
+            tv_medication.setTextColor(textGreenColor)
+            iv_medication.backgroundTintList =
+                ColorStateList.valueOf(textGreenColor)
+            tv_meal_logs.setTextColor(textGreyColor)
+            iv_meal_logs.backgroundTintList =
+                ColorStateList.valueOf(textWhiteColor)
             tv_test_logs.setTextColor(textGreyColor)
             iv_test_logs.backgroundTintList =
                 ColorStateList.valueOf(textWhiteColor)
@@ -399,6 +428,73 @@ class LogbookFragment : BaseFragmentWithoutNav() {
         }
     }
 
+    private fun showMedicationBottomSheetDialog() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.apply {
+            setContentView(R.layout.bottomsheet_medication_filter)
+            setupFullHeight(bottomSheetDialog)
+            show()
+
+            resetMedicationFilter()
+
+            ivAll.setOnClickListener {
+                ivAll.isSelected = !ivAll.isSelected
+                all = !ivAll.isSelected
+                ivPills.isSelected = false
+                ivMG.isSelected = false
+
+                pills = false
+                mg = false
+            }
+            ivPills.setOnClickListener {
+                ivPills.isSelected = !ivPills.isSelected
+                pills = ivPills.isSelected
+            }
+            ivMG.setOnClickListener {
+                ivMG.isSelected = !ivMG.isSelected
+                mg = ivMG.isSelected
+            }
+
+            tvMedFromDate.setOnClickListener {
+                selectDate(tvMedFromDate)
+            }
+            tvMedToDate.setOnClickListener {
+                selectDate(tvMedToDate)
+            }
+            btnMedApplyFilter.setOnClickListener {
+                val medFragment = mPagerAdapter?.getItem(2) as MedicationFragment
+                val toDate = tvMedToDate.text.toString().trim()
+                val fromDate = tvMedFromDate.text.toString().trim()
+                val type = getSelectedType()
+                medFragment.getData(
+                    pageNo = 1,
+                    fromDate = fromDate,
+                    toDate = toDate,
+                    type = type
+                )
+                bottomSheetDialog.dismiss()
+            }
+            btnReset.setOnClickListener {
+                tvMedFromDate.text = ""
+                tvMedToDate.text = ""
+                ivPills.isSelected = false
+                ivAll.isSelected = false
+                ivMG.isSelected = false
+                resetMedicationFilter()
+            }
+        }
+    }
+
+    private fun getSelectedType(): String {
+        val sBuilder = StringBuilder()
+        if (pills) {
+            sBuilder.append(AppConstants.PILLES)
+        }
+        if (mg) {
+            sBuilder.append(AppConstants.MG)
+        }
+        return sBuilder.toString()
+    }
 
     private fun resetTestLogFilter() {
         displayAll = false
@@ -414,6 +510,12 @@ class LogbookFragment : BaseFragmentWithoutNav() {
         today = false
         thisWeek = false
         thisMonth = false
+    }
+
+    private fun resetMedicationFilter() {
+        all = false
+        pills = false
+        mg = false
     }
 
     private fun selectDate(tvFromDate: AppCompatTextView) {

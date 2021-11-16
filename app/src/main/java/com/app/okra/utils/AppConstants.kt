@@ -78,6 +78,8 @@ class AppConstants {
             const val repeatType: String = "repeatType"
             const val endRepeatType: String = "endRepeatType"
             const val endDate: String = "endDate"
+            const val from: String = "from"
+            const val to: String = "to"
         }
     }
 
@@ -99,7 +101,7 @@ class AppConstants {
 
     class NotificationConstants {
         companion object {
-const val ADMIN_USER_ACCOUNT_VERIFY = "ADMIN_USER_ACCOUNT_VERIFY"
+            const val ADMIN_USER_ACCOUNT_VERIFY = "ADMIN_USER_ACCOUNT_VERIFY"
         }
     }
 
@@ -149,6 +151,11 @@ const val ADMIN_USER_ACCOUNT_VERIFY = "ADMIN_USER_ACCOUNT_VERIFY"
         const val SET_UP = "SET_UP"
         const val BLOOD_GLUCOSE: String = "BLOOD_GLUCOSE"
         const val INSULIN: String = "INSULIN"
+        const val MG = "MG"
+        const val PILLES = "PILLES"
+        const val NAME = "name"
+        const val UNIT = "unit"
+        const val QUANTITY = "quantity"
     }
 
     object ContentManagementUrl {
@@ -162,7 +169,7 @@ const val ADMIN_USER_ACCOUNT_VERIFY = "ADMIN_USER_ACCOUNT_VERIFY"
         const val DATE_FORMAT_1 = "MMM dd YYYY | hh:mma"
         const val DATE_FORMAT_2 = "yyyy-MM-dd hh:mm a"
         const val DATE_FORMAT_3 = "yyyy-MM-dd"
-
+        const val DATE_FORMAT_4 = "MMM dd YYYY"
     }
 
 

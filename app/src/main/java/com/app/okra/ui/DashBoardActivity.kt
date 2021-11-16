@@ -9,6 +9,7 @@ import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.ui.add_meal.AddMealActivity
+import com.app.okra.ui.add_medication.AddMedicationActivity
 import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
 import com.app.okra.ui.home.HomeViewPagerAdapter
 import com.app.okra.ui.home.HomeFragment
@@ -127,14 +128,16 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
         startActivity(Intent(this, AddMealActivity::class.java))
     }
 
+
     override fun onThirdOptionClick(dialog: DialogInterface?) {
+        startActivity(Intent(this, AddMedicationActivity::class.java))
 
     }
 
     override fun onOkClick(dialog: DialogInterface?) {
         dialog?.dismiss()
-    }
 
+    }
     override fun onCancelClick(dialog: DialogInterface?) {}
 
 }
