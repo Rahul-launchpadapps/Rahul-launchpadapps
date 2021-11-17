@@ -1,17 +1,22 @@
 package com.app.okra.ui.logbook.medication
 
+import android.app.Activity
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.app.okra.amazonS3.AmazonS3
+import com.app.okra.amazonS3.ImageBean
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.network.ApiData
 import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.MedicationRepo
 import com.app.okra.models.*
 import com.app.okra.utils.*
+import com.app.sensor.amazonS3.AmazonS3Callbacks
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
+class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() , AmazonS3Callbacks {
 
     private var medicationLiveData = MutableLiveData<ApiData<MedicationResponse>>()
     val _medicationLiveData: LiveData<ApiData<MedicationResponse>>
@@ -29,13 +34,37 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
     val _deleteMedicationLiveData: LiveData<ApiData<Any>>
         get() = deleteMedicationLiveData
 
-    private var searchMedicationLiveData = MutableLiveData<ApiData<Any>>()
-    val _searchMedicationLiveData: LiveData<ApiData<Any>>
+    private var searchMedicationLiveData = MutableLiveData<ApiData<MedicationSearchResponse>>()
+    val _searchMedicationLiveData: LiveData<ApiData<MedicationSearchResponse>>
         get() = searchMedicationLiveData
 
+    private var amazonStatusLiveData = MutableLiveData<ImageBean>()
+    val _amazonStatusLiveData: LiveData<ImageBean>
+        get() = amazonStatusLiveData
+
+
     var params = WeakHashMap<String, Any>()
-    val updateRequest = MealUpdateRequest()
+    val updateRequest = MedicationUpdateRequest()
     val addRequest = AddMedicationRequest()
+    private val mAmazonS3: AmazonS3 = AmazonS3()
+
+
+    override fun uploadSuccess(imageBean: ImageBean) {
+        amazonStatusLiveData.value = imageBean
+        progressDialog.value = Event(ProgressDialogData(status = false))
+    }
+
+    override fun uploadError(e: Exception, imageBean: ImageBean) {
+        progressDialog.value = Event(ProgressDialogData(status = false))
+        errorObserver.value = Event(ApiData(message = e.message!!))
+    }
+
+    override fun uploadProgress(imageBean: ImageBean) {}
+
+    override fun uploadFailed(imageBean: ImageBean) {
+        progressDialog.value = Event(ProgressDialogData(status = false))
+        errorObserver.value = Event(ApiData(message = MessageConstants.Errors.upload_failed))
+    }
 
     fun prepareRequest(
         pageNo: Int,
@@ -58,43 +87,28 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
         }
     }
 
-    fun prepareUpdateRequest(
-        mealsId: String? = null,
-        date: String? = null,
-        image: String? = null,
-        foodItems: ArrayList<FoodItemsRequest>? = null,
-        foodType: String? = null,
-        calories: CommonData? = null,
-        carbs: CommonData? = null,
-        fat: CommonData? = null,
-        protein: CommonData? = null,
-    ) {
-        updateRequest.mealsId = mealsId
+    fun prepareUpdateRequest(data  :MedicationData) {
+        updateRequest.apply {
+            medicationId = data._id
+            medicineName = data.medicineName
 
-        if (!date.isNullOrEmpty()) {
-            updateRequest.date = date
-        }
+            if (!data.unit.isNullOrEmpty ()) {
+                unit = data.unit
+            }
 
-        image?.let {
-            updateRequest.image = it
-        }
-        foodItems?.let {
-            updateRequest.foodItems = it
-        }
-        calories?.let {
-            updateRequest.calories = it
-        }
-        carbs?.let {
-            updateRequest.carbs = it
-        }
-        fat?.let {
-            updateRequest.fat = it
-        }
-        protein?.let {
-            updateRequest.protien = it
-        }
-        foodType?.let {
-            updateRequest.foodType = it
+            if (data.quantity!=null) {
+                quantity = data.quantity
+            }
+
+            if (data.tags!=null) {
+                tags = data.tags
+            }
+            if (data.feelings!=null) {
+                feelings = data.feelings
+            }
+            if (data.image!=null) {
+                image = data.image
+            }
         }
     }
 
@@ -117,12 +131,13 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
         }
     }
 
-    fun addMedication(name: String, unit: String, quant: Int) {
+    fun addMedication(name: String, unit: String, quant: Int, medicationType: String) {
         launchDataLoad {
             showProgressBar()
             addRequest.medicineName = name
             addRequest.unit = unit
             addRequest.quantity = quant
+            addRequest.medicineType = medicationType
             val result = repo?.addMedication(addRequest)
             hideProgressBar()
             when (result) {
@@ -177,11 +192,11 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
         }
     }
 
+
+
     fun searchMedication(search: String) {
         launchDataLoad {
-            showProgressBar()
             val result = repo?.searchMedication(search)
-            hideProgressBar()
             when (result) {
                 is ApiResult.Success -> {
                     searchMedicationLiveData.value = result.value
@@ -195,5 +210,17 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() {
             }
         }
     }
+
+
+    fun setAmazonCallback(activity : Activity){
+        mAmazonS3.setCallback(activity, this)
+    }
+
+
+    fun uploadFile(uri: Uri?) {
+        uploadFile(mAmazonS3, uri)
+    }
+
+
 
 }

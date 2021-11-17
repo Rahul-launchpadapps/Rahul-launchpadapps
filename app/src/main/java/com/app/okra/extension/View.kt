@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -144,4 +145,9 @@ fun View.setErrorView(context: Context){
 
 fun View.setNormalView(context: Context){
     this.background = ResourcesCompat.getDrawable(context.resources, R.mipmap.bg_edittext, null)
+}
+
+
+ fun EditText.setMaxLength(maxLength: Int) {
+    filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
 }

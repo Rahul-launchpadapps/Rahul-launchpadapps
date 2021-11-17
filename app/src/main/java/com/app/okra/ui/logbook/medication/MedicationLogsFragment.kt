@@ -1,10 +1,13 @@
 package com.app.okra.ui.logbook.medication
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
@@ -13,15 +16,19 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MedicationRepoImpl
 import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
+import com.app.okra.extension.navigate
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MedicationData
+import com.app.okra.ui.add_medication.AddMedicationActivity
+import com.app.okra.utils.AppConstants
+import com.app.okra.utils.AppConstants.Intent_Constant.Companion.RELOAD_SCREEN
 
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_medication.*
 
-class MedicationFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
+class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var medicationAdapter: MedicationAdapter
@@ -45,18 +52,19 @@ class MedicationFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener
         ).get(MedicationViewModel::class.java)
     }
 
-   /* val activityForResult = registerForActivityResult(MealLogContract()){ result ->
-        if(result){
-            pageNo=1
-            getData(1)
+    private val activityForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        result?.let {
+            if (result.data!!.hasExtra(RELOAD_SCREEN)) {
+                pageNo = 1
+                getData(pageNo)
+            }
         }
-    }*/
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_medication, container, false)
     }
 
@@ -175,7 +183,13 @@ class MedicationFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener
 
     override fun onSelect(o: Any?, o1: Any?) {
         val data = o1 as MedicationData
-       // activityForResult.launch(data)
+        val intent = Intent(requireContext(), AddMedicationActivity::class.java)
+        intent.putExtra(AppConstants.DATA, data)
+        intent.putExtra(
+            AppConstants.Intent_Constant.FROM_SCREEN,
+            MedicationLogsFragment::class.java.simpleName
+        )
+        activityForResult.launch(intent)
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {

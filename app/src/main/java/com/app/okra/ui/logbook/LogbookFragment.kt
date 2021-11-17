@@ -12,17 +12,15 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.app.okra.R
-import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.logbook.meal.MealLogsFragment
-import com.app.okra.ui.logbook.medication.MedicationFragment
+import com.app.okra.ui.logbook.medication.MedicationLogsFragment
 import com.app.okra.ui.logbook.test.TestLogsFragment
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.utils.AppConstants
-import com.app.okra.utils.AppConstants.Companion.DISPLAY_ALL
 import com.app.okra.utils.AppConstants.Companion.THIS_MONTH
 import com.app.okra.utils.AppConstants.Companion.THIS_WEEK
 import com.app.okra.utils.AppConstants.Companion.TODAY
@@ -92,7 +90,7 @@ class LogbookFragment : BaseFragmentWithoutNav() {
         mPagerAdapter = activity?.supportFragmentManager?.let { ViewPagerBottomBar(it) }
         mPagerAdapter?.addFragment(TestLogsFragment())
         mPagerAdapter?.addFragment(MealLogsFragment())
-        mPagerAdapter?.addFragment(MedicationFragment())
+        mPagerAdapter?.addFragment(MedicationLogsFragment())
         viewPager.adapter = mPagerAdapter
         viewPager.offscreenPageLimit = 1
         viewPager.beginFakeDrag()
@@ -462,7 +460,7 @@ class LogbookFragment : BaseFragmentWithoutNav() {
                 selectDate(tvMedToDate)
             }
             btnMedApplyFilter.setOnClickListener {
-                val medFragment = mPagerAdapter?.getItem(2) as MedicationFragment
+                val medFragment = mPagerAdapter?.getItem(2) as MedicationLogsFragment
                 val toDate = tvMedToDate.text.toString().trim()
                 val fromDate = tvMedFromDate.text.toString().trim()
                 val type = getSelectedType()

@@ -122,6 +122,7 @@ class MessageConstants {
     class Messages {
 
         companion object {
+            const val you_cant_add_more= "You can't add more than 10 images."
             const val no_serving_available = "No serving available."
             const val please_enable_your_bluetooth=  "Please enable your bluetooth and retry."
             const val internet_connection_required ="Internet connection required."

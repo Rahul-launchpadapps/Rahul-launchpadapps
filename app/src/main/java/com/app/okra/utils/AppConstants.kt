@@ -28,6 +28,7 @@ class AppConstants {
             const val NAME = "Name"
             const val PROFILE_PIC = "profilePic"
             const val DEVICE_TOKEN = "device_token"
+            const val RECENT_MEDICINE = "recent_medicine"
         }
     }
 
@@ -87,6 +88,7 @@ class AppConstants {
     class Intent_Constant {
         companion object {
 
+            const val RELOAD_SCREEN = "reloadScreen"
             const val FROM_SCREEN = "fromScreen"
             const val EMAIL: String = "email"
             const val NAME: String = "name"
@@ -154,6 +156,8 @@ class AppConstants {
         const val MG = "MG"
         const val PILLES = "PILLES"
         const val NAME = "name"
+        const val MEDICATION_TYPE = "medication_type"
+        const val MEDICATION_ID = "medicationId"
         const val UNIT = "unit"
         const val QUANTITY = "quantity"
     }

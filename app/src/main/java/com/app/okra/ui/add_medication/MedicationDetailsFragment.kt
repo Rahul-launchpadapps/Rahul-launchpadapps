@@ -9,12 +9,17 @@ import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MedicationRepoImpl
+import com.app.okra.extension.beGone
+import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.MedicationData
+import com.app.okra.ui.logbook.medication.MedicationLogsFragment
 import com.app.okra.ui.logbook.medication.MedicationViewModel
 import com.app.okra.utils.*
 import kotlinx.android.synthetic.main.fragment_save_medication.*
 import kotlinx.android.synthetic.main.layout_button.view.*
 import kotlinx.android.synthetic.main.layout_header.*
+import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
 import java.util.*
 
 class MedicationDetailsFragment : BaseFragment() {
@@ -31,6 +36,9 @@ class MedicationDetailsFragment : BaseFragment() {
         return viewModel
     }
 
+    private var screenFrom: String?=null
+    private var medicationData: MedicationData?=null
+    private var medicationType: String?=null
     private val viewModel by lazy {
         ViewModelProvider(this,
             viewModelFactory {
@@ -41,29 +49,81 @@ class MedicationDetailsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getData()
+
         setViews()
         setListener()
-        getData()
         setObserver()
     }
 
     private fun getData() {
+
         arguments?.let { it ->
-            tvTitle.text = it.getString(AppConstants.NAME)
-            tvUnitValue.text = it.getString(AppConstants.UNIT)
-            tvQuantityValue.text = it.getInt(AppConstants.QUANTITY).toString()
-            val cal = Calendar.getInstance()
-            tvDateValue.text =
-                getDateFromTimeStamp(
-                    cal.timeInMillis,
-                    formatYouWant = AppConstants.DateFormat.DATE_FORMAT_4
-                )
+
+            if(it.containsKey(AppConstants.DATA)){
+                medicationData = it.getParcelable(AppConstants.DATA)
+            }
+
+            if(it.containsKey(AppConstants.Intent_Constant.FROM_SCREEN)){
+                screenFrom = it.getString(AppConstants.Intent_Constant.FROM_SCREEN)
+            }
+
+            if(it.containsKey(AppConstants.MEDICATION_TYPE)) {
+                medicationType = it.getString(AppConstants.MEDICATION_TYPE)
+            }
         }
     }
 
     private fun setViews() {
         tvTitle.text = getString(R.string.medication)
-        layout_button.btnCommon.text = getString(R.string.save)
+        ivRight.beVisible()
+
+
+        if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
+            // Coming to update or delete medication
+            ivRight.beVisible()
+            ivDelete.beVisible()
+            layout_button.btnCommon.text = getString(R.string.share)
+
+        }else{
+            // Coming to add medication
+            ivRight.beGone()
+            ivDelete.beGone()
+            layout_button.btnCommon.text = getString(R.string.save)
+
+        }
+
+        medicationData?.let {
+            if(!it.medicineName.isNullOrEmpty()) {
+                tvTitle.text = it.medicineName
+            }
+
+            if(!it.unit.isNullOrEmpty()) {
+                val unit: String = if (it.unit.equals(AppConstants.MG))
+                    getString(R.string.mg)
+                else
+                    getString(R.string.pills)
+                tvUnitValue.text = unit
+            }
+
+            if(it.quantity!=null) {
+                tvQuantityValue.text = it.quantity.toString()
+            }
+
+            if(!it.createdAt.isNullOrEmpty()) {
+                tvDateValue.text = getDateTimeFromISO(
+                    it.createdAt!!,
+                    formatYouWant = "MMM dd yyyy")
+            }else{
+                val cal = Calendar.getInstance()
+                tvDateValue.text =
+                    getDateFromTimeStamp(
+                        cal.timeInMillis,
+                        formatYouWant = AppConstants.DateFormat.DATE_FORMAT_4
+                    )
+            }
+
+        }
     }
 
     private fun setListener() {
@@ -71,8 +131,30 @@ class MedicationDetailsFragment : BaseFragment() {
             activity?.finish()
         }
 
+        ivRight.setOnClickListener {
+            val bundle = Bundle()
+            medicationData?.let {
+                bundle.putParcelable(AppConstants.DATA, it)
+            }
+           navController.navigate(R.id.action_saveMedication_to_editMedicationFragment,bundle)
+        }
+
         layout_button.btnCommon.setOnClickListener {
-            viewModel.addMedication(tvTitle.text.toString(),tvUnitValue.text.toString(),tvQuantityValue.text.toString().toInt())
+
+            if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
+                showToast(MessageConstants.Messages.work_in_progress)
+            }else {
+                val unitToSend = if (tvUnitValue.text.toString() == getString(R.string.mg))
+                    AppConstants.MG
+                else
+                    AppConstants.PILLES
+                viewModel.addMedication(
+                    tvTitle.text.toString(),
+                    unitToSend,
+                    tvQuantityValue.text.toString().toInt(),
+                    medicationType!!
+                )
+            }
         }
     }
 

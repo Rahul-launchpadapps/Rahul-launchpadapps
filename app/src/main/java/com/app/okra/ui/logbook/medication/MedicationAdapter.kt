@@ -14,7 +14,6 @@ class MedicationAdapter (var listener: Listeners.ItemClickListener,
                          private val hashMapKeyList : List<String>,
                          private val hashMap : HashMap<String, ArrayList<MedicationData>>
 
-
 ) : RecyclerView.Adapter<MedicationAdapter.ItemViewHolder>() {
 
 

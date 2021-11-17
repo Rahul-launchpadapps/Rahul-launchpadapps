@@ -127,12 +127,12 @@ interface ApiService {
     suspend fun addMedication(@Body params: AddMedicationRequest): Response<BaseResponse<Any>>
 
     @PUT("v1/users/medication")
-    suspend fun updateMedication(@Body params: MealUpdateRequest): Response<BaseResponse<Any>>
+    suspend fun updateMedication(@Body params: MedicationUpdateRequest): Response<BaseResponse<Any>>
 
     @DELETE("v1/users/medication")
     suspend fun deleteMedication(@Query("medicationId")  id:String): Response<BaseResponse<Any>>
 
     @GET("v1/users/medication/search")
-    suspend fun searchMedication(@Query("search") serach:String): Response<BaseResponse<Any>>
+    suspend fun searchMedication(@Query("search") search:String): Response<BaseResponse<MedicationSearchResponse>>
 
 }

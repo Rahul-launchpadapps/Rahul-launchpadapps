@@ -36,11 +36,11 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-         android:name=".ui.add_medication.AddMedicationActivity"
-         android:exported="true" />
+            android:name=".ui.reports.ReportsActivity"
+            android:exported="true" />
         <activity
-         android:name=".ui.reports.ReportsActivity"
-         android:exported="true" />
+            android:name=".ui.add_medication.AddMedicationActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.subscription.SubscriptionActivity"
             android:exported="true"

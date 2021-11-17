@@ -130,11 +130,12 @@ class AddMedicationFragment : BaseFragment() {
 
     private fun addMedicationApi(quant: Int) {
         var unit = ""
-        if(isMG)
-            unit = AppConstants.MG
+        unit = if(isMG)
+            AppConstants.MG
         else
-            unit = AppConstants.PILLES
+            AppConstants.PILLES
         val bundle = Bundle()
+        bundle.putString(AppConstants.MEDICATION_TYPE,"2")
         bundle.putString(AppConstants.NAME,name)
         bundle.putString(AppConstants.UNIT,unit)
         bundle.putInt(AppConstants.QUANTITY,quant)

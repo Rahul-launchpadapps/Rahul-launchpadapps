@@ -5,43 +5,44 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
-import com.app.okra.models.MedicationData
-import com.app.okra.models.MedicineName
 import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import kotlinx.android.synthetic.main.row_medication.view.*
+import kotlinx.android.synthetic.main.row_name.view.*
 
-class MedicineAdapter(
+class RecentMedicineAdapter(
     var listener: Listeners.ItemClickListener,
-    private val dataList: ArrayList<MedicineName>,
-) : RecyclerView.Adapter<MedicineAdapter.ItemViewHolder>() {
+    private val dataList: ArrayList<String>,
+) : RecyclerView.Adapter<RecentMedicineAdapter.ItemViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.row_medication, parent, false
+                R.layout.row_name, parent, false
             )
         )
     }
 
     override fun getItemCount(): Int {
-        return dataList.size
+        if(dataList.size>3)
+            return 3
+        else
+            return dataList.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.onBind(dataList[position], position)
 
         holder.itemView.setOnClickListener {
-            listener.onSelect(position, dataList[position])
+            listener.onUnSelect(position, dataList[position])
         }
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun onBind(data: MedicineName?, position: Int) {
+        fun onBind(data: String?, position: Int) {
 
             data?.let { it ->
-                    itemView.tvTitle.text = it.medicineName
+                val string = it.replace("[","").replace("]","").trim()
+                    itemView.tvName.text = "\"" + string + "\""
             }
         }
     }

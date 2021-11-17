@@ -1,11 +1,13 @@
 package com.app.okra.ui.logbook.medication
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.MedicationData
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDateFromISOInString
 import kotlinx.android.synthetic.main.row_medication.view.*
@@ -15,8 +17,9 @@ class MedAdapter(
     private val dataList: ArrayList<MedicationData>,
 ) : RecyclerView.Adapter<MedAdapter.ItemViewHolder>() {
 
-
+    lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        context = parent.context
         return ItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.row_medication, parent, false
@@ -40,8 +43,12 @@ class MedAdapter(
         fun onBind(data: MedicationData?, position: Int) {
 
             data?.let { it ->
-
-                itemView.tvDetail.text = it.quantity.toString() + " " + it.unit
+                var unit: String
+                if(it.unit.equals(AppConstants.MG))
+                    unit = context.getString(R.string.mg)
+                else
+                    unit = context.getString(R.string.pills)
+                itemView.tvDetail.text = it.quantity.toString() + " " + unit
 
                 it.createdAt?.let {
                     if (it.isNotEmpty()) {

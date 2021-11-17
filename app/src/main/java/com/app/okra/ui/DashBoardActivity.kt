@@ -128,16 +128,14 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
         startActivity(Intent(this, AddMealActivity::class.java))
     }
 
-
     override fun onThirdOptionClick(dialog: DialogInterface?) {
         startActivity(Intent(this, AddMedicationActivity::class.java))
-
     }
 
     override fun onOkClick(dialog: DialogInterface?) {
         dialog?.dismiss()
-
     }
+
     override fun onCancelClick(dialog: DialogInterface?) {}
 
 }

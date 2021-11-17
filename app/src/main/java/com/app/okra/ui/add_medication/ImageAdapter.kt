@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
+import com.app.okra.extension.loadRoundCornerImageFromUrl
 import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.row_image.view.*
@@ -36,7 +37,7 @@ class ImageAdapter (
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun onBind( position: Int) {
 
-           itemView.ivImage.loadUserImageFromUrl(context,data[position])
+           itemView.ivImage.loadRoundCornerImageFromUrl(data[position], setAllCornerSize=true, allCornerSize = 20.0f)
             itemView.ivCross.setOnClickListener{
                 listener?.onSelect(position,null)
             }

@@ -40,34 +40,8 @@ class ImageUtils {
         mCallbacks = listener
     }
 
-    val activityCameraResult by lazy {
-        if(mFragment!=null){
-            mFragment!!.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (photoURI != null) {
-                    val image: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Uri.parse(mCurrentPhotoPath)
-                    } else {
-                        photoURI!!
-                    }
-                    mCallbacks?.setImagePath(image)
-                }
-            }
-        }else{
-            if(this::mActivity.isInitialized){
-                mActivity.registerForActivityResult
-                if (photoURI != null) {
-                    val image: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Uri.parse(mCurrentPhotoPath)
-                    } else {
-                        photoURI!!
-                    }
-                    mCallbacks?.setImagePath(image)
-                }
-            }
-        }
-    }
 
-    fun openCamera() :Intent {
+    fun openCamera(triggerActivityResult : Boolean =true) :Intent {
        return Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera mActivity to handle the intent
             takePictureIntent.resolveActivity(mActivity.packageManager)?.also {
@@ -89,16 +63,18 @@ class ImageUtils {
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     takePictureIntent.putExtra("return-data", true)
 
-                    if(mFragment!=null) {
-                        mFragment!!.startActivityForResult(
-                            takePictureIntent,
-                            AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
-                        )
-                    }else{
-                        mActivity.startActivityForResult(
-                            takePictureIntent,
-                            AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
-                        )
+                    if(triggerActivityResult) {
+                        if (mFragment != null) {
+                            mFragment!!.startActivityForResult(
+                                takePictureIntent,
+                                AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
+                            )
+                        } else {
+                            mActivity.startActivityForResult(
+                                takePictureIntent,
+                                AppConstants.RequestOrResultCodes.REQUEST_CLICK_IMAGE_FROM_CAMERA
+                            )
+                        }
                     }
                 }
             }
