@@ -66,6 +66,13 @@ class MyReminderFragment : BaseFragment() {
                     val time = convertUtc2Local(it.foodReminder?.time, "hh:mm a")
                     tvFoodValue.text = startDate+ ", "+time+ ", "+ it.foodReminder?.repeatType
                 }
+                if(it.medicineReminder?.startDate!=null) {
+                    tvAddMedicine.gravity = Gravity.BOTTOM
+                    tvMedicineValue.visibility = View.VISIBLE
+                    val startDate = convertUtc2Local(it.medicineReminder?.startDate, "dd MMM yyyy")
+                    val time = convertUtc2Local(it.medicineReminder?.time, "hh:mm a")
+                    tvMedicineValue.text = startDate+ ", "+time+ ", "+ it.medicineReminder?.repeatType
+                }
             }
         }
     }
@@ -80,6 +87,12 @@ class MyReminderFragment : BaseFragment() {
         clAddFood.setOnClickListener {
             val bundle = Bundle()
             bundle.putString(AppConstants.DATA, AppConstants.FOOD)
+            navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
+        }
+
+        clAddMedicine.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString(AppConstants.DATA, AppConstants.MEDICINE)
             navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
         }
     }

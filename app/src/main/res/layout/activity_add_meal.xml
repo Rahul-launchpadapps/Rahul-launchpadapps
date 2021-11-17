@@ -127,6 +127,26 @@
                 tools:ignore="RtlSymmetry"
                 tools:text="@string/food_type" />
 
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etFoodTypeValue"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:inputType="text"
+                android:ellipsize="end"
+                android:visibility="gone"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/grey_4"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFoodType"
+                app:layout_constraintTop_toBottomOf="@id/tvUploadImage"
+                tools:ignore="RtlSymmetry"
+                tools:text="@string/food_type" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDateHeading"
                 style="@style/textContainer"
