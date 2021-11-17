@@ -23,9 +23,8 @@ class AddMealContracts :ActivityResultContract<MealInput, Items?>() {
 
     override fun parseResult(resultCode: Int, intent: Intent?): Items?{
         return if(resultCode == AppCompatActivity.RESULT_OK && intent!=null){
-            intent.getParcelableExtra(data)!!
+                intent.getParcelableExtra(data)
         }else null
     }
-
 
 }

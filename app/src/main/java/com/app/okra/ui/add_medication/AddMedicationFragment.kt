@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
+import com.app.okra.models.MedicationData
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.dialog
 import kotlinx.android.synthetic.main.fragment_add_medication.*
@@ -129,16 +130,20 @@ class AddMedicationFragment : BaseFragment() {
     }
 
     private fun addMedicationApi(quant: Int) {
+        val data = MedicationData()
         var unit = ""
         unit = if(isMG)
             AppConstants.MG
         else
             AppConstants.PILLES
+
+        data.medicineName =name
+        data.unit =unit
+        data.quantity =quant
+
         val bundle = Bundle()
         bundle.putString(AppConstants.MEDICATION_TYPE,"2")
-        bundle.putString(AppConstants.NAME,name)
-        bundle.putString(AppConstants.UNIT,unit)
-        bundle.putInt(AppConstants.QUANTITY,quant)
+        bundle.putParcelable(AppConstants.DATA,data)
         navController.navigate(R.id.action_addMed_to_saveMed, bundle)
     }
 

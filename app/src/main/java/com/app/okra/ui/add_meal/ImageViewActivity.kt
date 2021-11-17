@@ -66,9 +66,9 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
                     this,
                     this,
                     getString(R.string.this_does_not_look_like_photo),
-                    false,
+                    true,
                     positiveButtonText = getString(R.string.retake),
-                    negativeButtonText = "",
+                    negativeButtonText = getString(R.string.add_manually),
                     title = getString(R.string.invalid_photo)
                 )
             }
@@ -89,6 +89,8 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
 
     override fun onCancelClick(dialog: DialogInterface?) {
         dialog?.dismiss()
+        setResult(RESULT_FIRST_USER, Intent().putExtra("isManual",true))
+        finish()
     }
 
     private fun showBottomSheetDialog() {
@@ -153,6 +155,10 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
                 rv_item_types.adapter = foodTypeAdapter
                 rv_item_types.scrollToPosition(0)
 
+                tvAddManual.setOnClickListener {
+                    setResult(RESULT_FIRST_USER, Intent().putExtra("isManual",true))
+                    finish()
+                }
 
                 show()
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dp_120"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/dp_120"
+
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -9,27 +10,12 @@
         android:id="@+id/ivImage"
         android:layout_width="@dimen/dp_100"
         android:layout_height="@dimen/dp_100"
-        android:layout_marginTop="@dimen/dp_20"
         android:gravity="center"
         android:scaleType="fitXY"
         android:paddingStart="@dimen/dp_5"
         android:paddingEnd="@dimen/dp_5"
-        android:singleLine="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <androidx.appcompat.widget.AppCompatImageView
-        style="@style/edit_text_style"
-        android:id="@+id/ivCross"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/red_cross"
-        android:gravity="center"
-        android:paddingStart="@dimen/dp_5"
-        android:paddingEnd="@dimen/dp_5"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

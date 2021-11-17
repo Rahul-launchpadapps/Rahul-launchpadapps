@@ -219,6 +219,7 @@ to the Okra Terms &amp; Conditions</string>
     <string name="please_select_carbs">Please select carbs</string>
     <string name="please_select_fat">Please select fat</string>
     <string name="please_select_protein">Please select protein</string>
+    <string name="please_select_food_type">Please select food type</string>
     <string name="serving_size">Serving Size</string>
     <string name="no_of_Servings">Number of servings</string>
     <string name="done">Done</string>
@@ -263,6 +264,10 @@ to the Okra Terms &amp; Conditions</string>
     <string name="unit">Unit</string>
     <string name="quantity">Quantity</string>
     <string name="medicines">Medicines</string>
+    <string name="none_of_the_below_tap_here">None of the below? Tap here.</string>
+    <string name="tap_here_to_edit">Tap here to edit</string>
+    <string name="add_manually">Add Manually</string>
+    <string name="take_medicine">Take Medicine</string>
 
 
     <!-- BLE -->
@@ -312,6 +317,8 @@ to the Okra Terms &amp; Conditions</string>
     <string name="tags">Tags</string>
     <string name="how_to_feel">How to feel after medicine</string>
     <string name="share">Share</string>
+    <string name="feeling_after_medicine">How to feel after medicine</string>
+    <string name="images">Images</string>
 
 
 </resources>

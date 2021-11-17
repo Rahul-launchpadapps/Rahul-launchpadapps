@@ -5,11 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
-import com.app.okra.models.MedicationData
 import com.app.okra.models.MedicineName
 import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import kotlinx.android.synthetic.main.row_medication.view.*
+import kotlinx.android.synthetic.main.row_medicine.view.*
 
 class MedicineAdapter(
     var listener: Listeners.ItemClickListener,
@@ -20,7 +18,7 @@ class MedicineAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.row_medication, parent, false
+                R.layout.row_medicine, parent, false
             )
         )
     }

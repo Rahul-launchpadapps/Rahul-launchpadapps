@@ -54,7 +54,7 @@ class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickList
 
     private val activityForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
         result?.let {
-            if (result.data!!.hasExtra(RELOAD_SCREEN)) {
+            if (result.data!=null && result.data!!.hasExtra(RELOAD_SCREEN)) {
                 pageNo = 1
                 getData(pageNo)
             }

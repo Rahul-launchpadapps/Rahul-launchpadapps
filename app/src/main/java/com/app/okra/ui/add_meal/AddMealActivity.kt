@@ -7,7 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.net.toUri
@@ -21,12 +21,12 @@ import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.CommonData
 import com.app.okra.models.FoodItemsRequest
-import com.app.okra.models.FoodRecognintionResponse
 import com.app.okra.models.Items
 import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
-import com.google.gson.Gson
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_2
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_3
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
@@ -36,13 +36,12 @@ import kotlinx.android.synthetic.main.layout_header.*
 import kotlinx.android.synthetic.main.layout_header.tvTitle
 import java.io.File
 import java.util.*
-import org.json.JSONObject
 
 class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
     PermissionUtils.IGetPermissionListener,
     ImageUtils.IChooseImageInterface {
 
-    private lateinit var amazonImageUrl: String
+    private var amazonImageUrl: String = ""
     private lateinit var localImageUri: Uri
     private val mPermissionUtils: PermissionUtils = PermissionUtils(this)
     private val mChooseImageUtils: ImageUtils = ImageUtils()
@@ -53,6 +52,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
     private var mHour: Int = 0
     private var mMin: Int = 0
     private  lateinit var selectedFoodItem : Items
+    private var isManual = false
+    private var strDate : String = ""
 
     override fun getViewModel(): BaseViewModel? {
         return viewModel
@@ -109,7 +110,6 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
 
         ivBack.setOnClickListener {
             checkDataExistence()
-
         }
 
         cv_image.setOnClickListener {
@@ -123,6 +123,9 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
             when {
                 TextUtils.isEmpty(amazonImageUrl) -> {
                     showToast(getString(R.string.please_select_image))
+                }
+                TextUtils.isEmpty(etFoodTypeValue.text.toString()) && isManual -> {
+                    showToast(getString(R.string.please_select_food_type))
                 }
                 TextUtils.isEmpty(tvDate.text.toString()) -> {
                     showToast(getString(R.string.please_select_date))
@@ -150,23 +153,26 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
                             selectedFoodItem.group,
                             selectedFoodItem.name,
                             selectedFoodItem.selectedServingSize?.unit
-
                         )
                     }else {
                         FoodItemsRequest(
-                            "jshjksd",
-                            "djhjh",
-                            "1"
+                            "android",
+                            "android",
+                            "0"
                         )
                     }
-                    foodList.add(foodItemsRequest)
 
-                    val dateToConvert =   getDifferentInfoFromDate(date,DATE_FORMAT_1,DATE_FORMAT_1)
+                    var foodType: String
+                    if(isManual)
+                        foodType = etFoodTypeValue.text.toString()
+                    else
+                        foodType = tvFoodTypeValue.text.toString()
+                    val dateToConvert =   getDifferentInfoFromDate_String(strDate, "yyyy-MM-dd hh:mm",DATE_FORMAT_2)
                     viewModel.prepareAddRequest(
-                        date = getISOFromDateAndTime_inString(dateToConvert),
+                        date = dateToConvert,
                         image = amazonImageUrl,
                         foodItems = foodList,
-                        foodType = tvFoodTypeValue.text.toString(),
+                        foodType = foodType,
                         calories = CommonData(tvCalories.text.toString(), "cal"),
                         carbs = CommonData(tvCarbs.text.toString(), "gm"),
                         fat = CommonData(tvFat.text.toString(), "gm"),
@@ -174,12 +180,18 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
                     )
                     viewModel.addMeal()
                 }
-
             }
         }
 
         tvDate.setOnClickListener {
             selectDate(tvDate)
+        }
+
+        tvFoodTypeValue.setOnClickListener {
+            if(isManual){
+                tvFoodTypeValue.visibility = View.INVISIBLE
+                etFoodTypeValue.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -263,7 +275,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == AppCompatActivity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                     val result: CropImage.ActivityResult? = CropImage.getActivityResult(data)
@@ -283,9 +295,23 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
                     }
                 }
                 else -> {
-                    mChooseImageUtils.setImageResult(requestCode, resultCode, data)
+                    if(data?.hasExtra("isManual") == true){
+                        isManual = true
+                        tvFoodTypeValue.text = getString(R.string.tap_here_to_edit)
+                    }else {
+                        isManual = false
+                        mChooseImageUtils.setImageResult(requestCode, resultCode, data)
+                    }
 
                 }
+            }
+        }else if (resultCode == RESULT_FIRST_USER) {
+            if(data?.hasExtra("isManual") == true){
+                isManual = true
+                tvFoodTypeValue.text = getString(R.string.tap_here_to_edit)
+            }else {
+                isManual = false
+                mChooseImageUtils.setImageResult(requestCode, resultCode, data)
             }
         }
     }
@@ -336,10 +362,6 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
             try {
                 println("::: Output: ${it}")
 
-                /* val jObject = JSONObject(it)
-
-                 val jsonString = jObject.getString("lang")
-                 val response = Gson().fromJson(it, FoodRecognintionResponse::class.java)*/
                 val mealInput  = if (!it.is_food) {
                     println("::::: Invalid: True ")
 
@@ -382,7 +404,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
 
         val datePickerDialog =
             DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
-                val strDate: String =
+                strDate =
                     year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
                 showTimePicker(tvDate, strDate)
             }, mYear, mMonth, mDay)
@@ -403,14 +425,13 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
 
         val tpd = TimePickerDialog(
             this, { timePicker, hour, minute ->
-               val completeDate = "$selectedDate $hour:$minute"
-                tvDate.text =  getDifferentInfoFromDate_String(completeDate,"yyyy-MM-dd hh:mm",DATE_FORMAT_1)
+                strDate = "$selectedDate $hour:$minute"
+                tvDate.text =  getDifferentInfoFromDate_String(strDate,"yyyy-MM-dd hh:mm",DATE_FORMAT_1)
             },
             mHour,
             mMin,
             true
         )
-
         tpd.show()
 
     }

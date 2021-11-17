@@ -11,6 +11,7 @@ class UserDetailResponse(){
     var mobile: String?=null
     var foodReminder: FoodReminder?=null
     var diabetesReminder: FoodReminder? = null
+    var medicineReminder: FoodReminder? = null
 }
 
 class FoodReminder(){

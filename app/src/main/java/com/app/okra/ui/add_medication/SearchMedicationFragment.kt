@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
 import android.widget.Button
@@ -29,6 +30,7 @@ import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_search_medication.*
 import kotlinx.android.synthetic.main.fragment_search_medication.rv_medication
 import kotlinx.android.synthetic.main.layout_header.*
+import kotlinx.android.synthetic.main.layout_header.tvTitle
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,9 +74,17 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
 
     private fun setAdapter() {
 
-        val myList = ArrayList(Arrays.asList(PreferenceManager.getString(AppConstants.Pref_Key.RECENT_MEDICINE)?.split(",")))
+        val myList = ArrayList(Arrays.asList(
+            PreferenceManager.getString(AppConstants.Pref_Key.RECENT_MEDICINE)?.replace("[","")?.replace("]","")?.trim()?.split(",")))
         for (i in 0 until (myList[0]?.size ?: 0)){
-            myList[0]?.let { recentMedicine.add(it.get(i)) }
+            myList[0]?.let {
+                if(!TextUtils.isEmpty(it.get(i)))
+                    recentMedicine.add(it.get(i).trim())
+            }
+        }
+
+        if(recentMedicine.size==0){
+            tvRecentSearch.visibility = View.GONE
         }
         medicationAdapter = MedicineAdapter(this, data)
         layoutManager = LinearLayoutManager(requireContext())
@@ -112,8 +122,13 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
                     tvMedicine.visibility = View.GONE
                     data.clear()
                     medicationAdapter.notifyDataSetChanged()
-                } else if (p0.length > 2) {
-                    viewModel.searchMedication(p0.toString())
+                } else {
+                    tvRecentSearch.visibility = View.GONE
+                    rv_recent_medication.visibility = View.GONE
+                    tvMedicine.visibility = View.VISIBLE
+                    if (p0.length > 2) {
+                        viewModel.searchMedication(p0.toString())
+                    }
                 }
             }
 
@@ -125,25 +140,22 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
 
     override fun onSelect(o: Any?, o1: Any?) {
         val data = o1 as MedicineName
-        data.medicineName?.let { recentMedicine.add(0, it) }
+        if(!recentMedicine.contains(etSearch.text.toString()))
+            recentMedicine.add(0, etSearch.text.toString())
         PreferenceManager.putString(AppConstants.Pref_Key.RECENT_MEDICINE, recentMedicine.toString())
+        recentMedicationAdapter.notifyDataSetChanged()
         showUnitDialog(data.medicineName)
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) {
         val data = o1 as String
-        showUnitDialog(data.replace("[","").replace("]","").trim())
+        etSearch.setText(data.replace("[","").replace("]","").trim())
     }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._searchMedicationLiveData.observe(viewLifecycleOwner) { it ->
             it.data?.let {
-                if (it.data?.size!! > 0) {
-                    tvRecentSearch.visibility = View.GONE
-                    rv_recent_medication.visibility = View.GONE
-                    tvMedicine.visibility = View.VISIBLE
-                }
                 it.data?.let { it1 ->
                     data.clear()
                     data.addAll(it1)

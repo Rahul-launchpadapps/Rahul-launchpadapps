@@ -128,6 +128,7 @@ class MessageConstants {
             const val internet_connection_required ="Internet connection required."
             const val msg_storage_permission ="You have to give storage permission"
             const val msg_camera_permission ="You have to give camera permission"
+            const val msg_are_you_sure="Are you sure you want to delete this medication?"
             const val msg_location_permission ="You have to give location permission"
             const val we_have_sent = "We have resent the verification code on your Registered Email Id"
             const val one_to_one_message = "Do you want to bring your own supporter?"

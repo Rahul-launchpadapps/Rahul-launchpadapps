@@ -1005,7 +1005,7 @@ fun convertLocalTimeZoneToUTC(inputPattern: String?, date: String?): String {
     try {
         localDate = SimpleDateFormat(
             inputPattern,
-            Locale.US
+            Locale.getDefault()
         ).parse(date) // Local Date Format (By default)
         utcDateFormat.timeZone = TimeZone.getTimeZone("UTC")
         utcDateFormat.format(localDate)

@@ -88,8 +88,10 @@ class SetReminderFragment : BaseFragment() {
             var data: String? = it.getString(AppConstants.DATA)
             if (data.equals(AppConstants.DIABETES)) {
                 reminderType = 2
-            } else
+            }else if (data.equals(AppConstants.FOOD)) {
                 reminderType = 1
+            } else
+                reminderType = 3
         }
     }
 

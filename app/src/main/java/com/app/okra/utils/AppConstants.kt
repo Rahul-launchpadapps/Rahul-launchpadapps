@@ -146,6 +146,7 @@ class AppConstants {
         const val FROM = "from"
         const val MEAL = "meal"
         const val FOOD = "food"
+        const val MEDICINE = "medicine"
         const val DIABETES = "diabetes"
         const val EVERY_DAY = "EVERY_DAY"
         const val EVERY_MONTH = "EVERY_MONTH"

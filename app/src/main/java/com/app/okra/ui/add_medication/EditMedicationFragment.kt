@@ -163,7 +163,10 @@ class EditMedicationFragment : BaseFragment(),
     }
 
     private fun setAdapter() {
-        mAdapter = ImageAdapter(requireContext(), imageList, this)
+        mAdapter = ImageAdapter(requireContext(),
+            imageList,
+            this,
+            EditMedicationFragment::class.java.simpleName)
         rvMealImages.adapter = mAdapter
     }
 

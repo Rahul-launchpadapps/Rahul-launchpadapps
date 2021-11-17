@@ -1,10 +1,16 @@
 package com.app.okra.ui.add_medication
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
@@ -84,13 +90,14 @@ class MedicationDetailsFragment : BaseFragment() {
             ivRight.beVisible()
             ivDelete.beVisible()
             layout_button.btnCommon.text = getString(R.string.share)
+            clEditional.beVisible()
 
         }else{
             // Coming to add medication
             ivRight.beGone()
             ivDelete.beGone()
             layout_button.btnCommon.text = getString(R.string.save)
-
+            clEditional.beGone()
         }
 
         medicationData?.let {
@@ -123,11 +130,30 @@ class MedicationDetailsFragment : BaseFragment() {
                     )
             }
 
+            if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
+
+                if(it.tags!=null) {
+                    tvTagsValue.text = it.tags.toString()
+                }
+                if(it.feelings!=null) {
+                    tvFeelingValues.text = it.feelings.toString()
+                }
+
+                if(!it.image.isNullOrEmpty()){
+                    val adapter = ImageAdapter(requireContext(), it.image!!, screenType= MedicationDetailsFragment::class.java.simpleName)
+
+                    val layoutManager = GridLayoutManager(requireContext(), 3)
+                   // val layoutManager = LinearLayoutManager(requireContext())
+                    rvImages.layoutManager = layoutManager
+                    rvImages.adapter = adapter
+                }
+            }
         }
     }
 
     private fun setListener() {
         ivBack.setOnClickListener {
+            activity?.setResult(RESULT_CANCELED)
             activity?.finish()
         }
 
@@ -136,7 +162,22 @@ class MedicationDetailsFragment : BaseFragment() {
             medicationData?.let {
                 bundle.putParcelable(AppConstants.DATA, it)
             }
-           navController.navigate(R.id.action_saveMedication_to_editMedicationFragment,bundle)
+            navController.navigate(R.id.action_saveMedication_to_editMedicationFragment,bundle)
+        }
+        ivDelete.setOnClickListener {
+            showAlertDialog(requireContext(), object : Listeners.DialogListener {
+                override fun onOkClick(dialog: DialogInterface?) {
+                    medicationData?.let {
+                        viewModel.deleteMedication(it._id!!)
+                    }
+                   dialog?.dismiss()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {
+                    dialog?.dismiss()
+                }
+            }, MessageConstants.Messages.msg_are_you_sure,true)
+
         }
 
         layout_button.btnCommon.setOnClickListener {
@@ -162,6 +203,12 @@ class MedicationDetailsFragment : BaseFragment() {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._addMedicationLiveData.observe(viewLifecycleOwner) { it ->
             showToast(getString(R.string.saved_successfully))
+            activity?.finish()
+        }
+        viewModel._deleteMedicationLiveData.observe(viewLifecycleOwner) { it ->
+            val intent = Intent()
+            intent.putExtra(AppConstants.Intent_Constant.RELOAD_SCREEN, "true")
+            activity?.setResult(RESULT_OK,intent)
             activity?.finish()
         }
 
