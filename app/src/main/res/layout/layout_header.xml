@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/grey_3"
         android:onClick="onBackClick"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent "
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@mipmap/delete"

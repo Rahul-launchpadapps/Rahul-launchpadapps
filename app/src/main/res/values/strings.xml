@@ -268,7 +268,11 @@ to the Okra Terms &amp; Conditions</string>
     <string name="tap_here_to_edit">Tap here to edit</string>
     <string name="add_manually">Add Manually</string>
     <string name="take_medicine">Take Medicine</string>
-
+    <string name="app_tutorial">App Tutorial</string>
+    <string name="app_tutorial_message">Need help getting started? Check out these quick tips &amp; discover how Okra can simplify you daily diabetes care.</string>
+    <string name="log_test_and_set_reminder">Log test &amp; set reminder:</string>
+    <string name="app_tutorial_message1">1. Click on  </string>
+    <string name="app_tutorial_message2">button\n2. Click on the "Add test" option to log the test.\n3. Visit My profile &amp; click on the "My reminders" option to add the reminders.</string>
 
     <!-- BLE -->
 

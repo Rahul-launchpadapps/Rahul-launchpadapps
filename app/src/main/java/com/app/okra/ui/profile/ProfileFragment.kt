@@ -31,6 +31,7 @@ import com.app.okra.ui.profile.profile_details.ProfileViewModel
 import com.app.okra.ui.my_account.setting.SettingsActivity
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
 import com.app.okra.ui.my_reminder.MyReminderActivity
+import com.app.okra.ui.tutorial.AppTutorialActivity
 import com.app.okra.utils.*
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -167,22 +168,25 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
                 requireActivity().navigationOnly(SettingsActivity())
             }
             5 -> {
+                requireActivity().navigationOnly(AppTutorialActivity())
+            }
+            6 -> {
                 requireActivity().navigate(
                         Intent(requireContext(), ResetOrChangePasswordActivity::class.java)
                                 .putExtra(AppConstants.SCREEN_TYPE, ProfileFragment::class.java.simpleName)
                 )
             }
-            6 -> {
+            7 -> {
                 try {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/")))
                 } catch (e: ActivityNotFoundException) {
                    println("Exception:"+e.printStackTrace())
                 }
             }
-            7 -> {
+            8 -> {
                 requireActivity().navigationOnly(MyReminderActivity())
             }
-            8 -> {
+            9 -> {
             requireActivity().navigationOnly(SupportRequestActivity())
             }
         }

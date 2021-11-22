@@ -831,10 +831,11 @@ fun getProfileItems(context: Context?): MutableMap<Int, ItemModel> {
         "Settings",
         R.mipmap.setting
     )
-    profileHash[4] = ItemModel("Change password", R.mipmap.change_password)
-    profileHash[5] = ItemModel("Share app", R.mipmap.share_app)
-    profileHash[6] = ItemModel("My reminders", R.mipmap.my_reminder)
-    profileHash[7] = ItemModel("Support request", R.mipmap.support_request)
+    profileHash[4] = ItemModel("App tutorial", R.mipmap.app_tutorial)
+    profileHash[5] = ItemModel("Change password", R.mipmap.change_password)
+    profileHash[6] = ItemModel("Share app", R.mipmap.share_app)
+    profileHash[7] = ItemModel("My reminders", R.mipmap.my_reminder)
+    profileHash[8] = ItemModel("Support request", R.mipmap.support_request)
 
 
     return profileHash
