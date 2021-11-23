@@ -201,8 +201,8 @@ to the Okra Terms &amp; Conditions</string>
     <string name="cancel_anytime">Cancel anytime</string>
     <string name="cancel_subscription">To buy the subscription plan you need to click on the “Subscibe” option &amp; you will be redirected to the Okra web page foe the further process. Payment is to be handled by your shopify account. The subscription will get automatically auto renewed unless it is canceled atleast 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage &amp; cancel the subscriptions by going to the shopify account settings after purchase.</string>
     <string name="hello">Hello,</string>
-    <string name="total_strips_received">Total Strips\nReceived</string>
-    <string name="total_strips_left">Total Strips\nLeft</string>
+    <string name="total_tests_logged">Total Tests\nLogged</string>
+    <string name="total_meals_logged">Total Meals\nLogged</string>
     <string name="total_tests">Total Tests</string>
     <string name="avg_bg">Avg. BG</string>
     <string name="avg_insulin">Avg. Insulin</string>
@@ -251,6 +251,7 @@ to the Okra Terms &amp; Conditions</string>
     <string name="pill">Pill</string>
     <string name="pills">Pills</string>
     <string name="mg">mg</string>
+    <string name="ml">ml</string>
     <string name="plus_add_new_medication">+ Add New Medication</string>
     <string name="recent_search">Recent Search</string>
     <string name="name_text">Name</string>

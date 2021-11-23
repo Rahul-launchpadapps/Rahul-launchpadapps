@@ -46,8 +46,11 @@ class MedAdapter(
                 var unit: String
                 if(it.unit.equals(AppConstants.MG))
                     unit = context.getString(R.string.mg)
-                else
+                else if(it.unit.equals(AppConstants.PILLES))
                     unit = context.getString(R.string.pills)
+                else
+                    unit = context.getString(R.string.ml)
+
                 itemView.tvDetail.text = it.quantity.toString() + " " + unit
 
                 it.createdAt?.let {

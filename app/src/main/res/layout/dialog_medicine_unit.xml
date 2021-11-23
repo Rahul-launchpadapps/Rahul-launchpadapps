@@ -77,7 +77,6 @@
             android:id="@+id/tvPill"
             style="@style/textContainer"
             android:layout_width="wrap_content"
-            android:layout_marginEnd="@dimen/dp_55"
             android:paddingTop="@dimen/dp_15"
             android:paddingBottom="@dimen/dp_15"
             android:ellipsize="end"
@@ -87,6 +86,24 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="@string/pill"
+            android:textColor="@color/grey_3"
+            android:textSize="@dimen/sp_14"
+            tools:ignore="RtlSymmetry" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvML"
+            style="@style/textContainer"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/dp_55"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:ellipsize="end"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:fontFamily="@font/axiforma_medium"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/ml"
             android:textColor="@color/grey_3"
             android:textSize="@dimen/sp_14"
             tools:ignore="RtlSymmetry" />

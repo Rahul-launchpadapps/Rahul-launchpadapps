@@ -41,7 +41,7 @@ class EditMedicationFragment : BaseFragment(),
     ImageUtils.IChooseImageInterface, Listeners.ItemClickListener {
 
     private var medicationType: String? = null
-    private var medicationData: MedicationData?=null
+    private var medicationData: MedicationData? = null
     private lateinit var mAdapter: ImageAdapter
     private lateinit var localImageUri: Uri
     private val mPermissionUtils: PermissionUtils = PermissionUtils(this)
@@ -62,21 +62,27 @@ class EditMedicationFragment : BaseFragment(),
         ).get(MedicationViewModel::class.java)
     }
 
-    private val activityGalleryResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-        if(result!=null){
-            mChooseImageUtils.setImageResult(REQUEST_PICK_IMAGE_FROM_GALLERY, Activity.RESULT_OK, result.data)
+    private val activityGalleryResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result != null) {
+                mChooseImageUtils.setImageResult(
+                    REQUEST_PICK_IMAGE_FROM_GALLERY,
+                    Activity.RESULT_OK,
+                    result.data
+                )
+            }
         }
-    }
 
 
-    private val activityCameraResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it != null) {
-            mChooseImageUtils.getCameraImageResult(it.data)
+    private val activityCameraResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it != null) {
+                mChooseImageUtils.getCameraImageResult(it.data)
+            }
         }
-    }
 
 
-    private var tvUnitValue: TextView?=null
+    private var tvUnitValue: TextView? = null
     private lateinit var tvQuantityValue: TextView
 
     override fun onCreateView(
@@ -106,29 +112,31 @@ class EditMedicationFragment : BaseFragment(),
                 etName.setText(it.medicineName)
             }
 
-            if(!it.unit.isNullOrEmpty()) {
+            if (!it.unit.isNullOrEmpty()) {
                 val unit: String = if (it.unit.equals(AppConstants.MG))
                     getString(R.string.mg)
-                else
+                else if (it.unit.equals(AppConstants.PILLES))
                     getString(R.string.pills)
+                else
+                    getString(R.string.ml)
                 tvUnitData.text = unit
             }
 
-            if(it.quantity!=null) {
+            if (it.quantity != null) {
                 tvQuantityValue.text = it.quantity.toString()
             }
 
-            if(!it.image.isNullOrEmpty()) {
+            if (!it.image.isNullOrEmpty()) {
                 imageList.clear()
                 imageList.addAll(it.image!!)
                 mAdapter.notifyDataSetChanged()
             }
 
-            if(!it.tags.isNullOrEmpty()) {
+            if (!it.tags.isNullOrEmpty()) {
                 etTags.setText(it.tags.toString())
             }
 
-            if(!it.feelings.isNullOrEmpty()) {
+            if (!it.feelings.isNullOrEmpty()) {
                 etHowToFeel.setText(it.feelings.toString())
 
             }
@@ -153,20 +161,22 @@ class EditMedicationFragment : BaseFragment(),
 
     private fun getData() {
         arguments?.let { it ->
-            if(it.containsKey(AppConstants.DATA)){
+            if (it.containsKey(AppConstants.DATA)) {
                 medicationData = it.getParcelable(AppConstants.DATA)
             }
-            if(it.containsKey(AppConstants.MEDICATION_TYPE)) {
+            if (it.containsKey(AppConstants.MEDICATION_TYPE)) {
                 medicationType = it.getString(AppConstants.MEDICATION_TYPE)
             }
         }
     }
 
     private fun setAdapter() {
-        mAdapter = ImageAdapter(requireContext(),
+        mAdapter = ImageAdapter(
+            requireContext(),
             imageList,
             this,
-            EditMedicationFragment::class.java.simpleName)
+            EditMedicationFragment::class.java.simpleName
+        )
         rvMealImages.adapter = mAdapter
     }
 
@@ -214,13 +224,14 @@ class EditMedicationFragment : BaseFragment(),
     override fun onPermissionsGiven(data: Int) {
         when (data) {
             AppConstants.PermissionCodes.PERMISSION_STORAGE -> {
-                val intent =  Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-                    setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-                }
+                val intent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                        setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                    }
                 activityGalleryResult.launch(intent)
             }
             AppConstants.PermissionCodes.PERMISSION_CAMERA -> {
-                val cameraIntent =   mChooseImageUtils.openCamera(false)
+                val cameraIntent = mChooseImageUtils.openCamera(false)
                 activityCameraResult.launch(cameraIntent)
             }
         }
@@ -310,27 +321,29 @@ class EditMedicationFragment : BaseFragment(),
 
 
     override fun onClick(p0: View?) {
-        when(p0?.id){
-            R.id.tvQuantityData ->{
-               showUnitDialog(tvUnitData.text.toString(), tvQuantityValue.text.toString())
-            }
-            R.id.tvUnitData ->{
+        when (p0?.id) {
+            R.id.tvQuantityData -> {
                 showUnitDialog(tvUnitData.text.toString(), tvQuantityValue.text.toString())
             }
-            R.id.cvAdd ->{
-                if(imageList.size<10) {
+            R.id.tvUnitData -> {
+                showUnitDialog(tvUnitData.text.toString(), tvQuantityValue.text.toString())
+            }
+            R.id.cvAdd -> {
+                if (imageList.size < 10) {
                     showOptionDialog(requireContext(), this, false)
-                }else{
+                } else {
                     showToast(msg = MessageConstants.Messages.you_cant_add_more)
                 }
 
             }
-            R.id.btnSave ->{
-                if(medicationData!=null) {
+            R.id.btnSave -> {
+                if (medicationData != null) {
                     val unitToSend = if (tvUnitData.text.toString() == getString(R.string.mg))
                         AppConstants.MG
-                    else
+                    else if (tvUnitData.text.toString() == getString(R.string.pills))
                         AppConstants.PILLES
+                    else
+                        AppConstants.ML
 
                     val localData = MedicationData()
                     localData._id = medicationData!!._id
@@ -346,9 +359,9 @@ class EditMedicationFragment : BaseFragment(),
                 }
 
             }
-            R.id.ivBack ->{
-            navController.popBackStack()
-        }
+            R.id.ivBack -> {
+                navController.popBackStack()
+            }
         }
     }
 
@@ -383,9 +396,12 @@ class EditMedicationFragment : BaseFragment(),
             val etUnit: EditText = findViewById(R.id.etUnit)
             val tvMG: TextView = findViewById(R.id.tvMG)
             val tvPill: TextView = findViewById(R.id.tvPill)
+            val tvML: TextView = findViewById(R.id.tvML)
             var isPill = false
+            var isML = false
+            var isMG = false
 
-            medicationData?.let{
+            medicationData?.let {
                 tvTitle.text = it.medicineName
 
                 if (unit == getString(R.string.mg)) {
@@ -394,39 +410,85 @@ class EditMedicationFragment : BaseFragment(),
                     tvMG.setTextColor(ContextCompat.getColor(context, R.color.white))
                     tvPill.background = null
                     tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
-                     isPill = false
+                    tvML.background = null
+                    tvML.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    isMG = true
+                    isPill = false
+                    isML = false
                     etUnit.setMaxLength(4)
 
-                }
-                else {
-                    tvPill.background = ResourcesCompat.getDrawable(resources,R.drawable.bg_button_green, null)
+                } else if (unit == getString(R.string.pills)) {
+                    tvPill.background =
+                        ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
                     tvPill.setTextColor(ContextCompat.getColor(context, R.color.white))
                     tvMG.background = null
                     tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    tvML.background = null
+                    tvML.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
                     isPill = true
+                    isMG = false
+                    isML = false
+                    etUnit.setMaxLength(2)
+                } else {
+                    tvML.background =
+                        ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
+                    tvML.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    tvMG.background = null
+                    tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    tvPill.background = null
+                    tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    isMG = false
+                    isML = true
+                    isPill = false
+                    etUnit.setMaxLength(3)
                 }
                 etUnit.setText(quantity)
             }
 
 
             tvMG.setOnClickListener {
-                isPill = false
-                etUnit.setMaxLength(4)
-                tvMG.background = ResourcesCompat.getDrawable(resources,R.drawable.bg_button_green, null)
-                tvMG.setTextColor(ContextCompat.getColor(context, R.color.white))
-                tvPill.background = null
-                tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
-                etUnit.setText("")
+                if(!isML) {
+                    isPill = false
+                    etUnit.setMaxLength(4)
+                    tvMG.background =
+                        ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
+                    tvMG.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    tvPill.background = null
+                    tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    tvML.background = null
+                    tvML.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    etUnit.setText("")
+                }
             }
 
             tvPill.setOnClickListener {
-                isPill = true
-                etUnit.setMaxLength(2)
-                tvPill.background = ResourcesCompat.getDrawable(resources,R.drawable.bg_button_green, null)
-                tvPill.setTextColor(ContextCompat.getColor(context, R.color.white))
-                tvMG.background = null
-                tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
-                etUnit.setText("")
+                if (!isML) {
+                    isPill = true
+                    etUnit.setMaxLength(2)
+                    tvPill.background =
+                        ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
+                    tvPill.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    tvMG.background = null
+                    tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    tvML.background = null
+                    tvML.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    etUnit.setText("")
+                }
+            }
+
+            tvML.setOnClickListener {
+                if (!isMG || !isPill) {
+                    isPill = false
+                    etUnit.setMaxLength(3)
+                    tvML.background =
+                        ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
+                    tvML.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    tvMG.background = null
+                    tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    tvPill.background = null
+                    tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                    etUnit.setText("")
+                }
             }
 
             btnAdd.setOnClickListener {
@@ -443,14 +505,22 @@ class EditMedicationFragment : BaseFragment(),
                             }
                             else -> {
                                 tvUnitValue?.text = getString(R.string.pills)
-                               tvQuantityValue.setText(etUnit.text.toString())
+                                tvQuantityValue.setText(etUnit.text.toString())
                                 dialog?.dismiss()
                             }
                         }
-                    } else {
+                    } else if(isML){
+                        if (etUnit.text.toString().isEmpty()) {
+                            showToast("Enter no of ml.")
+                        } else {
+                            tvUnitValue?.text = getString(R.string.ml)
+                            tvQuantityValue.setText(etUnit.text.toString())
+                            dialog?.dismiss()
+                        }
+                    }else {
                         if (etUnit.text.toString().isEmpty()) {
                             showToast("Enter no of mg.")
-                        }else{
+                        } else {
                             tvUnitValue?.text = getString(R.string.mg)
                             tvQuantityValue.setText(etUnit.text.toString())
                             dialog?.dismiss()

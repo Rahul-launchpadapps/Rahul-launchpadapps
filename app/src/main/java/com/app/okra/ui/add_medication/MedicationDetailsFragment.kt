@@ -108,8 +108,10 @@ class MedicationDetailsFragment : BaseFragment() {
             if(!it.unit.isNullOrEmpty()) {
                 val unit: String = if (it.unit.equals(AppConstants.MG))
                     getString(R.string.mg)
-                else
+                else if (it.unit.equals(AppConstants.PILLES))
                     getString(R.string.pills)
+                else
+                    getString(R.string.ml)
                 tvUnitValue.text = unit
             }
 
@@ -187,8 +189,10 @@ class MedicationDetailsFragment : BaseFragment() {
             }else {
                 val unitToSend = if (tvUnitValue.text.toString() == getString(R.string.mg))
                     AppConstants.MG
-                else
+                else if (tvUnitValue.text.toString() == getString(R.string.pills))
                     AppConstants.PILLES
+                else
+                    AppConstants.ML
                 viewModel.addMedication(
                     tvTitle.text.toString(),
                     unitToSend,

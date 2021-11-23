@@ -1,4 +1,4 @@
-package com.airhireme.ui.video_player
+package com.app.okra.ui.tutorial
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
@@ -8,6 +8,7 @@ import android.view.View
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
+import com.app.okra.utils.AppConstants
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -40,7 +41,7 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
 
     private fun getBundleData() {
         intent.extras?.let {
-            //videoUrl = it.getString(AppConstants.BundleConstantsKeys.KEY_DATA)!!
+            videoUrl = it.getString(AppConstants.DATA)!!
         }
     }
 

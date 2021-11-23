@@ -36,14 +36,21 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".ui.tutorial.VideoPlayerActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.tutorial.AppTutorialActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.reports.ReportsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.add_medication.AddMedicationActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.subscription.SubscriptionActivity"
             android:exported="true"

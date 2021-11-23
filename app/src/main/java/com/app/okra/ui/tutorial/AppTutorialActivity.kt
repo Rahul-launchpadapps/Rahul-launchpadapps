@@ -1,5 +1,6 @@
 package com.app.okra.ui.tutorial
 
+import android.content.Intent
 import android.os.Bundle
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
@@ -11,8 +12,14 @@ import android.text.style.ImageSpan
 import android.graphics.BitmapFactory
 
 import android.text.SpannableStringBuilder
+import com.app.okra.extension.navigate
+import com.app.okra.extension.navigationOnly
+import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordActivity
+import com.app.okra.ui.profile.ProfileFragment
+import com.app.okra.utils.AppConstants
 
 import kotlinx.android.synthetic.main.activity_app_tutorial.*
+import kotlinx.android.synthetic.main.layout_header.*
 
 
 class AppTutorialActivity : BaseActivity() {
@@ -34,5 +41,16 @@ class AppTutorialActivity : BaseActivity() {
         tvMessage2.setText(getString(R.string.app_tutorial_message1))
         tvMessage2.append(ssb)
         tvMessage2.append(getString(R.string.app_tutorial_message2))
+
+        ivPlay.setOnClickListener {
+            navigate(
+                Intent(this, VideoPlayerActivity::class.java)
+                    .putExtra(AppConstants.DATA, "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+            )
+        }
+
+        ivBack.setOnClickListener {
+            finish()
+        }
     }
 }
