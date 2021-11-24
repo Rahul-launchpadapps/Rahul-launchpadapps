@@ -15,6 +15,7 @@
         <entry key="app/src/main/res/layout/activity_add_meal.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_add_medication.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_app_tutorial.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/activity_choose.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_connected_device.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_contact_us.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.22" />
@@ -29,6 +30,7 @@
         <entry key="app/src/main/res/layout/activity_profile_info.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_reset_or_change_password.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_static_content.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_subscription.xml" value="0.19791666666666666" />
@@ -54,7 +56,7 @@
         <entry key="app/src/main/res/layout/fragment_edit_test_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_in_sight.xml" value="0.19791666666666666" />
-        <entry key="app/src/main/res/layout/fragment_insulin.xml" value="0.10643115942028986" />
+        <entry key="app/src/main/res/layout/fragment_insulin.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_logbook.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_meal_details.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_meal_logs.xml" value="0.14" />

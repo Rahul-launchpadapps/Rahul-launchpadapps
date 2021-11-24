@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
@@ -25,7 +24,6 @@ import com.app.okra.utils.*
 import kotlinx.android.synthetic.main.fragment_save_medication.*
 import kotlinx.android.synthetic.main.layout_button.view.*
 import kotlinx.android.synthetic.main.layout_header.*
-import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
 import java.util.*
 
 class MedicationDetailsFragment : BaseFragment() {
