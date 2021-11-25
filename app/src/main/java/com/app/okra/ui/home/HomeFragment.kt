@@ -87,8 +87,8 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._stripeInfoLiveData.observe(viewLifecycleOwner) { it ->
             it.data?.let {
-                tvReceivedStrips.text = it.totalStripsReceived
-                tvLeftStrips.text = it.totalStripsLeft
+                tvTestLogged.text = it.totalTestLog
+                tvMealLogged.text = it.totalMealLog
             }
         }
 
@@ -196,11 +196,11 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         ivNotification.setOnClickListener {
             requireActivity().navigationOnly(NotificationActivity())
         }
-        tvReceivedStrips.setOnClickListener {
+        tvTestLogged.setOnClickListener {
             viewModel.stripeInfo()
         }
 
-        tvLeftStrips.setOnClickListener {
+        tvMealLogged.setOnClickListener {
             viewModel.stripeInfo()
         }
 

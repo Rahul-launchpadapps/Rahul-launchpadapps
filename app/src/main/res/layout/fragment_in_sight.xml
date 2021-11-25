@@ -50,7 +50,7 @@
         android:layout_marginTop="@dimen/dp_30"
         app:layout_constraintTop_toBottomOf="@id/tvInsights"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/guideline">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_blood_glucose"
@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_30"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/tvInsights"
         app:layout_constraintStart_toEndOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent">

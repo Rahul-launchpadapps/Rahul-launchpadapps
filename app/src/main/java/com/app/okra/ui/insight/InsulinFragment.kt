@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.app.okra.R
@@ -24,8 +23,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import kotlinx.android.synthetic.main.fragment_blood_glucose.*
-import kotlinx.android.synthetic.main.fragment_insulin.*
 import kotlinx.android.synthetic.main.fragment_insulin.chart
 import kotlinx.android.synthetic.main.fragment_insulin.iv_this_month
 import kotlinx.android.synthetic.main.fragment_insulin.iv_this_week
@@ -33,8 +30,6 @@ import kotlinx.android.synthetic.main.fragment_insulin.iv_today
 import kotlinx.android.synthetic.main.fragment_insulin.rl_this_month
 import kotlinx.android.synthetic.main.fragment_insulin.rl_this_week
 import kotlinx.android.synthetic.main.fragment_insulin.rl_today
-import kotlinx.android.synthetic.main.fragment_insulin.spinner
-import kotlinx.android.synthetic.main.fragment_insulin.tvSet
 import kotlinx.android.synthetic.main.fragment_insulin.tv_no_chart
 import kotlinx.android.synthetic.main.fragment_insulin.tv_this_month
 import kotlinx.android.synthetic.main.fragment_insulin.tv_this_week
@@ -44,12 +39,7 @@ class InsulinFragment : BaseFragmentWithoutNav() {
 
     private val type : String = AppConstants.INSULIN
     private var time : String = AppConstants.TODAY
-    private var testingTime : String = AppConstants.BEFORE_MEAL
-    private lateinit var customSpinnerAdapter: CustomSpinnerAdapter
 
-    private val timingList by lazy {
-        arrayListOf<String>()
-    }
     private val viewModel by lazy {
         ViewModelProvider(this,
             viewModelFactory {
@@ -75,11 +65,10 @@ class InsulinFragment : BaseFragmentWithoutNav() {
         getData()
         setObserver()
         setListener()
-        setAdapter()
     }
 
     private fun getData() {
-        viewModel.prepareRequest(type,testingTime,time)
+        viewModel.prepareRequest(type,AppConstants.BEFORE_MEAL,time)
         viewModel.getInsight()
     }
 
@@ -157,35 +146,6 @@ class InsulinFragment : BaseFragmentWithoutNav() {
             time = AppConstants.MONTH
             getData()
         }
-
-        tvSet.setOnClickListener {
-            spinner.performClick()
-        }
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                tvSet.text = timingList[p2]
-                testingTime = getMealTime(timingList[p2],false)
-                getData()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-        }
-
-    }
-
-    private fun setAdapter() {
-        timingList.add(AppConstants.BEFORE_MEAL_TEXT)
-        timingList.add(AppConstants.AFTER_MEAL_TEXT)
-        timingList.add(AppConstants.POST_MEDICINE_TEXT)
-        timingList.add(AppConstants.POST_WORKOUT_TEXT)
-        timingList.add(AppConstants.CONTROLE_SOLUTION_TEXT)
-
-        customSpinnerAdapter = CustomSpinnerAdapter(requireActivity(), timingList)
-        spinner.adapter = customSpinnerAdapter
-
-        var index = 0
-        tvSet.text = timingList[index]
     }
 
     private fun setCharts(graphInfo: ArrayList<Float>) {

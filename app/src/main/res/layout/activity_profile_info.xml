@@ -273,7 +273,7 @@
                     android:background="@mipmap/bg_edittext"
                     android:hint="@string/name"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:maxLength="50"
                     android:singleLine="true"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/bg_grey">
 
-
     <ImageView
         android:id="@+id/ivIcon"
         style="@style/textContainer"
@@ -20,8 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/app_name" />
-
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clNewHere"
@@ -63,6 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clHaveBeenBefore"
             android:layout_width="match_parent"

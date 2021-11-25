@@ -7,9 +7,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
+import com.app.okra.extension.setMaxLength
 import com.app.okra.models.MedicationData
 import com.app.okra.utils.AppConstants
 import com.app.okra.utils.dialog
@@ -21,6 +23,7 @@ class AddMedicationFragment : BaseFragment() {
 
     private var isMG:Boolean = true
     private var isPill:Boolean = false
+    private var isML:Boolean = false
     private var name:String = ""
 
     override fun getViewModel(): BaseViewModel? {
@@ -83,26 +86,48 @@ class AddMedicationFragment : BaseFragment() {
             val etUnit: EditText = findViewById(R.id.etUnit)
             val tvMG: TextView = findViewById(R.id.tvMG)
             val tvPill: TextView = findViewById(R.id.tvPill)
+            val tvML: TextView = findViewById(R.id.tvML)
 
             tvTitle.text = name
 
             tvMG.setOnClickListener {
                 isMG = true
                 isPill = false
+                isML = false
                 tvMG.background = resources.getDrawable(R.drawable.bg_button_green)
                 tvMG.setTextColor(ContextCompat.getColor(context,R.color.white))
                 tvPill.background = null
                 tvPill.setTextColor(ContextCompat.getColor(context,R.color.grey_3))
+                tvML.background = null
+                tvML.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
                 etUnit.setText("")
             }
 
             tvPill.setOnClickListener {
                 isPill = true
                 isMG = false
+                isML = false
                 tvPill.background = resources.getDrawable(R.drawable.bg_button_green)
                 tvPill.setTextColor(ContextCompat.getColor(context,R.color.white))
                 tvMG.background = null
                 tvMG.setTextColor(ContextCompat.getColor(context,R.color.grey_3))
+                tvML.background = null
+                tvML.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                etUnit.setText("")
+            }
+
+            tvML.setOnClickListener {
+                isML = true
+                isMG = false
+                isPill = false
+                etUnit.setMaxLength(3)
+                tvML.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
+                tvML.setTextColor(ContextCompat.getColor(context, R.color.white))
+                tvMG.background = null
+                tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
+                tvPill.background = null
+                tvPill.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
                 etUnit.setText("")
             }
 
@@ -134,8 +159,10 @@ class AddMedicationFragment : BaseFragment() {
         var unit = ""
         unit = if(isMG)
             AppConstants.MG
-        else
+        else if (isPill)
             AppConstants.PILLES
+        else
+            AppConstants.ML
 
         data.medicineName =name
         data.unit =unit

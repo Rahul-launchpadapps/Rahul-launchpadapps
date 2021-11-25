@@ -158,6 +158,7 @@ class AppConstants {
         const val BLOOD_GLUCOSE: String = "BLOOD_GLUCOSE"
         const val INSULIN: String = "INSULIN"
         const val MG = "MG"
+        const val ML = "ML"
         const val PILLES = "PILLES"
         const val NAME = "name"
         const val MEDICATION_TYPE = "medication_type"
