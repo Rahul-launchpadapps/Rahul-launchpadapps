@@ -42,3 +42,15 @@ fun Long.getFormattedDuration(forceShowHours: Boolean = false): String {
     sb.append(":").append(String.format(Locale.getDefault(), "%02d", seconds))
     return sb.toString()
 }
+
+
+fun hexToDecimalConversion(value :String?): String? {
+    return value?.let {
+        Integer.parseInt(it, 16).toString()
+    }
+}
+fun decimalToHexConversion(value :String?): String? {
+    return value?.let {
+        Integer.toHexString(it.toInt()).toString()
+    }
+}

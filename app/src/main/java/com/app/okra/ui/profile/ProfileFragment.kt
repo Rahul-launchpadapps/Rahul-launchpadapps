@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
-import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseFragmentWithoutNav
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
@@ -25,15 +24,13 @@ import com.app.okra.extension.navigationOnly
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.ItemModel
 import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordActivity
-import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
+import com.app.okra.ui.connected_devices.BluetoothActivity
 import com.app.okra.ui.profile.profile_details.ProfileInfoActivity
 import com.app.okra.ui.profile.profile_details.ProfileViewModel
 import com.app.okra.ui.my_account.setting.SettingsActivity
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
 import com.app.okra.ui.my_reminder.MyReminderActivity
 import com.app.okra.utils.*
-import com.google.firebase.dynamiclinks.DynamicLink
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -161,7 +158,7 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
                 requireActivity().navigationOnly(ProfileInfoActivity())
             }
             3 -> {
-                requireActivity().navigationOnly(ConnectedDeviceActivity())
+                requireActivity().navigationOnly(BluetoothActivity())
             }
             4 -> {
                 requireActivity().navigationOnly(SettingsActivity())

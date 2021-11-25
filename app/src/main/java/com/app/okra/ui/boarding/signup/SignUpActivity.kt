@@ -193,11 +193,18 @@ class SignUpActivity : BaseActivity(), View.OnClickListener, TextWatcher {
         when(p0?.id){
             R.id.btnCommon -> {
                 initFields()
+                val serialNo =
+                    if(etSerialNo.text.toString().trim().isNotEmpty()){
+                        etSerialNo.text.toString().trim()
+                    }else{
+                        null
+                    }
+
                 viewModel.setSignUpValue(
                     etName.text.toString().trim(),
                     etEmail.text.toString().trim(),
                     etPassword.text.toString().trim(),
-                    etSerialNo.text.toString().trim()
+                    serialNo
                 )
                 viewModel.signUp()
             }

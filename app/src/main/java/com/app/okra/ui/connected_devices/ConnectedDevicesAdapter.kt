@@ -5,14 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
-import com.app.okra.models.DevicesListModel
+import com.app.okra.bluetooth.data.BleDevice
 import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.row_connected_devices.view.*
-import kotlinx.android.synthetic.main.row_profile.view.*
-import kotlinx.android.synthetic.main.row_profile.view.tvOptionName
 
-class ConnectedDevicesAdapter (listener: Listeners.ItemClickListener,
-                               val devicesList : ArrayList<DevicesListModel>
+class ConnectedDevicesAdapter(
+    listener: Listeners.ItemClickListener,
+    val devicesList: ArrayList<BleDevice>
 ) : RecyclerView.Adapter<ConnectedDevicesAdapter.ItemViewHolder>() {
 
     var mlistener = listener
@@ -38,10 +37,21 @@ class ConnectedDevicesAdapter (listener: Listeners.ItemClickListener,
         }
     }
 
+    fun removeDevice(bleDevice: BleDevice?) {
+        devicesList.remove(bleDevice)
+        notifyDataSetChanged()
+    }
+
+    fun addDevice(bleDevice: BleDevice?) {
+        removeDevice(bleDevice)
+        devicesList.add(bleDevice!!)
+        notifyDataSetChanged()
+    }
+
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun onBind(data: DevicesListModel?, position: Int) {
+        fun onBind(data: BleDevice?, position: Int) {
             itemView.tvDeviceName.text = data?.name
-            itemView.tvDeviceAddress.text = data?.address
+            itemView.tvDeviceAddress.text = data?.mac
 
         }
     }

@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.app.okra.data.network.ApiManager
 import com.app.okra.data.network.ApiService
+import com.app.okra.utils.MessageConstants
 import com.app.okra.utils.navigateToLogin
 import com.app.okra.utils.showProgressDialog
 
@@ -44,11 +45,11 @@ abstract class BaseFragment :Fragment() {
     }
 
     protected fun setBaseObservers(
-            viewModel: BaseViewModel?,
-            lifecycleOwner: LifecycleOwner,
-            observeToast :Boolean = true,
-            observeError :Boolean = true,
-            observeProgress :Boolean = true,
+        viewModel: BaseViewModel?,
+        lifecycleOwner: LifecycleOwner,
+        observeToast :Boolean = true,
+        observeError :Boolean = true,
+        observeProgress :Boolean = true,
     ) {
         viewModel?.apply {
             if(observeError) {
@@ -108,10 +109,10 @@ abstract class BaseFragment :Fragment() {
     }
 
     open fun addFragment(layoutResId: Int, fragment: BaseFragment?, tag: String?) {
-            childFragmentManager.beginTransaction()
-                .replace(layoutResId, fragment!!, tag)
-                 .addToBackStack(tag)
-                .commit()
+        childFragmentManager.beginTransaction()
+            .replace(layoutResId, fragment!!, tag)
+            .addToBackStack(tag)
+            .commit()
     }
 
 
@@ -126,6 +127,10 @@ abstract class BaseFragment :Fragment() {
         }
     }
 
+    fun showToast_errorOccurred() {
+        showToast(MessageConstants.Errors.an_error_occurred)
+    }
+
     open fun hideProgressBar() {
         progressDialog?.let { if (it.isShowing) it.dismiss() }
     }
@@ -136,6 +141,13 @@ abstract class BaseFragment :Fragment() {
             return true
         }
         return false
+    }
+
+    fun executeOnMainThread(codeToExecute: () -> Any){
+        requireActivity().runOnUiThread {
+            codeToExecute.invoke()
+        }
+
     }
 
 }

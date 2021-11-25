@@ -1,33 +1,24 @@
 package com.app.okra.ui.connected_devices
 
-import android.bluetooth.BluetoothAdapter
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
-import com.app.okra.bluetooth.otherlib.BleManager
-import com.app.okra.bluetooth.otherlib.callback.BleScanCallback
-import com.app.okra.bluetooth.otherlib.data.BleDevice
+import com.app.okra.bluetooth.BleManager
+import com.app.okra.bluetooth.data.BleDevice
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.*
-import com.app.okra.models.DevicesListModel
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
 import com.app.okra.utils.*
 import com.app.okra.utils.bleValidater.BLEValidaterListener
 import com.app.okra.utils.bleValidater.BleValidate
 import com.app.okra.utils.bleValidater.GPSContract
-import kotlinx.android.synthetic.main.activity_add_meal.*
 import kotlinx.android.synthetic.main.fragment_connected_devices.*
 
 
@@ -37,7 +28,7 @@ class ConnectedDevicesFragment : BaseFragment(),
 
     private val REQUEST_CODE_OPEN_GPS = 1
     private lateinit var devicesAdapter: ConnectedDevicesAdapter
-    private val devicesList = ArrayList<DevicesListModel>()
+    private val devicesList = ArrayList<BleDevice>()
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory {
@@ -48,7 +39,7 @@ class ConnectedDevicesFragment : BaseFragment(),
 
     private val bleManager by lazy {
         // Sets up the bluetooth controller.
-        BleManager.getInstance()
+        BleManager.instance
     }
 
     private val bleValidate by lazy {
@@ -123,7 +114,7 @@ class ConnectedDevicesFragment : BaseFragment(),
                 ).apply {
                     putExtra(
                         AppConstants.SCREEN_TYPE,
-                        ConnectedDeviceActivity::class.java.simpleName
+                        BluetoothActivity::class.java.simpleName
                     )
                 })
             }
@@ -132,7 +123,7 @@ class ConnectedDevicesFragment : BaseFragment(),
 
     override fun onSelect(o: Any?, o1: Any?) {
         val pos = o as Int
-        val type = o1 as DevicesListModel
+        val type = o1 as BleDevice
 
     }
 

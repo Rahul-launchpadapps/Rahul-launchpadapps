@@ -19,5 +19,20 @@
         android:id="@+id/blueToothDeviceListFragment"
         android:name="com.app.okra.ui.connected_devices.BluetoothDevicesListFragment"
         android:label="BluetoothDevicesListFragment"
-        tools:layout="@layout/fragment_bluetooth_devices_list"/>
+        tools:layout="@layout/fragment_bluetooth_devices_list">
+        <action
+            android:id="@+id/action_blueToothDeviceListFragment_to_connectionStatusFragment"
+            app:destination="@id/connectionStatusFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/connectionStatusFragment"
+        android:name="com.app.okra.ui.connected_devices.ConnectionStatusFragment"
+        android:label="ConnectionStatusFragment"
+        tools:layout="@layout/fragment_connection_status">
+        <action
+            android:id="@+id/action_connectionStatusFragment_to_connectedDevicesFragment"
+            app:destination="@id/connectedDevicesFragment"
+            app:popUpTo="@id/connectedDevicesFragment"
+           />
+    </fragment>
 </navigation>

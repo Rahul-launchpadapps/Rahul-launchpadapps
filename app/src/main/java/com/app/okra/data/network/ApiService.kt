@@ -75,6 +75,9 @@ interface ApiService {
    @DELETE("v1/test")
     suspend fun deleteTest(@Query("testId")  id:String): Response<BaseResponse<Any>>
 
+   @POST("v1/test")
+    suspend fun addTest(@Body  testData :TestAddRequest): Response<BaseResponse<Any>>
+
     @DELETE("v1/meals")
     suspend fun deleteMeal(@Query("mealsId")  id:String): Response<BaseResponse<Any>>
 
@@ -113,6 +116,9 @@ interface ApiService {
 
     @GET("v1/user/device-list")
     suspend fun getPreviouslyConnectedDevices(): Response<BaseResponse<Any>>
+
+    @POST("v1/user/device")
+    suspend fun getTestDataCount(@Body deviceDataRequest: DeviceDataRequest): Response<BaseResponse<DeviceDataCount>>
 
     @GET("v1/user/notification")
     suspend fun notification(@Query("pageNo")  page:Int, @Query("limit") limit:Int): Response<BaseResponse<NotificationResponse>>

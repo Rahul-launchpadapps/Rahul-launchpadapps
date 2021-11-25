@@ -13,9 +13,9 @@ import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
 import com.app.okra.utils.DateFormatter
 import com.app.okra.utils.getDatePicker
 import com.app.okra.utils.getMinDateForReports
-import java.util.*
 import kotlinx.android.synthetic.main.activity_reports.*
 import kotlinx.android.synthetic.main.layout_header.*
+import java.util.*
 
 
 class ReportsActivity : BaseActivity(), AdapterView.OnItemSelectedListener {

@@ -7,6 +7,7 @@ class AppConstants {
     class Pref_Key {
         companion object {
 
+            const val DEVICES_DATA_COUNT = "devices_data_count"
             const val USER_TYPE = "userType"
             const val ACCESS_TOKEN = "accessToken"
             const val IS_APPROVED = "isApproved"
@@ -109,6 +110,7 @@ class AppConstants {
 
 
     companion object {
+        const val BLE_SCAN_TIMEOUT = 10000L
         const val DATA_LIMIT = 100
         const val DATA = "data"
         const val SCREEN_TYPE = "screen_type"
@@ -130,6 +132,7 @@ class AppConstants {
         const val BEFORE_MEAL = "BEFORE_MEAL"
         const val CONTROLE_SOLUTION_TEXT = "Control Solution"
         const val CONTROLE_SOLUTION = "CONTROLE_SOLUTION"
+        const val NO_USE = "NO_USE"
         const val POST_MEDICINE_TEXT = "Post Medicine"
         const val POST_MEDICINE = "POST_MEDICINE"
         const val POST_WORKOUT_TEXT = "Post Workout"
@@ -176,6 +179,5 @@ class AppConstants {
         const val DATE_FORMAT_3 = "yyyy-MM-dd"
         const val DATE_FORMAT_4 = "MMM dd YYYY"
     }
-
 
 }

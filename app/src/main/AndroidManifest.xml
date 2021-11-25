@@ -147,7 +147,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.connected_devices.ConnectedDeviceActivity"
+            android:name=".ui.connected_devices.BluetoothActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity

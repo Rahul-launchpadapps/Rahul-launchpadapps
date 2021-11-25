@@ -3,6 +3,10 @@ package com.app.okra.models
 import android.os.Parcel
 import android.os.Parcelable
 
+class TestAddRequest(
+        var testData: ArrayList<BLETestData>?= null
+)
+
 class TestUpdateRequest(
         var testId: String?= null,
         var bloodGlucose: Int?=null,

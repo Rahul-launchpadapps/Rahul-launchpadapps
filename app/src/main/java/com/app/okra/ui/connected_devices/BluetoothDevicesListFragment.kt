@@ -1,6 +1,6 @@
 package com.app.okra.ui.connected_devices
 
-import android.app.Application
+import android.bluetooth.BluetoothGatt
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
@@ -12,36 +12,41 @@ import com.app.okra.OkraApplication
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
-import com.app.okra.bluetooth.otherlib.BleManager
-import com.app.okra.bluetooth.otherlib.callback.BleScanCallback
-import com.app.okra.bluetooth.otherlib.data.BleDevice
+import com.app.okra.bluetooth.BleManager
+import com.app.okra.bluetooth.callback.BleGattCallback
+import com.app.okra.bluetooth.callback.BleScanCallback
+import com.app.okra.bluetooth.data.BleDevice
+import com.app.okra.bluetooth.data.BleScanState
+import com.app.okra.bluetooth.exception.BleException
+import com.app.okra.bluetooth.scan.BleScanRuleConfig
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
-import com.app.okra.models.DevicesListModel
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.MessageConstants
-import com.app.okra.utils.PermissionUtils
+import com.app.okra.utils.*
 import com.app.okra.utils.bleValidater.BLEValidaterListener
 import com.app.okra.utils.bleValidater.BleValidate
-import com.app.okra.utils.showCustomAlertDialog
 import kotlinx.android.synthetic.main.fragment_bluetooth_devices_list.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class BluetoothDevicesListFragment : BaseFragment(),
-        Listeners.ItemClickListener,
-    PermissionUtils.IGetPermissionListener, BLEValidaterListener {
+    Listeners.ItemClickListener,
+    PermissionUtils.IGetPermissionListener,
+    BLEValidaterListener,
+    View.OnClickListener {
 
+    private lateinit var deviceData: BleDevice
     private lateinit var devicesAdapter: ConnectedDevicesAdapter
-    private val devicesList = ArrayList<DevicesListModel>()
+    private val devicesList = ArrayList<BleDevice>()
     private val mPermissionUtils by lazy {
         PermissionUtils(this)
     }
 
     private val bleManager by lazy {
         // Sets up the bluetooth controller.
-       BleManager.getInstance()
+        BleManager.instance
     }
 
     private val bleValidate by lazy {
@@ -78,26 +83,12 @@ class BluetoothDevicesListFragment : BaseFragment(),
         setViews()
         setObserver()
         setListener()
-        BleManager.getInstance().init(OkraApplication.getApplicationInstance())
-        BleManager.getInstance()
-            .enableLog(true)
-            .setReConnectCount(1, 5000)
-            .setConnectOverTime(20000).operateTimeout = 5000
+        BleManager.instance.init(OkraApplication.getApplicationInstance())
+        BleManager.instance.enableLog(true)
+            .setReConnectCount(1, AppConstants.BLE_SCAN_TIMEOUT)
+            .setConnectOverTime(20000).operateTimeout
 
         bleValidate.checkPermissions()
-       // broadCastDelegator = BroadcastReceiverDelegator(requireActivity(), this)
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), 123)
-            }else{
-                checkForBluetooth()
-
-            }
-        }else{
-            checkForBluetooth()
-
-        }*/
     }
 
     private fun setAdapter() {
@@ -107,26 +98,36 @@ class BluetoothDevicesListFragment : BaseFragment(),
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeToast = false)
+        viewModel._dataCountLiveData.observe(viewLifecycleOwner){ it ->
+            it.data?.let{
+                it.deviceId = deviceData.deviceKey
+
+                // updated test count into local list
+                viewModel.updateDeviceDataList(it)
+
+                // fetching total test count from BLE Device
+                navController.navigate(R.id.action_blueToothDeviceListFragment_to_connectionStatusFragment)
+            }
+        }
     }
 
     private fun setListener() {
+
 
     }
 
     private fun setViews() {
         llDiscovering.beVisible()
         llList.beGone()
+        (activity as BluetoothActivity).setDeleteButtonVisibility(false)
+        (activity as BluetoothActivity).setHeaderButtonVisibility(true)
+        (activity as BluetoothActivity).setHeaderButtonText(getString(R.string.scan))
     }
 
 
     private fun addDeviceInList(device: BleDevice) {
-        if (!device.name.isNullOrEmpty()) {
-            devicesList.add(DevicesListModel(name = device.name, address = device.mac))
-        }
-
+        devicesList.add(device)
     }
-
-
 
     override fun onBluetoothDisable(msg: String) {
         showCustomAlertDialog(
@@ -171,7 +172,16 @@ class BluetoothDevicesListFragment : BaseFragment(),
     }
 
     override fun onPermissionsGiven(data: Int) {
+        setScanRule()
         startScan()
+    }
+
+    private fun setScanRule() {
+        val scanRuleConfig: BleScanRuleConfig = BleScanRuleConfig.Builder()
+            .setAutoConnect(false)
+            .setScanTimeOut(AppConstants.BLE_SCAN_TIMEOUT)
+            .build()
+        BleManager.instance.initScanRule(scanRuleConfig)
     }
 
     override fun onPermissionsDeny(data: Int) {
@@ -196,12 +206,30 @@ class BluetoothDevicesListFragment : BaseFragment(),
 
     }
 
+    override fun onStop() {
+        super.onStop()
+          println(":::: BleDeviceList: OnStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println(":::: BleDeviceList: onDestroy")
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        println(":::: BleDeviceList: onDestroyView")
+    }
+
     private fun startScan() {
-        BleManager.getInstance().scan(object : BleScanCallback() {
+        BleManager.instance.scan(object : BleScanCallback() {
             override fun onScanStarted(success: Boolean) {
-                devicesList.clear()
-                devicesAdapter.notifyDataSetChanged()
-                manageViewVisibility(true)
+
+                if (success) {
+                    (activity as BluetoothActivity).setHeaderButtonVisibility(false)
+                    devicesList.clear()
+                    devicesAdapter.notifyDataSetChanged()
+                    manageViewVisibility(true)
+                }
             }
 
             override fun onLeScan(bleDevice: BleDevice?) {
@@ -209,13 +237,15 @@ class BluetoothDevicesListFragment : BaseFragment(),
             }
 
             override fun onScanning(bleDevice: BleDevice?) {
-                println(":::: Device Found")
+              //  println(":::: Device Found: ${bleDevice?.name}")
                 addDeviceInList(bleDevice!!)
                 devicesAdapter.notifyDataSetChanged()
-                manageViewVisibility(false)
+                manageViewVisibility(true)
             }
 
             override fun onScanFinished(scanResultList: List<BleDevice?>?) {
+                (activity as BluetoothActivity).setHeaderButtonVisibility(true)
+                manageViewVisibility(false)
                 showToast("Scan finished")
                 /* img_loading.clearAnimation()
                 img_loading.setVisibility(View.INVISIBLE)
@@ -226,8 +256,13 @@ class BluetoothDevicesListFragment : BaseFragment(),
 
     private fun manageViewVisibility(isDiscovering: Boolean) {
         if(isDiscovering){
-            llDiscovering.beVisible()
-            llList.beGone()
+            if(devicesList.isNotEmpty()) {
+                llDiscovering.beGone()
+                llList.beVisible()
+            }else{
+                llDiscovering.beVisible()
+                llList.beGone()
+            }
         }else{
             llDiscovering.beGone()
             llList.beVisible()
@@ -243,12 +278,112 @@ class BluetoothDevicesListFragment : BaseFragment(),
     }
 
     override fun onSelect(o: Any?, o1: Any?) {
+        val pos = o as Int
+         deviceData = o1 as BleDevice
+
+        var needCancelButton  = false
+        val needOkButtonText :String
+
+        val dialogText = if(deviceData.name!=null && deviceData.name!!.toLowerCase(Locale.ROOT)
+                .contains("okra")){
+            needCancelButton = true
+            needOkButtonText = getString(R.string.connect)
+            MessageConstants.Messages.do_you_want_to
+        }else{
+            needOkButtonText = getString(R.string.ok)
+            MessageConstants.Messages.you_can_only_pair
+        }
+
+        showAlertDialog(requireContext(),object : Listeners.DialogListener{
+            override fun onOkClick(dialog: DialogInterface?) {
+                if(deviceData.name!=null && deviceData.name!!.toLowerCase(Locale.ROOT).contains("okra")){
+                    if (!BleManager.instance.isConnected(deviceData)) {
+                        BleManager.instance.cancelScan()
+                        connect(deviceData)
+                    }
+                }
+                dialog?.dismiss()
+            }
+
+            override fun onCancelClick(dialog: DialogInterface?) {
+                dialog?.dismiss()
+            }
+
+        }, dialogText,
+            needCancelButton,
+            needOkButtonText,
+            getString(R.string.cancel)
+        )
 
     }
 
-    override fun onUnSelect(o: Any?, o1: Any?) {
+    private fun connect(deviceData: BleDevice) {
+        BleManager.instance.connect(deviceData, object : BleGattCallback() {
+            override fun onStartConnect() {
+                (activity as BluetoothActivity).setHeaderButtonVisibility(false)
+                showProgressBar()
+            }
+
+            override fun onConnectFail(bleDevice: BleDevice?, exception: BleException?) {
+                (activity as BluetoothActivity).setHeaderButtonVisibility(true)
+                hideProgressBar()
+                showToast(getString(R.string.connect_fail))
+            }
+
+            override fun onConnectSuccess(
+                bleDevice: BleDevice?,
+                gatt: BluetoothGatt?,
+                status: Int
+            ) {
+                showToast("Connected")
+                hideProgressBar()
+
+                if(bleDevice!=null) {
+                    (activity as BluetoothActivity).connectedBleDevice = bleDevice
+
+                    if ((activity as BluetoothActivity).checkIfDeviceCountExist(bleDevice)) {
+                        // Show device connected view and get total count from BLE device
+
+                        navController.navigate(R.id.action_blueToothDeviceListFragment_to_connectionStatusFragment)
+                    }else{
+                        // Hit api, get count from it and then get total count from BLE device
+
+                        viewModel.setDeviceDataRequest(bleDevice.name, bleDevice.mac)
+                        viewModel.getTestDataCountFromApi()
+
+                        /*  (activity as BluetoothActivity).connectedBleDevice = bleDevice
+                          navController.navigate(R.id.action_blueToothDeviceListFragment_to_connectionStatusFragment)
+                        */
+                    }
+                }else{
+                    showToast(MessageConstants.Errors.an_error_occurred)
+                }
+            }
+
+            override fun onDisConnected(
+                isActiveDisConnected: Boolean,
+                bleDevice: BleDevice?,
+                gatt: BluetoothGatt?,
+                status: Int
+            ) {
+                /*if((activity as BluetoothActivity).getCurrentLoadedFragment() is ConnectionStatusFragment){
+                    navController.popBackStack()
+                }*/
+
+                hideProgressBar()
+                devicesAdapter.removeDevice(bleDevice)
+
+                if (isActiveDisConnected) {
+                    showToast(getString(R.string.active_disconnected))
+                } else {
+                    showToast(getString(R.string.disconnected))
+                }
+            }
+        })
 
     }
+
+    override fun onUnSelect(o: Any?, o1: Any?) { }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -257,6 +392,27 @@ class BluetoothDevicesListFragment : BaseFragment(),
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         startScan()
+    }
+
+    override fun onClick(p0: View?) {
+        when(p0?.id){
+            R.id.btnSave -> {
+                checkAndScan()
+            }
+        }
+    }
+
+    fun checkAndScan() {
+        if (checkIfAlreadyScanning()) {
+            bleValidate.checkPermissions()
+        } else {
+            showToast(MessageConstants.Messages.already_scanning)
+        }
+
+    }
+
+    private fun checkIfAlreadyScanning(): Boolean {
+        return BleManager.instance.scanSate ==  BleScanState.STATE_IDLE
     }
 
 

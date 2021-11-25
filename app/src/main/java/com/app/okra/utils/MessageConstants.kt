@@ -122,6 +122,10 @@ class MessageConstants {
     class Messages {
 
         companion object {
+            val test_already_added = "Test already added."
+            val test_fetched_successfully = "Test fetched successfully"
+            val you_can_only_pair = "You can only pair the Okra pro devices with this application."
+            const val do_you_want_to = "Do you want to connect to this device?"
             const val you_cant_add_more= "You can't add more than 10 images."
             const val no_serving_available = "No serving available."
             const val please_enable_your_bluetooth=  "Please enable your bluetooth and retry."
@@ -141,6 +145,7 @@ class MessageConstants {
             const val exit_app_message = "Are you sure, you want to exit the app?"
             const val delete_group_message = "Are you sure, you want to delete this group?"
             const val start_activity_message = "Are you sure, you want to start this activity?"
+            const val already_scanning = "Already scanning"
             const val stop_activity_message = "Are you sure, you want to stop this activity?"
             const val delete_activity_message = "Are you sure, you want to delete this activity?"
             const val decline_request_message = "Are you sure, you want to decline this activity?"

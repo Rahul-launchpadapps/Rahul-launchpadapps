@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.app.okra.BuildConfig
 import com.app.okra.R
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.extension.beGone
@@ -259,17 +260,23 @@ fun getISOFromDateAndTime(year: Int?, month: Int?, day: Int?, hour: Int, min: In
     return result
 }
 
-fun getISOFromDateAndTime_inString(date: Date?): String? {
+fun getISOFromDate(date: String, currentFormat: String?): String? {
+
+    val formatter: DateFormat = SimpleDateFormat(currentFormat, Locale.getDefault())
+    val dateInDateFormat =  formatter.parse(date)
+
     val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
     } else {
         SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
     }
+    formatISO.timeZone = TimeZone.getTimeZone("UTC")
+
     var result = ""
 
-    if (date != null) {
+    if(dateInDateFormat!=null) {
         try {
-            result = formatISO.format(date)
+            result = formatISO.format(dateInDateFormat)
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -283,6 +290,7 @@ fun getISOFromDateAndTime_inDate(date: Date?): Date? {
     } else {
         SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
     }
+    formatISO.timeZone = TimeZone.getTimeZone("UTC")
     var result: Date? = null
 
     if (date != null) {
@@ -650,8 +658,7 @@ fun getDifferentInfoFromDate_String(
     initFormat: String?,
     formatYouWant: String
 ): String? {
-    var month = "";
-    var date: Date? = null
+    val date: Date?
     var initialFormat: String? = initFormat
 
     if (initialFormat == null || initialFormat.isEmpty()) {
@@ -1029,7 +1036,9 @@ fun convertUtc2Local(utcTime: String?,date_formate: String?): String? {
         }
         val localFormatter = SimpleDateFormat(date_formate, Locale.getDefault())
         localFormatter.timeZone = TimeZone.getDefault()
-        assert(gpsUTCDate != null)
+        if (BuildConfig.DEBUG && gpsUTCDate == null) {
+            error("Assertion failed")
+        }
         time = localFormatter.format(gpsUTCDate!!.time)
         val c = Calendar.getInstance()
         val currentDate = localFormatter.format(c.time)
@@ -1042,19 +1051,16 @@ fun convertUtc2Local(utcTime: String?,date_formate: String?): String? {
 }
 
 fun getDateFromPattern(inputPattern: String?, date: String?): Date? {
-    val utcDateFormat: SimpleDateFormat = SimpleDateFormat(inputPattern, Locale.US)
+    val utcDateFormat = SimpleDateFormat(inputPattern, Locale.US)
     var localDate: Date? = null
-    try {
-        localDate = SimpleDateFormat(
-            inputPattern,
-            Locale.US
-        ).parse(date) // Local Date Format (By default)
+    return try {
+        localDate = SimpleDateFormat(inputPattern, Locale.US).parse(date) // Local Date Format (By default)
         utcDateFormat.timeZone = TimeZone.getTimeZone("UTC")
         utcDateFormat.format(localDate)
-        return localDate
+        localDate
     } catch (e: ParseException) {
         e.printStackTrace()
-        return null
+        null
     }
 }
 
@@ -1151,10 +1157,10 @@ fun getDatePicker(
 ): DatePickerDialog {
     val calendar = Calendar.getInstance()
     return DatePickerDialog(context, { _, year, month, dayOfMonth ->
-            calendar.set(year, month, dayOfMonth)
-            val longTime = calendar.timeInMillis
-            dateSelected(longTime, isEndDate)
-        },
+        calendar.set(year, month, dayOfMonth)
+        val longTime = calendar.timeInMillis
+        dateSelected(longTime, isEndDate)
+    },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)
@@ -1170,10 +1176,10 @@ fun getDatePicker(
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = setDateInMillis
     return DatePickerDialog(context, { _, year, month, dayOfMonth ->
-            calendar.set(year, month, dayOfMonth)
-            val longTime = calendar.timeInMillis
-            dateSelected(longTime, isEndDate)
-        },
+        calendar.set(year, month, dayOfMonth)
+        val longTime = calendar.timeInMillis
+        dateSelected(longTime, isEndDate)
+    },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)

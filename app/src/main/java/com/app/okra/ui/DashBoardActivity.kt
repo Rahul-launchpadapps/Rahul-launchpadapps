@@ -10,7 +10,7 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.add_medication.AddMedicationActivity
-import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
+import com.app.okra.ui.connected_devices.BluetoothActivity
 import com.app.okra.ui.home.HomeViewPagerAdapter
 import com.app.okra.ui.home.HomeFragment
 import com.app.okra.ui.insight.InSightFragment
@@ -110,7 +110,7 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
 
     override fun onFirstOptionClick(dialog: DialogInterface?) {
         if(PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_VERIFIED)) {
-            startActivity(Intent(this, ConnectedDeviceActivity::class.java))
+            startActivity(Intent(this, BluetoothActivity::class.java))
         }else{
             showAlertDialog(
                 this,

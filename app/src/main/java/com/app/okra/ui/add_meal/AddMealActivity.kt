@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +25,6 @@ import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
 import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_2
-import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_3
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
@@ -317,8 +315,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
     }
 
 
-    override fun setImagePath(uri: Uri) {
-        val file = File(uri.path)
+    override fun setImagePath(path: Uri) {
+        val file = File(path.path!!)
 
         if (file.exists()) {
             openCropper(file.toUri())

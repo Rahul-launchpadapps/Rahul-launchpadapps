@@ -199,7 +199,7 @@ to the Okra Terms &amp; Conditions</string>
     <string name="subscribe">Subscribe</string>
     <string name="billed_yearly">Billed yearly</string>
     <string name="cancel_anytime">Cancel anytime</string>
-    <string name="cancel_subscription">To buy the subscription plan you need to click on the “Subscibe” option &amp; you will be redirected to the Okra web page foe the further process. Payment is to be handled by your shopify account. The subscription will get automatically auto renewed unless it is canceled atleast 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage &amp; cancel the subscriptions by going to the shopify account settings after purchase.</string>
+    <string name="cancel_subscription">To buy the subscription plan you need to click on the “Subscribe” option &amp; you will be redirected to the Okra web page foe the further process. Payment is to be handled by your shopify account. The subscription will get automatically auto renewed unless it is canceled atleast 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage &amp; cancel the subscriptions by going to the shopify account settings after purchase.</string>
     <string name="hello">Hello,</string>
     <string name="total_strips_received">Total Strips\nReceived</string>
     <string name="total_strips_left">Total Strips\nLeft</string>
@@ -319,6 +319,9 @@ to the Okra Terms &amp; Conditions</string>
     <string name="share">Share</string>
     <string name="feeling_after_medicine">How to feel after medicine</string>
     <string name="images">Images</string>
+    <string name="scan">Scan</string>
+    <string name="device_connected_successfully">"Device connected successfully "</string>
+    <string name="retrieving_data">"Retrieving data from the okra device "</string>
 
 
 </resources>

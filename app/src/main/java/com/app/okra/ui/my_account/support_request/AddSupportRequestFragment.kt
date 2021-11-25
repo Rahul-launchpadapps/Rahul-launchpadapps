@@ -8,20 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.SupportRequestRepoImpl
 import com.app.okra.extension.*
-import com.app.okra.models.ItemModel
-import com.app.okra.models.SupportResponse
 import com.app.okra.ui.Message2Activity
-import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordViewModel
-import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
-import com.app.okra.utils.AppConstants
+import com.app.okra.ui.connected_devices.BluetoothActivity
 import com.app.okra.utils.AppConstants.Companion.SCREEN_TYPE
-import com.app.okra.utils.Listeners
 import kotlinx.android.synthetic.main.fragment_add_support_request.*
 import kotlinx.android.synthetic.main.layout_button.*
 
@@ -80,7 +74,7 @@ class AddSupportRequestFragment : BaseFragment(),
                     putExtra(SCREEN_TYPE, AddSupportRequestFragment::class.java.simpleName)
                 })
 
-                if(!screenType.isNullOrEmpty() && screenType == ConnectedDeviceActivity::class.java.simpleName){
+                if(!screenType.isNullOrEmpty() && screenType == BluetoothActivity::class.java.simpleName){
                     requireActivity().finish()
                 }else {
                     Handler(Looper.getMainLooper()).postDelayed({

@@ -5,11 +5,14 @@ import android.content.DialogInterface
 
 class Listeners {
 
+    interface BLEDataListener {
+        fun onDataReceived(data: ByteArray?)
+    }
+
     interface CommonListener {
         fun onSuccess(o: Any?, o1: Any?)
         fun onFailure(o: Any?)
     }
-
 
 
     interface EventClickListener{

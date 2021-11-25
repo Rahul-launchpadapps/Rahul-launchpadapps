@@ -7,7 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
-import com.app.okra.ui.connected_devices.ConnectedDeviceActivity
+import com.app.okra.ui.connected_devices.BluetoothActivity
 import com.app.okra.utils.AppConstants
 import kotlinx.android.synthetic.main.layout_header.*
 
@@ -48,7 +48,7 @@ class SupportRequestActivity : BaseActivity(), View.OnClickListener {
     private fun setViews() {
         tvTitle.text = getString(R.string.title_my_support_request)
 
-        if(screenType == ConnectedDeviceActivity::class.java.simpleName){
+        if(screenType == BluetoothActivity::class.java.simpleName){
            val graph = navController.navInflater.inflate(R.navigation.nav_graph_support)
 
             graph.startDestination = R.id.addSupportRequestFragment
