@@ -14,19 +14,20 @@ import com.app.okra.bluetooth.BleManager
 import com.app.okra.bluetooth.data.BleDevice
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.*
+import com.app.okra.models.BLEDeviceListData
 import com.app.okra.ui.my_account.support_request.SupportRequestActivity
 import com.app.okra.utils.*
 import com.app.okra.utils.bleValidater.BLEValidaterListener
 import com.app.okra.utils.bleValidater.BleValidate
 import com.app.okra.utils.bleValidater.GPSContract
 import kotlinx.android.synthetic.main.fragment_connected_devices.*
+import kotlinx.android.synthetic.main.layout_header.*
 
 
 class ConnectedDevicesFragment : BaseFragment(),
     View.OnClickListener,
     Listeners.ItemClickListener, BLEValidaterListener {
 
-    private val REQUEST_CODE_OPEN_GPS = 1
     private lateinit var devicesAdapter: ConnectedDevicesAdapter
     private val devicesList = ArrayList<BleDevice>()
 
@@ -63,6 +64,7 @@ class ConnectedDevicesFragment : BaseFragment(),
         setObserver()
         setListener()
         getPreviousDevices()
+        println(":::: Again")
     }
 
     private fun getPreviousDevices() {
@@ -72,8 +74,16 @@ class ConnectedDevicesFragment : BaseFragment(),
     private fun setAdapter() {
         devicesAdapter = ConnectedDevicesAdapter(this, devicesList)
         rv_connected_devices.adapter = devicesAdapter
+        rv_connected_devices.isNestedScrollingEnabled = true
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println(":::: ConnectedDeviceFrag: onDestroy")
+        hideProgressBar()
+
+    }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeToast = false)
@@ -81,17 +91,30 @@ class ConnectedDevicesFragment : BaseFragment(),
         viewModel._connectedDevicesLiveData.observe(viewLifecycleOwner){
             it.data?.let{
                 devicesList.clear()
-                //  devicesList.addAll(it)
+                prepareDataForAdapter(it)
                 devicesAdapter.notifyDataSetChanged()
             }
             manageViewVisibility()
         }
     }
 
+    private fun prepareDataForAdapter(arrayList: ArrayList<BLEDeviceListData>) {
+        if(!arrayList.isNullOrEmpty()){
+            for(deviceData in arrayList){
+                val bleDevice  = BleDevice()
+                bleDevice.localName = deviceData.deviceName
+                bleDevice.localDeviceId = deviceData.deviceUUID
+                devicesList.add(bleDevice)
+            }
+        }
+    }
+
     private fun manageViewVisibility() {
         if(devicesList.isNullOrEmpty()){
+            tvConnectedDevices.beGone()
             rv_connected_devices.beGone()
         }else{
+            tvConnectedDevices.beVisible()
             rv_connected_devices.beVisible()
         }
     }
@@ -121,9 +144,15 @@ class ConnectedDevicesFragment : BaseFragment(),
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as BluetoothActivity).setHeaderButtonVisibility(false)
+    }
+
     override fun onSelect(o: Any?, o1: Any?) {
         val pos = o as Int
-        val type = o1 as BleDevice
+        val bleDevice = o1 as BleDevice
+        navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
 
     }
 
@@ -131,8 +160,8 @@ class ConnectedDevicesFragment : BaseFragment(),
 
 
     override fun onPermissionsGiven(data: Int) {
-            //startScan()
-            navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
+        //startScan()
+        navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
 
     }
 
@@ -210,7 +239,7 @@ class ConnectedDevicesFragment : BaseFragment(),
 
     private val activityForResult = registerForActivityResult(GPSContract()){ result ->
         if(result!=null && result){
-             navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
+            navController.navigate(R.id.action_connectedDevicesFragment_to_discoveringFragment)
         }
     }
 

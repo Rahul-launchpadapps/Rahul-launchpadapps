@@ -60,40 +60,12 @@
                     android:layout_height="match_parent"
                     android:padding="@dimen/dp_20">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/axiforma_medium"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:text="@string/date"
-                        android:textColor="@color/black_2"
-                        android:textSize="@dimen/sp_16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvDateValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/axiforma_regular"
-                        android:gravity="center"
-                        android:textColor="@color/grey_4"
-                        android:textSize="@dimen/sp_14"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Apr 15 2021" />
-
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvBloodGlucose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dp_15"
                         android:ellipsize="end"
                         android:fontFamily="@font/axiforma_medium"
                         android:gravity="center"
@@ -102,78 +74,21 @@
                         android:textColor="@color/black_2"
                         android:textSize="@dimen/sp_16"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvDate" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvBloodGlucoseValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_15"
                         android:fontFamily="@font/axiforma_regular"
                         android:gravity="center"
                         android:textColor="@color/grey_4"
                         android:textSize="@dimen/sp_14"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvDate"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="114 mg/dL" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvBloodPressure"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/axiforma_medium"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:text="@string/blood_pressure"
-                        android:textColor="@color/black_2"
-                        android:textSize="@dimen/sp_16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBloodGlucose" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvBloodPressureValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:fontFamily="@font/axiforma_regular"
-                        android:gravity="center"
-                        android:textColor="@color/grey_4"
-                        android:textSize="@dimen/sp_14"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBloodGlucose"
-                        tools:text="84 mmHg" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvInsulin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/axiforma_medium"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:text="@string/insulin_carb"
-                        android:textColor="@color/black_2"
-                        android:textSize="@dimen/sp_16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBloodPressure" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvInsulinValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:fontFamily="@font/axiforma_regular"
-                        android:gravity="center"
-                        android:textColor="@color/grey_4"
-                        android:textSize="@dimen/sp_14"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBloodPressure"
-                        tools:text="4 pMol/L" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvDeviceId"
@@ -189,7 +104,7 @@
                         android:textColor="@color/black_2"
                         android:textSize="@dimen/sp_16"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvInsulin" />
+                        app:layout_constraintTop_toBottomOf="@id/tvBloodGlucose" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvDeviceIdValue"
@@ -201,7 +116,7 @@
                         android:textColor="@color/grey_4"
                         android:textSize="@dimen/sp_14"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvInsulin"
+                        app:layout_constraintTop_toBottomOf="@id/tvBloodGlucose"
                         tools:text="64611512" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -237,6 +152,59 @@
             </androidx.cardview.widget.CardView>
 
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDateHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/date"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_details" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDate"
+                style="@style/edit_text_style"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:background="@mipmap/bg_edittext"
+                android:drawableEnd="@mipmap/calendar"
+                android:drawablePadding="@dimen/dp_5"
+                android:gravity="center_vertical"
+                android:hint="@string/date"
+                android:singleLine="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDateHeading" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTestingTimeHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/testing_time"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
             <FrameLayout
                 android:id="@+id/clSpinnerTiming"
                 style="@style/edit_text_style"
@@ -246,7 +214,7 @@
                 android:background="@mipmap/bg_edittext"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cv_details">
+                app:layout_constraintTop_toBottomOf="@id/tvTestingTimeHeading">
 
                 <Spinner
                     android:id="@+id/spinner"

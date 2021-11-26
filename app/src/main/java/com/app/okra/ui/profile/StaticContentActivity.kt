@@ -13,6 +13,7 @@ import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.ProfileRepoImpl
+import com.app.okra.extension.beInvisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.ItemModel
 import com.app.okra.ui.profile.ItemsAdapter
@@ -98,6 +99,7 @@ class StaticContentActivity : BaseActivity(),
 
 
     private fun setViews() {
+        ivDelete.beInvisible()
         tvTitle.text =
                 when(type){
                     TERMS_AND_CONDITION ->  getString(R.string.title_terms_and_condition)

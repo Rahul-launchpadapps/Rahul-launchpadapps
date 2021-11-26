@@ -8,7 +8,7 @@ import com.app.okra.models.*
 interface ConnectedDevicesRepo {
 
     suspend fun getPreviouslyConnectedDeviceList()
-            : ApiResult<ApiData<Any>>
+            : ApiResult<ApiData<ArrayList<BLEDeviceListData>>>
 
     suspend fun getDeviceDataCount(deviceDataRequest: DeviceDataRequest)
             : ApiResult<ApiData<DeviceDataCount>>

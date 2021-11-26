@@ -12,6 +12,7 @@ import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.SettingRepoImpl
+import com.app.okra.extension.beInvisible
 import com.app.okra.extension.navigate
 import com.app.okra.extension.navigationOnly
 import com.app.okra.extension.viewModelFactory
@@ -84,6 +85,7 @@ class SettingsActivity : BaseActivity(),
         tvTitle.text = getString(R.string.title_my_setting)
         btnLogin.text = getString(R.string.log_out)
         btnLogin.setTextColor(ContextCompat.getColor(this, R.color.red))
+        ivDelete.beInvisible()
     }
 
     override fun onClick(view: View?) {

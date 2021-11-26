@@ -9,52 +9,32 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/llDiscovering"
+        android:id="@+id/llNoData"
         style="@style/container"
+        android:visibility="gone"
         android:background="@color/bg_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivImage"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubHeader"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_300"
-            android:layout_marginTop="@dimen/dp_100"
-            android:contentDescription="@string/app_name"
-            android:src="@mipmap/finding_device_wave"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivImage1"
-            style="@style/textContainer"
-            android:layout_marginStart="@dimen/dp_30"
-            android:layout_marginTop="@dimen/dp_150"
-            android:contentDescription="@string/app_name"
-            android:src="@mipmap/found_device"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivImage2"
-            style="@style/textContainer"
-            android:layout_marginTop="@dimen/dp_170"
-            android:layout_marginEnd="@dimen/dp_30"
-            android:contentDescription="@string/app_name"
-            android:src="@mipmap/found_device"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:fontFamily="@font/axiforma_medium"
+            android:lineSpacingExtra="@dimen/dp_5"
+            android:text="@string/please_click_on_the"
+            android:textColor="@color/grey_3"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivImage3"
-            style="@style/textContainer"
-            android:layout_marginStart="@dimen/dp_100"
-            android:layout_marginTop="@dimen/dp_320"
-            android:contentDescription="@string/app_name"
-            android:src="@mipmap/found_device"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tvHeader" />
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -66,17 +46,42 @@
             android:layout_marginEnd="@dimen/dp_20"
             android:fontFamily="@font/axiforma_semibold"
             android:gravity="center"
-            android:text="@string/discovering"
+            android:text="@string/no_connected_device"
             android:textColor="@color/black_2"
             android:textSize="@dimen/sp_20"
+            app:layout_constraintBottom_toTopOf="@+id/tvSubHeader"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivImage" />
+
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_240"
+            android:layout_marginTop="@dimen/dp_90"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/no_connected_device"
+            app:layout_constraintBottom_toTopOf="@+id/tvHeader"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llList"
         style="@style/container"
+        android:visibility="gone"
         android:background="@color/bg_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

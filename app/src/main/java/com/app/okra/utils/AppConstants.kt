@@ -171,7 +171,7 @@ class AppConstants {
         const val PRIVACY_POLICY_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "PRIVACY_POLICY"
         const val TERM_AND_COND_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "TERMS_AND_CONDITIONS"
         const val ABOUT_US_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "ABOUT_US"
-        const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "CONTACT_US"
+        const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "FAQ"
     }
 
     object DateFormat {

@@ -200,6 +200,7 @@ ImageUtils.IChooseImageInterface, Listeners.CustomMediaDialogListener {
             cl_profile_edit.beGone()
             cv_profile_view_only.beVisible()
             ivRight.beVisible()
+            ivDelete.beGone()
             includeButton.beGone()
             btnCommon.text = getString(R.string.save)
             btnCommon.beDisable()
@@ -224,6 +225,8 @@ ImageUtils.IChooseImageInterface, Listeners.CustomMediaDialogListener {
                         includeButton.beGone()
                         iv_upload.beGone()
                         ivRight.beVisible()
+                        ivDelete.beGone()
+
                         iv_profile.loadUserImageFromUrl(this,profilePic)
 
                     }else {
@@ -236,6 +239,7 @@ ImageUtils.IChooseImageInterface, Listeners.CustomMediaDialogListener {
                     cv_profile_view_only.beGone()
                     includeButton.beVisible()
                     ivRight.beGone()
+                    ivDelete.beInvisible()
                     iv_upload.beVisible()
                     setValueInFields()
                 }

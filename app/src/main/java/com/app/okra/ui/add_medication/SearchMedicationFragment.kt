@@ -21,6 +21,7 @@ import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.MedicationRepoImpl
 import com.app.okra.extension.setMaxLength
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.models.MedicationData
 import com.app.okra.models.MedicineName
 import com.app.okra.ui.logbook.medication.MedicationViewModel
 import com.app.okra.utils.AppConstants
@@ -36,6 +37,7 @@ import kotlin.collections.ArrayList
 
 class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
 
+    val TAG = SearchMedicationFragment::class.java.simpleName
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var medicationAdapter: MedicineAdapter
     private lateinit var recentMedicationAdapter: RecentMedicineAdapter
@@ -273,17 +275,22 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
 
     private fun addMedicationApi(quant: Int, medicineName: String?) {
         var unit = ""
-        unit = if (isMG)
-            AppConstants.MG
-        else if (isPill)
-            AppConstants.PILLES
-        else
-            AppConstants.ML
+        unit = when {
+            isMG -> AppConstants.MG
+            isPill -> AppConstants.PILLES
+            else -> AppConstants.ML
+        }
+
+        val medicationData = MedicationData()
+        medicationData.medicineName = medicineName
+        medicationData.unit = unit
+        medicationData.quantity = quant
+
         val bundle = Bundle()
         bundle.putString(AppConstants.MEDICATION_TYPE, "1")
-        bundle.putString(AppConstants.NAME, medicineName)
-        bundle.putString(AppConstants.UNIT, unit)
-        bundle.putInt(AppConstants.QUANTITY, quant)
+        bundle.putParcelable(AppConstants.DATA, medicationData)
+        bundle.putString(AppConstants.Intent_Constant.FROM_SCREEN, TAG)
+
         navController.navigate(R.id.action_searchMed_to_saveMed, bundle)
     }
 }

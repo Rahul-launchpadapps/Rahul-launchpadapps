@@ -97,8 +97,8 @@ class ReportsActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         })
 
         reportsViewModel.isFileTypeSetMLD.observe(this, {
-
-            reportsViewModel.areAllFieldsSet.value = reportsViewModel.isEndDateSetMLD.value!! && reportsViewModel.isStartDateSetMLD.value!! && reportsViewModel.isFileTypeSetMLD.value!!
+            reportsViewModel.areAllFieldsSet.value = reportsViewModel.isEndDateSetMLD.value!!
+                    && reportsViewModel.isStartDateSetMLD.value!! && reportsViewModel.isFileTypeSetMLD.value!!
         })
 
         reportsViewModel.areAllFieldsSet.observe(this, { allFieldsSet ->

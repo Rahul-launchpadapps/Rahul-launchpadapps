@@ -54,7 +54,6 @@ class MedicationDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getData()
-
         setViews()
         setListener()
         setObserver()
@@ -88,6 +87,7 @@ class MedicationDetailsFragment : BaseFragment() {
             ivRight.beVisible()
             ivDelete.beVisible()
             layout_button.btnCommon.text = getString(R.string.share)
+            layout_button.beGone()
             clEditional.beVisible()
 
         }else{
@@ -95,6 +95,8 @@ class MedicationDetailsFragment : BaseFragment() {
             ivRight.beGone()
             ivDelete.beGone()
             layout_button.btnCommon.text = getString(R.string.save)
+            layout_button.beVisible()
+
             clEditional.beGone()
         }
 

@@ -4,6 +4,7 @@ import com.app.okra.data.network.ApiData
 import com.app.okra.data.network.ApiResult
 import com.app.okra.data.network.ApiService
 import com.app.okra.data.network.BaseRepo
+import com.app.okra.models.BLEDeviceListData
 import com.app.okra.models.DeviceDataCount
 import com.app.okra.models.DeviceDataRequest
 import com.app.okra.models.TestAddRequest
@@ -13,7 +14,8 @@ class ConnectedDevicesRepoImpl constructor(
     private val apiService: ApiService,
 ) : BaseRepo(apiService),
     ConnectedDevicesRepo {
-    override suspend fun getPreviouslyConnectedDeviceList(): ApiResult<ApiData<Any>> {
+    override suspend fun getPreviouslyConnectedDeviceList()
+    : ApiResult<ApiData<ArrayList<BLEDeviceListData>>> {
         return safeApiCall(Dispatchers.IO) {
             apiService.getPreviouslyConnectedDevices()
         }

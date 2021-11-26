@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.Parcelable
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -20,15 +22,19 @@ import com.app.okra.bluetooth.BleManager
 import com.app.okra.bluetooth.data.BleDevice
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.beGone
+import com.app.okra.extension.beInvisible
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.DeviceDataCount
+import com.app.okra.ui.profile.ProfileFragment
+import com.app.okra.utils.AppConstants
 import kotlinx.android.synthetic.main.layout_header.*
 
 
 class BluetoothActivity : BaseActivity(), View.OnClickListener{
 
-       private val viewModel by lazy {
+    private var fromScreen: String? = null
+    private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory {
             ConnectedDevicesViewModel(ConnectedDevicesRepoImpl(apiServiceAuth))
         }).get(ConnectedDevicesViewModel::class.java)
@@ -43,8 +49,6 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
     var gattCharacteristic : BluetoothGattCharacteristic?=null
 
 
-
-
     override fun getViewModel(): BaseViewModel? {
         return viewModel
     }
@@ -52,6 +56,7 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bluetooth)
+        getIntentData()
         initialize()
         setViews()
         setListener()
@@ -71,6 +76,13 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
         }
     }
 
+
+    private fun getIntentData() {
+        if(intent.hasExtra(AppConstants.Intent_Constant.FROM_SCREEN)){
+            fromScreen = intent.getStringExtra(AppConstants.Intent_Constant.FROM_SCREEN)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(mReceiver)
@@ -82,18 +94,23 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
         override fun onReceive(context: Context?, intent: Intent) {
             val action = intent.action
             println("Action$action")
-            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED == action) {
-                println("Started")
-            } else if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
-                println("changed")
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-                println("finished")
-            } else if (BluetoothDevice.ACTION_FOUND == action) {
-                //bluetooth device found
-                val device =
-                    intent.getParcelableExtra<Parcelable>(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
+            when {
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED == action -> {
+                    println("Started")
+                }
+                BluetoothAdapter.ACTION_STATE_CHANGED == action -> {
+                    println("changed")
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action -> {
+                    println("finished")
+                }
+                BluetoothDevice.ACTION_FOUND == action -> {
+                    //bluetooth device found
+                    val device =
+                        intent.getParcelableExtra<Parcelable>(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
 
-                 System.out.println("**** Found device " + device?.name);
+                    System.out.println("**** Found device " + device?.name);
+                }
             }
         }
     }
@@ -101,9 +118,18 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
     private fun initialize() {
         navHost = supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = navHost.navController
+
+        // if coming from Profile Fragment (Connected Device)
+        if(!fromScreen.isNullOrEmpty() && fromScreen == ProfileFragment::class.java.simpleName) {
+            val graph = navController.navInflater.inflate(R.navigation.nav_graph_connect)
+            graph.apply {
+                startDestination =  R.id.connectedDevicesListFragment
+                navController.graph =this
+            }
+        }
     }
 
-    fun setTitle(title: String){
+     fun setTitle(title: String){
         tvTitle.text = title
     }
 
@@ -112,25 +138,30 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
         btnSave.text = btnText
     }
 
-    fun setDeleteButtonVisibility(makeVisible: Boolean){
-        if(makeVisible) {
-            ivDelete.beVisible()
-        }else{
-            ivDelete.beGone()
+    fun setDeleteButtonVisibility(makeVisible: Boolean, beInvisible : Boolean?=null){
+        if(beInvisible!=null && beInvisible){
+            ivDelete.beInvisible()
+
+        }else {
+            if (makeVisible) {
+                ivDelete.beVisible()
+            } else {
+                ivDelete.beGone()
+            }
         }
     }
 
     fun setHeaderButtonVisibility(makeVisible: Boolean){
         if(makeVisible) {
-            btnSave.beVisible()
+            txtSave.beVisible()
         }else{
-            btnSave.beGone()
+            txtSave.beGone()
         }
     }
 
     private fun setListener() {
         ivBack.setOnClickListener(this)
-        btnSave.setOnClickListener(this)
+        txtSave.setOnClickListener(this)
     }
 
 
@@ -148,7 +179,7 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
                     navController.popBackStack()
                 }
             }
-            R.id.btnSave -> {
+            R.id.txtSave -> {
                 val fragment: Fragment = navHost.childFragmentManager.fragments[0]!!
 
                 if (fragment is BluetoothDevicesListFragment) {
@@ -185,10 +216,19 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
         fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    fun moveToConnectedDeviceFragment() {
-        val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.connectedDevicesFragment, true).build()
-        navController.navigate(R.id.connectedDevicesFragment, null, navOptions)
+    fun navigateToStartingFragment() {
+        Handler(Looper.getMainLooper()).postDelayed({
+           val navigationId= if(!fromScreen.isNullOrEmpty()
+               && fromScreen == ProfileFragment::class.java.simpleName) {
+               R.id.connectedDevicesListFragment
+            }else{
+               R.id.connectedDevicesFragment
+            }
+
+            val navOptions = NavOptions.Builder().setPopUpTo(navigationId, true).build()
+            navController.navigate(navigationId, null, navOptions)
+        },1000)
+
     }
 
 }

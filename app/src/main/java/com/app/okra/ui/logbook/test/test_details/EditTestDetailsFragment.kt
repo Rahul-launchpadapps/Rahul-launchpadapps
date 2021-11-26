@@ -1,5 +1,7 @@
 package com.app.okra.ui.logbook.test.test_details
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.ViewModelProvider
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
@@ -19,22 +22,24 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
-import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants
+import com.app.okra.utils.getDateFromISOInString
+import com.app.okra.utils.getDifferentInfoFromDate_String
+import com.app.okra.utils.getMealTime
 import kotlinx.android.synthetic.main.fragment_edit_test_details.*
-import kotlinx.android.synthetic.main.fragment_edit_test_details.spinner
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvBloodGlucoseValue
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvBloodPressureValue
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDateValue
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceIdValue
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceNameValue
-import kotlinx.android.synthetic.main.fragment_edit_test_details.tvInsulinValue
 import kotlinx.android.synthetic.main.layout_header.*
-import kotlinx.android.synthetic.main.layout_header.btnSave
+import java.util.*
 
 class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
 
+    private lateinit var strDate: String
     private lateinit var customSpinnerAdapter: CustomSpinnerAdapter
     private var data: Data? = null
+    private var mYear: Int = 0
+    private var mMonth: Int = 0
+    private var mDay: Int = 0
+    private var mHour: Int = 0
+    private var mMin: Int = 0
 
     private val timingList by lazy {
         arrayListOf<String>()
@@ -101,6 +106,7 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         ivRight.beInvisible()
         ivDelete.beGone()
         btnSave.beVisible()
+        tvDate.isEnabled=false
     }
 
     private fun setObserver() {
@@ -119,6 +125,10 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         tvSetTestingTime.setOnClickListener(this)
 
         btnSave.setOnClickListener (this)
+
+        tvDate.setOnClickListener {
+            selectDate(tvDate)
+        }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -154,7 +164,7 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         arguments?.let {
             data = it.getParcelable(AppConstants.DATA)
 
-            tvDateValue.text =
+            tvDate.text =
                 data?.date?.let { it1 ->
                     getDateFromISOInString(
                         it1,
@@ -163,12 +173,53 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
                 }
 
             tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
-            tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
-            tvInsulinValue.text = data?.insulin ?: ""
             tvDeviceIdValue.text = data?.deviceId ?: ""
             tvDeviceNameValue.text = data?.deviceName ?: ""
         }
     }
+
+
+    private fun selectDate(tvDate: AppCompatTextView) {
+        val c = Calendar.getInstance()
+        mYear = c.get(Calendar.YEAR)
+        mMonth = c.get(Calendar.MONTH)
+        mDay = c.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
+                strDate = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
+                showTimePicker(tvDate, strDate)
+            }, mYear, mMonth, mDay)
+        val c1 = Calendar.getInstance()
+        c1.add(Calendar.MONTH, -2)
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+        datePickerDialog.show()
+
+    }
+
+    private fun showTimePicker(
+        tvDate: AppCompatTextView,
+        selectedDate: String
+    ) {
+        val c = Calendar.getInstance()
+        mHour = c.get(Calendar.HOUR_OF_DAY)
+        mMin = c.get(Calendar.MINUTE)
+
+        val tpd = TimePickerDialog(
+            requireContext(), { timePicker, hour, minute ->
+                strDate = "$selectedDate $hour:$minute"
+                tvDate.text =  getDifferentInfoFromDate_String(strDate,"yyyy-MM-dd hh:mm",
+                    AppConstants.DateFormat.DATE_FORMAT_1
+                )
+            },
+            mHour,
+            mMin,
+            true
+        )
+        tpd.show()
+
+    }
+
 
     override fun onClick(p0: View?) {
         when(p0?.id){

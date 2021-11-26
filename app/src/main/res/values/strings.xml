@@ -328,6 +328,9 @@ to the Okra Terms &amp; Conditions</string>
     <string name="scan">Scan</string>
     <string name="device_connected_successfully">"Device connected successfully "</string>
     <string name="retrieving_data">"Retrieving data from the okra device "</string>
+    <string name="no_connected_device">No Device Connected</string>
+    <string name="please_click_on_the">Please click on the “Connect device” option to enjoy the services of the platform</string>
+    <string name="feeling">Feeling</string>
 
 
 </resources>

@@ -6,7 +6,6 @@ import android.os.*
 import com.app.okra.bluetooth.BleManager
 import com.app.okra.bluetooth.bluetooth.BleConnector.Companion.formUUID
 import com.app.okra.bluetooth.callback.*
-import com.app.okra.bluetooth.otherlib.callback.*
 import com.app.okra.bluetooth.data.BleConnectStateParameter
 import com.app.okra.bluetooth.data.BleDevice
 import com.app.okra.bluetooth.data.BleMsg

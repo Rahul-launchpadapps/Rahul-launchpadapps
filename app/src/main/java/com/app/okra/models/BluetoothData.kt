@@ -2,6 +2,22 @@ package com.app.okra.models
 
 class DeviceDataCount(var deviceId: String, var testCount  :Int)
 
+class BLEDeviceListData(
+    var _id: String?=null,
+    var userId :UserDetail?=null,
+    var deviceUUID :String?=null,
+    var deviceName :String?=null,
+    var created :String?=null,
+    var createdAt :String?=null,
+    var updatedAt :String?=null,
+)
+
+class UserDetail(
+    var _id: String?=null,
+    var userType: String?=null,
+    var name: String?=null,
+)
+
 class BLETestData(
     var date: String?=null,
     var testingTime :String?=null,

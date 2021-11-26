@@ -6,6 +6,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 interface ApiService {
@@ -115,7 +116,7 @@ interface ApiService {
     suspend fun stripeInfo(): Response<BaseResponse<HomeStripeResponse>>
 
     @GET("v1/user/device-list")
-    suspend fun getPreviouslyConnectedDevices(): Response<BaseResponse<Any>>
+    suspend fun getPreviouslyConnectedDevices(): Response<BaseResponse<ArrayList<BLEDeviceListData>>>
 
     @POST("v1/user/device")
     suspend fun getTestDataCount(@Body deviceDataRequest: DeviceDataRequest): Response<BaseResponse<DeviceDataCount>>

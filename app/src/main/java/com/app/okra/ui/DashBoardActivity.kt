@@ -8,6 +8,7 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
+import com.app.okra.extension.navigate
 import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.add_medication.AddMedicationActivity
 import com.app.okra.ui.connected_devices.BluetoothActivity
@@ -64,7 +65,7 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
                         .setIcon(R.mipmap.insight_inactive)
                     menu.getItem(4)
                         .setIcon(R.mipmap.account_inactive)
-                    view_pager_home.setCurrentItem(0)
+                    view_pager_home.currentItem = 0
                 }
                 R.id.action_logbook -> {
                     val menu1: Menu = bottom_navigation.getMenu()
@@ -75,7 +76,7 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
                         .setIcon(R.mipmap.insight_inactive)
                     menu1.getItem(4)
                         .setIcon(R.mipmap.account_inactive)
-                    view_pager_home.setCurrentItem(1)
+                    view_pager_home.currentItem = 1
                 }
                 R.id.action_insight -> {
                     val menu2: Menu = bottom_navigation.getMenu()
@@ -110,7 +111,12 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
 
     override fun onFirstOptionClick(dialog: DialogInterface?) {
         if(PreferenceManager.getBoolean(AppConstants.Pref_Key.IS_VERIFIED)) {
-            startActivity(Intent(this, BluetoothActivity::class.java))
+
+            val intent = Intent(this, BluetoothActivity::class.java)
+            intent.putExtra(AppConstants.Intent_Constant.FROM_SCREEN,
+                DashBoardActivity::class.java.simpleName
+            )
+            navigate(intent)
         }else{
             showAlertDialog(
                 this,

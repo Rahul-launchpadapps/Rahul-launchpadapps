@@ -19,6 +19,8 @@ import com.app.okra.bluetooth.data.BleDevice
 import com.app.okra.bluetooth.data.BleScanState
 import com.app.okra.bluetooth.exception.BleException
 import com.app.okra.bluetooth.scan.BleScanRuleConfig
+import com.app.okra.bluetooth.utils.BleLog
+import com.app.okra.bluetooth.utils.HexUtil
 import com.app.okra.data.repo.ConnectedDevicesRepoImpl
 import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
@@ -82,7 +84,6 @@ class BluetoothDevicesListFragment : BaseFragment(),
         setAdapter()
         setViews()
         setObserver()
-        setListener()
         BleManager.instance.init(OkraApplication.getApplicationInstance())
         BleManager.instance.enableLog(true)
             .setReConnectCount(1, AppConstants.BLE_SCAN_TIMEOUT)
@@ -100,7 +101,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
         setBaseObservers(viewModel, this, observeToast = false)
         viewModel._dataCountLiveData.observe(viewLifecycleOwner){ it ->
             it.data?.let{
-                it.deviceId = deviceData.deviceKey
+                it.deviceId = deviceData.mac!!
 
                 // updated test count into local list
                 viewModel.updateDeviceDataList(it)
@@ -111,11 +112,6 @@ class BluetoothDevicesListFragment : BaseFragment(),
         }
     }
 
-    private fun setListener() {
-
-
-    }
-
     private fun setViews() {
         llDiscovering.beVisible()
         llList.beGone()
@@ -123,7 +119,6 @@ class BluetoothDevicesListFragment : BaseFragment(),
         (activity as BluetoothActivity).setHeaderButtonVisibility(true)
         (activity as BluetoothActivity).setHeaderButtonText(getString(R.string.scan))
     }
-
 
     private fun addDeviceInList(device: BleDevice) {
         devicesList.add(device)
@@ -202,30 +197,21 @@ class BluetoothDevicesListFragment : BaseFragment(),
             positiveButtonText = getString(R.string.ok),
             title = getString(R.string.alert),
         )
-        Log.d("TAG", "**** onPermissionsDeny -Main Activity.")
-
     }
 
-    override fun onStop() {
-        super.onStop()
-          println(":::: BleDeviceList: OnStop")
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        println(":::: BleDeviceList: onDestroy")
-    }
     override fun onDestroyView() {
         super.onDestroyView()
-        println(":::: BleDeviceList: onDestroyView")
+        bleManager.removeConnectGattCallback((activity as BluetoothActivity).connectedBleDevice)
     }
 
     private fun startScan() {
         BleManager.instance.scan(object : BleScanCallback() {
             override fun onScanStarted(success: Boolean) {
-
                 if (success) {
                     (activity as BluetoothActivity).setHeaderButtonVisibility(false)
+                    (activity as BluetoothActivity).setDeleteButtonVisibility(false,true)
+
                     devicesList.clear()
                     devicesAdapter.notifyDataSetChanged()
                     manageViewVisibility(true)
@@ -237,16 +223,36 @@ class BluetoothDevicesListFragment : BaseFragment(),
             }
 
             override fun onScanning(bleDevice: BleDevice?) {
-              //  println(":::: Device Found: ${bleDevice?.name}")
+                println(":::: Device Found: ${bleDevice?.device?.name}, " +
+                        "Address: ${bleDevice?.device?.address}, "+
+                        " Type: ${bleDevice?.device?.type!!}, "+
+                        " Rssi: ${bleDevice.rssi} "+
+                        " ScanRecord: ${HexUtil.formatHexString(bleDevice.scanRecord)}, "
+                )
+
+               if(bleDevice.device?.uuids!=null) {
+                   println(":::: UUID: ")
+
+                   for (uuid in bleDevice.device?.uuids!!) {
+                       print(" ${uuid.uuid}")
+                   }
+                   println()
+               }
+
+
                 addDeviceInList(bleDevice!!)
                 devicesAdapter.notifyDataSetChanged()
                 manageViewVisibility(true)
             }
 
             override fun onScanFinished(scanResultList: List<BleDevice?>?) {
-                (activity as BluetoothActivity).setHeaderButtonVisibility(true)
-                manageViewVisibility(false)
-                showToast("Scan finished")
+                if(isResumed) {
+                    (activity as BluetoothActivity).setHeaderButtonVisibility(true)
+                    (activity as BluetoothActivity).setDeleteButtonVisibility(false)
+
+                    manageViewVisibility(false)
+                    showToast("Scan finished")
+                }
                 /* img_loading.clearAnimation()
                 img_loading.setVisibility(View.INVISIBLE)
                 btn_scan.setText(getString(R.string.start_scan))*/
@@ -255,6 +261,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
     }
 
     private fun manageViewVisibility(isDiscovering: Boolean) {
+        if(isResumed){
         if(isDiscovering){
             if(devicesList.isNotEmpty()) {
                 llDiscovering.beGone()
@@ -274,6 +281,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
                 rv_devices.beGone()
                 tvNoDevice.beVisible()
             }
+        }
         }
     }
 
@@ -318,69 +326,66 @@ class BluetoothDevicesListFragment : BaseFragment(),
     }
 
     private fun connect(deviceData: BleDevice) {
-        BleManager.instance.connect(deviceData, object : BleGattCallback() {
-            override fun onStartConnect() {
-                (activity as BluetoothActivity).setHeaderButtonVisibility(false)
-                showProgressBar()
-            }
+        BleManager.instance.connect(deviceData,gattCallBack )
 
-            override fun onConnectFail(bleDevice: BleDevice?, exception: BleException?) {
-                (activity as BluetoothActivity).setHeaderButtonVisibility(true)
-                hideProgressBar()
-                showToast(getString(R.string.connect_fail))
-            }
+    }
 
-            override fun onConnectSuccess(
-                bleDevice: BleDevice?,
-                gatt: BluetoothGatt?,
-                status: Int
-            ) {
-                showToast("Connected")
-                hideProgressBar()
+    var gattCallBack :BleGattCallback?= object : BleGattCallback() {
+        override fun onStartConnect() {
+            (activity as BluetoothActivity).setHeaderButtonVisibility(false)
+            (activity as BluetoothActivity).setDeleteButtonVisibility(false,true)
 
-                if(bleDevice!=null) {
-                    (activity as BluetoothActivity).connectedBleDevice = bleDevice
+            showProgressBar()
+        }
 
-                    if ((activity as BluetoothActivity).checkIfDeviceCountExist(bleDevice)) {
-                        // Show device connected view and get total count from BLE device
+        override fun onConnectFail(bleDevice: BleDevice?, exception: BleException?) {
+            (activity as BluetoothActivity).setHeaderButtonVisibility(true)
+            (activity as BluetoothActivity).setDeleteButtonVisibility(false)
 
-                        navController.navigate(R.id.action_blueToothDeviceListFragment_to_connectionStatusFragment)
-                    }else{
-                        // Hit api, get count from it and then get total count from BLE device
+            hideProgressBar()
+            showToast(getString(R.string.connect_fail))
+        }
 
-                        viewModel.setDeviceDataRequest(bleDevice.name, bleDevice.mac)
-                        viewModel.getTestDataCountFromApi()
+        override fun onConnectSuccess(bleDevice: BleDevice?, gatt: BluetoothGatt?, status: Int) {
+            hideProgressBar()
 
-                        /*  (activity as BluetoothActivity).connectedBleDevice = bleDevice
-                          navController.navigate(R.id.action_blueToothDeviceListFragment_to_connectionStatusFragment)
-                        */
-                    }
+            if(bleDevice!=null) {
+                (activity as BluetoothActivity).connectedBleDevice = bleDevice
+
+                if ((activity as BluetoothActivity).checkIfDeviceCountExist(bleDevice)) {
+                    // Show device connected view and get total count from BLE device
+                    navController.navigate(R.id.action_blueToothDeviceListFragment_to_connectionStatusFragment)
                 }else{
-                    showToast(MessageConstants.Errors.an_error_occurred)
+                    // Hit api, get count from it and then get total count from BLE device
+                    viewModel.setDeviceDataRequest(bleDevice.name, bleDevice.mac)
+                    viewModel.getTestDataCountFromApi()
                 }
+            }else{
+                showToast(MessageConstants.Errors.an_error_occurred)
             }
+        }
 
-            override fun onDisConnected(
-                isActiveDisConnected: Boolean,
-                bleDevice: BleDevice?,
-                gatt: BluetoothGatt?,
-                status: Int
-            ) {
-                /*if((activity as BluetoothActivity).getCurrentLoadedFragment() is ConnectionStatusFragment){
-                    navController.popBackStack()
-                }*/
+        override fun onDisConnected(
+            isActiveDisConnected: Boolean,
+            bleDevice: BleDevice?,
+            gatt: BluetoothGatt?,
+            status: Int
+        ) {
+            /*if((activity as BluetoothActivity).getCurrentLoadedFragment() is ConnectionStatusFragment){
+                navController.popBackStack()
+            }*/
 
+            if(!isDetached) {
                 hideProgressBar()
                 devicesAdapter.removeDevice(bleDevice)
 
                 if (isActiveDisConnected) {
                     showToast(getString(R.string.active_disconnected))
                 } else {
-                    showToast(getString(R.string.disconnected))
+                    showToast(getString(R.string.disconnected),requireActivity())
                 }
             }
-        })
-
+        }
     }
 
     override fun onUnSelect(o: Any?, o1: Any?) { }

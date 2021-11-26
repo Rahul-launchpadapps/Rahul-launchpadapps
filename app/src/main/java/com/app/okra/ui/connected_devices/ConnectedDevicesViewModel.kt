@@ -26,8 +26,8 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
     private var contactUsLiveData = MutableLiveData<ApiData<ContactResponse>>()
     val _contactUsLiveData: LiveData<ApiData<ContactResponse>> get() = contactUsLiveData
 
-    private var connectedDevicesLiveData = MutableLiveData<ApiData<Any>>()
-    val _connectedDevicesLiveData: LiveData<ApiData<Any>>
+    private var connectedDevicesLiveData = MutableLiveData<ApiData<ArrayList<BLEDeviceListData>>>()
+    val _connectedDevicesLiveData: LiveData<ApiData<ArrayList<BLEDeviceListData>>>
         get() = connectedDevicesLiveData
 
     private var dataCountLiveData = MutableLiveData<ApiData<DeviceDataCount>>()
@@ -277,9 +277,9 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
 
     fun getDeviceDataCount(bleDevice: BleDevice): Int {
         val deviceDataList = getDeviceDataList()
-        deviceDataList?.let {
+        deviceDataList.let {
             for (singleDevice in it) {
-                if (singleDevice.deviceId == bleDevice.deviceKey) {
+                if (singleDevice.deviceId == bleDevice.mac) {
                     return singleDevice.testCount
                 }
             }

@@ -4,29 +4,40 @@ import android.bluetooth.BluetoothDevice
 import android.os.Parcel
 import android.os.Parcelable
 
-class BleDevice : Parcelable {
-    var device: BluetoothDevice?
-    var scanRecord: ByteArray?=null
+class BleDevice() : Parcelable {
+    var device: BluetoothDevice? = null
+    var scanRecord: ByteArray? = null
     var rssi = 0
     var timestampNanos: Long = 0
     val isPaired: Boolean = false
 
-    constructor(device: BluetoothDevice?) {
+    var localName: String? = null
+    var localDeviceId: String? = null
+
+
+    constructor(device: BluetoothDevice?) : this() {
         this.device = device
     }
 
-    constructor(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?, timestampNanos: Long) {
+    constructor(
+        device: BluetoothDevice?,
+        rssi: Int,
+        scanRecord: ByteArray?,
+        timestampNanos: Long
+    ) : this() {
         this.device = device
         this.scanRecord = scanRecord
         this.rssi = rssi
         this.timestampNanos = timestampNanos
     }
 
-    protected constructor(`in`: Parcel) {
+    protected constructor(`in`: Parcel) : this() {
         device = `in`.readParcelable(BluetoothDevice::class.java.classLoader)
         scanRecord = `in`.createByteArray()
         rssi = `in`.readInt()
         timestampNanos = `in`.readLong()
+        localName = `in`.readString()
+        localDeviceId = `in`.readString()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -34,6 +45,8 @@ class BleDevice : Parcelable {
         dest.writeByteArray(scanRecord)
         dest.writeInt(rssi)
         dest.writeLong(timestampNanos)
+        dest.writeString(localName)
+        dest.writeString(localDeviceId)
     }
 
     override fun describeContents(): Int {
@@ -41,21 +54,47 @@ class BleDevice : Parcelable {
     }
 
     val name: String?
-        get() = if (device != null) device!!.name else null
+        get() = if (device != null) device!!.name else localName
     val mac: String?
-        get() = if (device != null) device!!.address else null
+        get() = if (device != null) device!!.address else localDeviceId
     val deviceKey: String
-        get() = if (device != null) device!!.name + device!!.address else ""
+        get() = gettingDeviceKey()
 
-
-    companion object  CREATOR: Parcelable.Creator<BleDevice?> {
-            override fun createFromParcel(`in`: Parcel): BleDevice? {
-                return BleDevice(`in`)
+    private fun gettingDeviceKey(): String {
+        var completeName = ""
+        completeName = when {
+            device != null -> {
+                device!!.name
             }
-
-            override fun newArray(size: Int): Array<BleDevice?> {
-                return arrayOfNulls(size)
+            localName != null -> {
+                localName!!
             }
+            else -> {
+                ""
+            }
+        }
 
+        completeName += when {
+            device != null -> {
+                device!!.address
+            }
+            localDeviceId != null -> {
+                localDeviceId!!
+            }
+            else -> {
+                ""
+            }
+        }
+        return completeName
+    }
+
+    companion object CREATOR : Parcelable.Creator<BleDevice> {
+        override fun createFromParcel(parcel: Parcel): BleDevice {
+            return BleDevice(parcel)
+        }
+
+        override fun newArray(size: Int): Array<BleDevice?> {
+            return arrayOfNulls(size)
+        }
     }
 }

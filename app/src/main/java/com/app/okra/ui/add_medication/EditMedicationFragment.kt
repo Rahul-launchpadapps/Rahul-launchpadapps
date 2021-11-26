@@ -129,6 +129,7 @@ class EditMedicationFragment : BaseFragment(),
             if (!it.image.isNullOrEmpty()) {
                 imageList.clear()
                 imageList.addAll(it.image!!)
+                imageList.reverse()
                 mAdapter.notifyDataSetChanged()
             }
 
@@ -171,10 +172,7 @@ class EditMedicationFragment : BaseFragment(),
     }
 
     private fun setAdapter() {
-        mAdapter = ImageAdapter(
-            requireContext(),
-            imageList,
-            this,
+        mAdapter = ImageAdapter(requireContext(), imageList, this,
             EditMedicationFragment::class.java.simpleName
         )
         rvMealImages.adapter = mAdapter

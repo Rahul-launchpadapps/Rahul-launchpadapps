@@ -41,4 +41,6 @@
         android:label="EditMedicationFragment"
         tools:layout="@layout/fragment_edit_medication"/>
 
+
+
 </navigation>

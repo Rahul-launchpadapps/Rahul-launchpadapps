@@ -57,7 +57,6 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 finish()
             }
         }
-
     }
 
     private fun setUpToolbar() {
@@ -108,8 +107,6 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
 
             tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
-            tvBloodPressureValue.text = data?.datbloodPressuree  + " mmHg"
-            tvInsulinValue.text = data?.insulin ?: ""
             tvDeviceIdValue.text = data?.deviceId ?: ""
             tvDeviceNameValue.text = data?.deviceName ?: ""
         }

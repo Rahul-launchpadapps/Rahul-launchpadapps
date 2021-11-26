@@ -35,4 +35,16 @@
             app:popUpTo="@id/connectedDevicesFragment"
            />
     </fragment>
+    <fragment
+        android:id="@+id/connectedDevicesListFragment"
+        android:name="com.app.okra.ui.connected_devices.ConnectedDevicesListFragment"
+        android:label="ConnectedDevicesListFragment"
+        tools:layout="@layout/fragment_connected_devices_list">
+        <action
+            android:id="@+id/action_connectedDevicesListFragment_to_blueToothDeviceListFragment"
+            app:destination="@id/blueToothDeviceListFragment" />
+        <action
+            android:id="@+id/action_connectedDevicesListFragment_to_connectedDevicesFragment"
+            app:destination="@id/connectedDevicesFragment" />
+    </fragment>
 </navigation>

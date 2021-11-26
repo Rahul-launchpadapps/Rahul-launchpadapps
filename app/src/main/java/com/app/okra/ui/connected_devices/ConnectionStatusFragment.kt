@@ -168,13 +168,13 @@ class ConnectionStatusFragment : BaseFragment(){
                                 } else {
                                     executeOnMainThread {
                                         showToast(MessageConstants.Messages.test_already_added)
-                                        (activity as BluetoothActivity).moveToConnectedDeviceFragment()
+                                            (requireActivity() as BluetoothActivity).navigateToStartingFragment()
                                     }
                                 }
                             } else {
                                 executeOnMainThread {
                                     showToast(MessageConstants.Messages.test_already_added)
-                                    (activity as BluetoothActivity).moveToConnectedDeviceFragment()
+                                    (requireActivity() as BluetoothActivity).navigateToStartingFragment()
                                 }
                             }
                         }
@@ -190,7 +190,7 @@ class ConnectionStatusFragment : BaseFragment(){
                         } else {
                             executeOnMainThread {
                                 showToast(MessageConstants.Messages.test_already_added)
-                                (activity as BluetoothActivity).moveToConnectedDeviceFragment()
+                                    (requireActivity() as BluetoothActivity).navigateToStartingFragment()
                             }
                         }
                     }
@@ -258,7 +258,7 @@ class ConnectionStatusFragment : BaseFragment(){
     private fun setViews() {
         ivImage.setImageResource(R.mipmap.welcome_to_ca_mo)
         tvInfoText.text = getString(R.string.device_connected_successfully)
-        (activity as BluetoothActivity).setDeleteButtonVisibility(false)
+        (activity as BluetoothActivity).setDeleteButtonVisibility(false,true)
         (activity as BluetoothActivity).setHeaderButtonVisibility(false)
     }
 

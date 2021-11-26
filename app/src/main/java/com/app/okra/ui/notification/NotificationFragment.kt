@@ -70,7 +70,7 @@ class NotificationFragment : BaseFragment(),
         touchListener2 = RecyclerTouchListener(requireActivity(), rv_earlier)
         touchListener1!!.setClickable(object : RecyclerTouchListener.OnRowClickListener {
             override fun onRowClicked(position: Int) {
-                navController.navigate(R.id.action_notificationFragment_to_addSupportRequestFragment, null)
+              //  navController.navigate(R.id.action_notificationFragment_to_addSupportRequestFragment, null)
             }
 
             override fun onIndependentViewClicked(independentViewID: Int, position: Int) {}

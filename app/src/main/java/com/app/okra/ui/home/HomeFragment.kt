@@ -100,7 +100,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
                 updateUserData(it.userInfo)
 
                 if(it.avgBloodGlucose!=null) {
-                    val valueToSet = String.format("%.2f", it.avgBloodGlucose!!.toBigDecimal()) + "mg/dL"
+                    val valueToSet = String.format("%.2f", it.avgBloodGlucose!!.toBigDecimal())
                     tvAvgBgValue.text =valueToSet
                 }
 
@@ -115,7 +115,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
                 }
 
                 if(it.carbsCount!=null) {
-                    val valueToSet = String.format("%.2f", it.carbsCount!!.toBigDecimal())+ "mg/dL"
+                    val valueToSet = String.format("%.2f", it.carbsCount!!.toBigDecimal())
                     tvCarbsValue.text =  valueToSet
                 }
                 if (it.foodLogs?.size!! > 0) {

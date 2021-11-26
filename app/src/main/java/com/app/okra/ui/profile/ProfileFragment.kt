@@ -125,13 +125,13 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
         viewModel._updateProfileLiveData.observe(viewLifecycleOwner) {
             showToast(it.message!!)
             BaseActivity.saveDataInPreference(profilePicture = amazonImageUrl)
-            iv_profile_pic.loadUserImageFromUrl(requireActivity(),amazonImageUrl)
+            iv_profile_pic.loadUserImageFromUrl(requireActivity(), amazonImageUrl)
         }
     }
 
     private fun manageUi() {
         tvName.text = name
-        iv_profile_pic.loadUserImageFromUrl(requireActivity(),profilePic)
+        iv_profile_pic.loadUserImageFromUrl(requireActivity(), profilePic)
         if(!profilePic.isNullOrEmpty()) {
             iv_profile_pic.layoutParams.width = 400
             iv_profile_pic.layoutParams.height = 400
@@ -159,7 +159,11 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
                 requireActivity().navigationOnly(ProfileInfoActivity())
             }
             3 -> {
-                requireActivity().navigationOnly(BluetoothActivity())
+                val intent = Intent(requireActivity(), BluetoothActivity::class.java)
+                intent.putExtra(AppConstants.Intent_Constant.FROM_SCREEN,
+                    ProfileFragment::class.java.simpleName
+                )
+                requireActivity().navigate(intent)
             }
             4 -> {
                 requireActivity().navigationOnly(SettingsActivity())
@@ -282,7 +286,6 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
             }
         }
     }
-
 
     override fun setImagePath(uri: Uri) {
         val file = File(uri.path)

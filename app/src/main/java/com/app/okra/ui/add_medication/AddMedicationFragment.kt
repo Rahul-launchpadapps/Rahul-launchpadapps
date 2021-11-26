@@ -157,12 +157,11 @@ class AddMedicationFragment : BaseFragment() {
     private fun addMedicationApi(quant: Int) {
         val data = MedicationData()
         var unit = ""
-        unit = if(isMG)
-            AppConstants.MG
-        else if (isPill)
-            AppConstants.PILLES
-        else
-            AppConstants.ML
+        unit = when {
+            isMG -> AppConstants.MG
+            isPill -> AppConstants.PILLES
+            else -> AppConstants.ML
+        }
 
         data.medicineName =name
         data.unit =unit
