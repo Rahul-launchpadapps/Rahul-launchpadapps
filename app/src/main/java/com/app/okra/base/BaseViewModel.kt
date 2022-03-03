@@ -69,12 +69,6 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    suspend fun hideProgressBar_loadMore(){
-        withContext(Dispatchers.Main) {
-            progressDialogForLoadMore.value = Event(ProgressDialogData())
-        }
-    }
-
     // this is general progress bar with fixed message "PROCESSING".
     fun showProgressBar_loadMore(){
         progressDialogForLoadMore.value = Event(ProgressDialogData(true))
