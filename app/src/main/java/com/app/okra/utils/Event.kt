@@ -12,6 +12,13 @@ class Event<out T>(private val content: T) {
         return null
     }
 
+    fun update() {
+        if (!isAlreadyHandled) {
+            isAlreadyHandled = true
+        }
+    }
+
+    @Synchronized
     fun peekContent(): T {
         return content
     }

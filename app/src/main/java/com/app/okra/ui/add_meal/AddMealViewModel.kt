@@ -109,6 +109,7 @@ class AddMealViewModel(private val repo: AddMealRepo?) : BaseViewModel(), Amazon
         carbs: CommonData?=null,
         fat: CommonData?=null,
         protein: CommonData?=null,
+        noOfServings: String?=null,
     ){
         if(!date.isNullOrEmpty()){
             addRequest.date = date
@@ -134,6 +135,10 @@ class AddMealViewModel(private val repo: AddMealRepo?) : BaseViewModel(), Amazon
         }
         foodType?.let{
             addRequest.foodType = it
+        }
+
+        if(!noOfServings.isNullOrEmpty()){
+            addRequest.noOfServings = noOfServings
         }
     }
 

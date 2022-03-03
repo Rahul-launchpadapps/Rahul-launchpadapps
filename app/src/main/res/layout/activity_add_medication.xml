@@ -4,7 +4,7 @@
     style="@style/container"
     android:background="@color/bg_grey">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
         style="@style/widthMatchOnly"
         android:name="androidx.navigation.fragment.NavHostFragment"

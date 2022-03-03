@@ -74,8 +74,8 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 this,
                 getString(R.string.are_you_sure_you_want_to_delete_the_added_meal),
                 true,
-                positiveButtonText=   getString(R.string.cancel),
-                negativeButtonText = getString(R.string.delete),
+                positiveButtonText=   getString(R.string.btn_cancel),
+                negativeButtonText = getString(R.string.btn_delete),
                 title = getString(R.string.delete_meal)
             )
 
@@ -106,10 +106,18 @@ class MealDetailsFragment : BaseFragment(), Listeners.DialogListener {
                     tvFoodTypeValue.text = it
                 }
 
-                tvCaloriesValue.text = String.format("%.2f",calories?.value!!.toBigDecimal()) + " cal"
-                tvCarbsValue.text =String.format("%.2f",carbs?.value!!.toBigDecimal()) + " gm"
-                tvFatValue.text = String.format("%.2f",fat?.value!!.toBigDecimal())  + " gm"
-                tvProteinvalue.text = String.format("%.2f",protien?.value!!.toBigDecimal())+ " gm"
+                noOfServings?.let {
+                    tvNoOfServingValue.text = it
+                }
+
+                val cal = String.format("%.2f",calories?.value!!.toBigDecimal()) + " cal"
+                val carb = String.format("%.2f",carbs?.value!!.toBigDecimal()) + " gm"
+                val fat = String.format("%.2f",fat?.value!!.toBigDecimal())  + " gm"
+                val protein = String.format("%.2f",protien?.value!!.toBigDecimal())+ " gm"
+                tvCaloriesValue.text = cal
+                tvCarbsValue.text = carb
+                tvFatValue.text = fat
+                tvProteinvalue.text = protein
             }
         }
     }

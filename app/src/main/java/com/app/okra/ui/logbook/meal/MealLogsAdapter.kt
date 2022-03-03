@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
 import com.app.okra.models.Data
 import com.app.okra.models.MealData
+import com.app.okra.utils.AppConstants
 import com.app.okra.utils.Listeners
 import com.app.okra.utils.getDifferentInfoFromDate_String
 import kotlinx.android.synthetic.main.row_test_or_meal_logs.view.*
@@ -45,7 +46,7 @@ class MealLogsAdapter (var listener: Listeners.ItemClickListener,
             itemView.tvDate.text = getDifferentInfoFromDate_String(
                 dateKey,
                 initFormat = "dd/MM/yyyy",
-                formatYouWant = "MMM dd yyyy")
+                    formatYouWant = AppConstants.DateFormat.DATE_FORMAT_9)
 
             val adapter = MealsAdapter(listener, entriesOfDate)
             itemView.rvTestLogs.adapter = adapter

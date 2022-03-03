@@ -28,10 +28,11 @@ import android.content.Intent
 import android.app.*
 import com.app.okra.R
 import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_3
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_8
 import java.text.SimpleDateFormat
 
 class SetReminderFragment : BaseFragment() {
-
     private var mYear: Int = 0
     private var mMonth: Int = 0
     private var mDay: Int = 0
@@ -39,6 +40,7 @@ class SetReminderFragment : BaseFragment() {
     private lateinit var customSpinnerAdapter2: CustomSpinnerAdapter
     private var time: Int = 1
     private var strDate: String = ""
+    private var strDateCalendarInstance: Calendar ?=null
     private var endDate: String = ""
     private var timeValue: String = ""
     private var reminderType: Int = 0
@@ -85,13 +87,21 @@ class SetReminderFragment : BaseFragment() {
 
     private fun getData() {
         arguments?.let { it ->
-            var data: String? = it.getString(AppConstants.DATA)
-            if (data.equals(AppConstants.DIABETES)) {
-                reminderType = 2
-            }else if (data.equals(AppConstants.FOOD)) {
-                reminderType = 1
-            } else
-                reminderType = 3
+            val data: String? = it.getString(AppConstants.DATA)
+            reminderType = when {
+                data.equals(AppConstants.DIABETES) -> {
+                    tvTitle.text = getString(R.string.perform_diabetes_test)
+                    2
+                }
+                data.equals(AppConstants.FOOD) -> {
+                    tvTitle.text = getString(R.string.food_log)
+                    1
+                }
+                else -> {
+                    tvTitle.text = getString(R.string.title_take_medicine)
+                    3
+                }
+            }
         }
     }
 
@@ -167,18 +177,22 @@ class SetReminderFragment : BaseFragment() {
 
         btnCommon.setOnClickListener {
             val c = Calendar.getInstance()
-            if(ivTimeSelector.isSelected && ivDateSelector.isSelected){
+            if (ivTimeSelector.isSelected && ivDateSelector.isSelected) {
                 val date1: Date = c.time
-                val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $timeValue")
-                if(startDate?.before(date1) == true) {
+                val startDate =
+                    getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $timeValue")
+                if (startDate?.before(date1) == true) {
                     showToast(getString(R.string.selected_time_should_not_be_lesser_than_current_time))
-                }else
+                } else
                     hitApi()
-            }else{
-                if(ivDateSelector.isSelected){
+            } else {
+                if (ivDateSelector.isSelected) {
                     val date1: Date = c.time
-                    val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $defaultTime")
-                    if(startDate?.before(date1) == true) {
+                    val startDate = getDateFromPattern(
+                        AppConstants.DateFormat.DATE_FORMAT_2,
+                        "$strDate $defaultTime"
+                    )
+                    if (startDate?.before(date1) == true) {
                         showToast("You can not select today's date as the default time of $defaultTime is already passed.")
 
                         ivDateSelector.isSelected = false
@@ -186,14 +200,18 @@ class SetReminderFragment : BaseFragment() {
                         tvDateValue.visibility = View.GONE
                         if (!ivTimeSelector.isSelected)
                             layout_button.visibility = View.GONE
-                    }else
+                    } else
                         hitApi()
-                }else if(ivTimeSelector.isSelected){
+                } else if (ivTimeSelector.isSelected) {
                     val date1: Date = c.time
-                    val df = SimpleDateFormat(AppConstants.DateFormat.DATE_FORMAT_3, Locale.getDefault())
+                    val df =
+                        SimpleDateFormat(AppConstants.DateFormat.DATE_FORMAT_3, Locale.getDefault())
                     strDate = df.format(date1)
-                    val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, "$strDate $timeValue")
-                    if(startDate?.before(date1) == true) {
+                    val startDate = getDateFromPattern(
+                        AppConstants.DateFormat.DATE_FORMAT_2,
+                        "$strDate $timeValue"
+                    )
+                    if (startDate?.before(date1) == true) {
                         showToast(MessageConstants.Errors.selected_time_should_not_be)
 
                         ivTimeSelector.isSelected = false
@@ -201,7 +219,7 @@ class SetReminderFragment : BaseFragment() {
                         tvTimeValue.visibility = View.GONE
                         if (!ivDateSelector.isSelected)
                             layout_button.visibility = View.GONE
-                    }else
+                    } else
                         hitApi()
                 }
             }
@@ -209,7 +227,7 @@ class SetReminderFragment : BaseFragment() {
     }
 
     private fun setAdapter() {
-        btnCommon.text = getString(R.string.save)
+        btnCommon.text = getString(R.string.btn_save)
         repeatList.add(AppConstants.NEVER_TEXT)
         repeatList.add(AppConstants.DAILY)
         repeatList.add(AppConstants.WEEKLY)
@@ -227,7 +245,7 @@ class SetReminderFragment : BaseFragment() {
         tvSetEndRepeat.text = endRepeatList[0]
     }
 
-    private fun hitApi(){
+    private fun hitApi() {
         setReminder(hour, min)
         val startDate: String
         val timeDate: String
@@ -248,24 +266,21 @@ class SetReminderFragment : BaseFragment() {
 
         if (ivTimeSelector.isSelected) {
             timeDate =
-                convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_2, strDate + " " + timeValue)
+                convertLocalTimeZoneToUTC(
+                    AppConstants.DateFormat.DATE_FORMAT_2,
+                    strDate + " " + timeValue
+                )
         } else
             timeDate =
-                convertLocalTimeZoneToUTC(AppConstants.DateFormat.DATE_FORMAT_2, strDate + " " + "12:00 pm")
-        obj.put(AppConstants.RequestParam.time, timeDate)
+                convertLocalTimeZoneToUTC(
+                    AppConstants.DateFormat.DATE_FORMAT_2,
+                    "$strDate 12:00 pm"
+                )
+        obj[AppConstants.RequestParam.time] = timeDate
 
-        if (tvSetRepeat.text.toString() == AppConstants.NEVER_TEXT)
-            repeatType = AppConstants.NEVER
-        else if (tvSetRepeat.text.toString() == AppConstants.DAILY)
-            repeatType = AppConstants.EVERY_DAY
-        else if (tvSetRepeat.text.toString() == AppConstants.MONTHLY)
-            repeatType = AppConstants.EVERY_MONTH
-        else if (tvSetRepeat.text.toString() == AppConstants.WEEKLY)
-            repeatType = AppConstants.EVERY_WEEK
-        else
-            repeatType = AppConstants.SET_UP
 
-        obj[AppConstants.RequestParam.repeatType] = repeatType
+        obj[AppConstants.RequestParam.repeatType] =
+            viewModel.getRepeatType(tvSetRepeat.text.toString(), false)
 
         endRepeatType = if (tvSetEndRepeat.text.toString() == AppConstants.NEVER_TEXT)
             AppConstants.NEVER
@@ -282,6 +297,7 @@ class SetReminderFragment : BaseFragment() {
         viewModel.setReminder(obj)
     }
 
+
     private fun selectDate() {
         val c = Calendar.getInstance()
         mYear = c.get(Calendar.YEAR)
@@ -289,148 +305,220 @@ class SetReminderFragment : BaseFragment() {
         mDay = c.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog =
-            DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
-                var date =
-                    year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
+            DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
+                val date = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
+                mYear = year
+                mMonth = monthOfYear
                 mDay = dayOfMonth
-                if (time == 1) {
+
+                if (time == 1) { // for Date
                     layout_button.visibility = View.VISIBLE
                     ivDateSelector.isSelected = true
                     tvDate.gravity = Gravity.BOTTOM
                     tvDateValue.visibility = View.VISIBLE
+                    strDateCalendarInstance = Calendar.getInstance().apply {
+                        set(Calendar.DAY_OF_MONTH, mDay)
+                        set(Calendar.MONTH, mMonth)
+                        set(Calendar.YEAR, mYear)
+                    }
                     strDate = date
-                    tvDateValue.text = date
-                    if(ivTimeSelector.isSelected){
-                        val date1: Date = c.getTime()
-                        val startDate = getDateFromPattern(AppConstants.DateFormat.DATE_FORMAT_2, strDate + " " + timeValue)
-                        if(startDate?.before(date1) == true) {
+                    tvDateValue.text = getDifferentInfoFromDate_String(date, DATE_FORMAT_3, DATE_FORMAT_8)
+                    if (ivTimeSelector.isSelected) {
+                        val date1: Date = c.time
+                        val startDate = getDateFromPattern(
+                            AppConstants.DateFormat.DATE_FORMAT_2,
+                            "$strDate $timeValue"
+                        )
+                        if (startDate?.before(date1) == true) {
                             ivTimeSelector.isSelected = false
                             tvTime.gravity = Gravity.CENTER
                             tvTimeValue.visibility = View.GONE
                         }
                     }
-                } else if (time == 2) {
+                } else if (time == 2) { // for END Date
                     endDate = date
                     tvSetEndRepeat.text = date
                 }
             }, mYear, mMonth, mDay)
         val c1 = Calendar.getInstance()
         c1.add(Calendar.MONTH, -2)
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+
+        if(strDateCalendarInstance!=null){
+            strDateCalendarInstance!!.add(Calendar.DATE, 1)
+            datePickerDialog.datePicker.minDate = strDateCalendarInstance!!.timeInMillis
+        }else{
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+
+        }
         datePickerDialog.show()
     }
 
     private fun selectTime() {
-        val timePicker = TimePickerDialog(
+      val calendar = Calendar.getInstance()
+       TimePickerDialog(
             requireContext(),
             timePickerDialogListener,
             12,
             10,
             false
-        )
-        timePicker.show()
+        ).apply {
+            updateTime(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE))
+            show()
+        }
     }
 
     private val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
-        object : TimePickerDialog.OnTimeSetListener {
-            override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 val formattedTime: String = when {
                     hourOfDay == 0 -> {
                         if (minute < 10) {
-                            "${hourOfDay + 12}:0${minute} am"
+                            "${hourOfDay + 12}:0${minute} AM"
                         } else {
-                            "${hourOfDay + 12}:${minute} am"
+                            "${hourOfDay + 12}:${minute} AM"
                         }
                     }
                     hourOfDay > 12 -> {
                         if (minute < 10) {
-                            "${hourOfDay - 12}:0${minute} pm"
+                            "${hourOfDay - 12}:0${minute} PM"
                         } else {
-                            "${hourOfDay - 12}:${minute} pm"
+                            "${hourOfDay - 12}:${minute} PM"
                         }
                     }
                     hourOfDay == 12 -> {
                         if (minute < 10) {
-                            "${hourOfDay}:0${minute} pm"
+                            "${hourOfDay}:0${minute} PM"
                         } else {
-                            "${hourOfDay}:${minute} pm"
+                            "${hourOfDay}:${minute} PM"
                         }
                     }
                     else -> {
                         if (minute < 10) {
-                            "${hourOfDay}:${minute} am"
+                            "${hourOfDay}:${minute} AM"
                         } else {
-                            "${hourOfDay}:${minute} am"
+                            "${hourOfDay}:${minute} AM"
                         }
                     }
                 }
                 timeValue = formattedTime
                 hour = hourOfDay
-                min= minute
+                min = minute
                 layout_button.visibility = View.VISIBLE
                 ivTimeSelector.isSelected = true
                 tvTime.gravity = Gravity.BOTTOM
                 tvTimeValue.visibility = View.VISIBLE
                 tvTimeValue.text = formattedTime
             }
-        }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this)
         viewModel._setReminderLiveData.observe(viewLifecycleOwner) { it ->
             showToast(getString(R.string.saved_successfully))
-            activity?.finish()
+
+            EventLiveData.eventLiveData.value =
+                    Event(EventLiveData.EventData(SetReminderFragment::class.java.simpleName))
+            navController.popBackStack()
         }
     }
 
-    fun setReminder(
+    private fun setReminder(
         hour: Int,
         min: Int,
     ) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
+        calendar[Calendar.DAY_OF_MONTH] = mDay
+        calendar[Calendar.MONTH] = mMonth
+        calendar[Calendar.YEAR] = mYear
         calendar[Calendar.HOUR_OF_DAY] = hour
         calendar[Calendar.MINUTE] = min
         calendar[Calendar.SECOND] = 0
         val alarmMgr = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val notificationTitle = when (reminderType) {
+            1 -> {
+                "Food Log"
+            }
+            2 -> {
+                "Perform Diabetes Test"
+            }
+            else -> {
+                "Take Medicine"
+            }
+        }
+
+        val notficationDesc = getNotificationDescription(calendar)
         val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra(AppConstants.Intent_Constant.TYPE, AppConstants.Intent_Constant.REMINDER)
+        intent.putExtra(AppConstants.Intent_Constant.NOTIFICATION_TITLE, notificationTitle)
+        intent.putExtra(AppConstants.Intent_Constant.NOTIFICATION_DESC, notficationDesc)
         val alarmIntent = PendingIntent.getBroadcast(
             context,
             100,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
+        println(":::: Notification time: ${getDateFromTimeStamp( calendar.timeInMillis,
+            AppConstants.DateFormat.DATE_FORMAT_5)}")
 
-        if (tvSetRepeat.text.toString().equals(AppConstants.DAILY))
-            alarmMgr.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                AlarmManager.INTERVAL_DAY * 1,
-                alarmIntent
-            )
-        else if (tvSetRepeat.text.toString().equals(AppConstants.MONTHLY))
-            alarmMgr.setRepeating(
+        when( tvSetRepeat.text.toString() ) {
+            AppConstants.DAILY -> {
+
+                 alarmMgr.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY * 1,
+                    alarmIntent
+                )
+            }
+            AppConstants.MONTHLY ->{
+                alarmMgr.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_HOUR * (1 / 24),
+                    alarmIntent
+                )
+                alarmMgr.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
                 AlarmManager.INTERVAL_DAY * 30,
                 alarmIntent
             )
-        else if (tvSetRepeat.text.toString().equals(AppConstants.WEEKLY))
-            alarmMgr.setRepeating(
+            }
+            AppConstants.WEEKLY -> alarmMgr.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
                 AlarmManager.INTERVAL_DAY * 7,
                 alarmIntent
             )
-        /*else
-            alarmMgr.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_HOUR * (1/24),
-            alarmIntent
-        )*/
+            else -> {
+                alarmMgr.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_HOUR * (1 / 24),
+                    alarmIntent
+                )
+            }
+        }
+
 
         calendar.add(Calendar.DAY_OF_MONTH, mDay)
+    }
+
+    private fun getNotificationDescription(calendar: Calendar): String {
+
+        val timeToShow = getDateFromTimeStamp(calendar.timeInMillis, "hh:mm a")
+        val repeatType = viewModel.getRepeatType(tvSetRepeat.text.toString(), true)
+
+        return when (repeatType) {
+            AppConstants.DAILY -> "Daily at $timeToShow"
+            AppConstants.WEEKLY -> {
+                val day = getDateFromTimeStamp(calendar.timeInMillis, "EEEE")
+                "Every $day at $timeToShow"
+            }
+            AppConstants.MONTHLY -> {
+                "Every Month at $timeToShow"
+            }
+            else -> ""
+        }
+
     }
 }

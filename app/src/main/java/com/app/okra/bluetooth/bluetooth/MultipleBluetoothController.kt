@@ -7,7 +7,7 @@ import com.app.okra.bluetooth.utils.BleLruHashMap
 import java.util.*
 
 class MultipleBluetoothController {
-    private val bleLruHashMap: BleLruHashMap<String, BleBluetooth>
+    private val bleLruHashMap: BleLruHashMap<String, BleBluetooth> = BleLruHashMap(BleManager.instance.maxConnectCount)
     private val bleTempHashMap: HashMap<String, BleBluetooth>
     @Synchronized
     fun buildConnectingBle(bleDevice: BleDevice?): BleBluetooth? {
@@ -135,7 +135,6 @@ class MultipleBluetoothController {
     }
 
     init {
-        bleLruHashMap = BleLruHashMap(BleManager.instance.maxConnectCount)
         bleTempHashMap = HashMap()
     }
 }

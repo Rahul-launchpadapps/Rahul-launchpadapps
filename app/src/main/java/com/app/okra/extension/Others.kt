@@ -23,7 +23,7 @@ fun String.isPasswordValid(): Boolean {
 
 
 fun isPhoneNumberValid(phoneNumber :String): Boolean {
-    return phoneNumber.length==10
+    return phoneNumber.length==11
 }
 
 fun Long.getFormattedDuration(forceShowHours: Boolean = false): String {

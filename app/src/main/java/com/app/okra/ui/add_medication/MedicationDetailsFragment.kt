@@ -15,13 +15,15 @@ import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.MedicationRepoImpl
 import com.app.okra.extension.beGone
+import com.app.okra.extension.beInvisible
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MedicationData
+import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.logbook.medication.MedicationLogsFragment
 import com.app.okra.ui.logbook.medication.MedicationViewModel
 import com.app.okra.utils.*
-import kotlinx.android.synthetic.main.fragment_save_medication.*
+import kotlinx.android.synthetic.main.fragment_medication_detail.*
 import kotlinx.android.synthetic.main.layout_button.view.*
 import kotlinx.android.synthetic.main.layout_header.*
 import java.util.*
@@ -29,11 +31,10 @@ import java.util.*
 class MedicationDetailsFragment : BaseFragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_save_medication, container, false)
+        return inflater.inflate(R.layout.fragment_medication_detail, container, false)
     }
 
     override fun getViewModel(): BaseViewModel? {
@@ -45,9 +46,9 @@ class MedicationDetailsFragment : BaseFragment() {
     private var medicationType: String?=null
     private val viewModel by lazy {
         ViewModelProvider(this,
-            viewModelFactory {
-                MedicationViewModel(MedicationRepoImpl(apiServiceAuth))
-            }
+                viewModelFactory {
+                    MedicationViewModel(MedicationRepoImpl(apiServiceAuth))
+                }
         ).get(MedicationViewModel::class.java)
     }
 
@@ -81,20 +82,18 @@ class MedicationDetailsFragment : BaseFragment() {
         tvTitle.text = getString(R.string.medication)
         ivRight.beVisible()
 
-
         if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
             // Coming to update or delete medication
             ivRight.beVisible()
             ivDelete.beVisible()
             layout_button.btnCommon.text = getString(R.string.share)
             layout_button.beGone()
-            clEditional.beVisible()
 
         }else{
             // Coming to add medication
             ivRight.beGone()
-            ivDelete.beGone()
-            layout_button.btnCommon.text = getString(R.string.save)
+            ivDelete.beInvisible()
+            layout_button.btnCommon.text = getString(R.string.btn_save)
             layout_button.beVisible()
 
             clEditional.beGone()
@@ -121,41 +120,45 @@ class MedicationDetailsFragment : BaseFragment() {
 
             if(!it.createdAt.isNullOrEmpty()) {
                 tvDateValue.text = getDateTimeFromISO(
-                    it.createdAt!!,
-                    formatYouWant = "MMM dd yyyy")
+                        it.createdAt!!,
+                        formatYouWant = "MMM dd yyyy")
             }else{
                 val cal = Calendar.getInstance()
                 tvDateValue.text =
-                    getDateFromTimeStamp(
-                        cal.timeInMillis,
-                        formatYouWant = AppConstants.DateFormat.DATE_FORMAT_4
-                    )
+                        getDateFromTimeStamp(
+                                cal.timeInMillis,
+                                formatYouWant = AppConstants.DateFormat.DATE_FORMAT_4
+                        )
             }
 
-            if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
 
-                if(it.tags!=null) {
+            if(it.tags.isNullOrEmpty() && it.feelings.isNullOrEmpty() && it.image.isNullOrEmpty()) {
+                clEditional.beGone()
+
+            }else {
+                clEditional.beVisible()
+                if (it.tags != null) {
                     tvTagsValue.text = it.tags.toString()
                 }
-                if(it.feelings!=null) {
+                if (it.feelings != null) {
                     tvFeelingValues.text = it.feelings.toString()
                 }
 
-                if(!it.image.isNullOrEmpty()){
-                    val adapter = ImageAdapter(requireContext(), it.image!!, screenType= MedicationDetailsFragment::class.java.simpleName)
+                if (!it.image.isNullOrEmpty()) {
+                    val adapter = ImageAdapter(requireContext(), it.image!!, screenType = MedicationDetailsFragment::class.java.simpleName)
 
                     val layoutManager = GridLayoutManager(requireContext(), 3)
-                   // val layoutManager = LinearLayoutManager(requireContext())
+                    // val layoutManager = LinearLayoutManager(requireContext())
                     rvImages.layoutManager = layoutManager
                     rvImages.adapter = adapter
                 }
             }
+
         }
     }
 
     private fun setListener() {
         ivBack.setOnClickListener {
-            activity?.setResult(RESULT_CANCELED)
             activity?.finish()
         }
 
@@ -164,7 +167,7 @@ class MedicationDetailsFragment : BaseFragment() {
             medicationData?.let {
                 bundle.putParcelable(AppConstants.DATA, it)
             }
-            navController.navigate(R.id.action_saveMedication_to_editMedicationFragment,bundle)
+            navController.navigate(R.id.action_medicationDetail_to_editMedicationFragment,bundle)
         }
         ivDelete.setOnClickListener {
             showAlertDialog(requireContext(), object : Listeners.DialogListener {
@@ -172,7 +175,7 @@ class MedicationDetailsFragment : BaseFragment() {
                     medicationData?.let {
                         viewModel.deleteMedication(it._id!!)
                     }
-                   dialog?.dismiss()
+                    dialog?.dismiss()
                 }
 
                 override fun onCancelClick(dialog: DialogInterface?) {
@@ -184,22 +187,18 @@ class MedicationDetailsFragment : BaseFragment() {
 
         layout_button.btnCommon.setOnClickListener {
 
-            if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
-                showToast(MessageConstants.Messages.work_in_progress)
-            }else {
-                val unitToSend = if (tvUnitValue.text.toString() == getString(R.string.mg))
-                    AppConstants.MG
-                else if (tvUnitValue.text.toString() == getString(R.string.pills))
-                    AppConstants.PILLES
-                else
-                    AppConstants.ML
-                viewModel.addMedication(
+            val unitToSend = if (tvUnitValue.text.toString() == getString(R.string.mg))
+                AppConstants.MG
+            else if (tvUnitValue.text.toString() == getString(R.string.pills))
+                AppConstants.PILLES
+            else
+                AppConstants.ML
+            viewModel.addMedication(
                     tvTitle.text.toString(),
                     unitToSend,
                     tvQuantityValue.text.toString().toInt(),
                     medicationType!!
-                )
-            }
+            )
         }
     }
 
@@ -207,6 +206,8 @@ class MedicationDetailsFragment : BaseFragment() {
         setBaseObservers(viewModel, this, observeError = false)
         viewModel._addMedicationLiveData.observe(viewLifecycleOwner) { it ->
             showToast(getString(R.string.saved_successfully))
+            EventLiveData.eventLiveData.value =
+                    Event(EventLiveData.EventData(MedicationDetailsFragment::class.java.simpleName))
             activity?.finish()
         }
         viewModel._deleteMedicationLiveData.observe(viewLifecycleOwner) { it ->
@@ -214,6 +215,14 @@ class MedicationDetailsFragment : BaseFragment() {
             intent.putExtra(AppConstants.Intent_Constant.RELOAD_SCREEN, "true")
             activity?.setResult(RESULT_OK,intent)
             activity?.finish()
+        }
+
+        EventLiveData.editMedicationLiveData.observe(viewLifecycleOwner){ it ->
+            val medication =  it?.getContent()
+            medication?.let{
+                medicationData=it
+                setViews()
+            }
         }
 
         viewModel._errorObserver.observe(viewLifecycleOwner){
@@ -226,5 +235,7 @@ class MedicationDetailsFragment : BaseFragment() {
             }
         }
     }
+
+
 
 }

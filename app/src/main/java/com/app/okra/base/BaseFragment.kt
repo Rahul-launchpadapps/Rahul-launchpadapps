@@ -127,7 +127,7 @@ abstract class BaseFragment :Fragment() {
         }
     }
 
-    fun showToast_errorOccurred() {
+    fun showToastErrorOccurred() {
         showToast(MessageConstants.Errors.an_error_occurred)
     }
 

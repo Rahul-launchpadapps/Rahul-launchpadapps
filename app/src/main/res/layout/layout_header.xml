@@ -86,9 +86,8 @@
             android:layout_marginStart="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_0"
             android:background="@mipmap/get_started_btn"
-            android:text="@string/save"
+            android:text="@string/btn_save"
             android:visibility="gone"
-
             android:textColor="@color/green_1"
             app:layout_constraintEnd_toStartOf="@+id/txtSave"
             app:layout_constraintTop_toTopOf="parent"

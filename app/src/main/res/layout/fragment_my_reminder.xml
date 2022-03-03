@@ -48,29 +48,30 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvAddTest"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/perform_diabetes_test"
                 android:textAllCaps="false"
+                android:layout_marginBottom="@dimen/dp_12"
                 android:textColor="@color/black_2"
-                app:layout_constraintBottom_toTopOf="@id/tvDiabetesValue"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivAddTest"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvDiabetesValue"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_5"
                 android:fontFamily="@font/axiforma_medium"
-                android:gravity="top"
-                android:paddingTop="@dimen/dp_2"
-                android:text="@string/date"
-                android:textAllCaps="false"
+                tools:text="@string/date"
                 android:visibility="gone"
+                android:textAllCaps="false"
                 android:textColor="@color/grey_3"
                 app:layout_constraintStart_toEndOf="@+id/ivAddTest"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvAddTest" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,29 +114,32 @@
             <TextView
                 android:id="@+id/tvAddFood"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/food_log"
+                android:layout_marginBottom="@dimen/dp_12"
                 android:textAllCaps="false"
                 android:textColor="@color/black_2"
                 app:layout_constraintStart_toEndOf="@id/ivAddFood"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tvFoodValue" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvFoodValue"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_5"
                 android:fontFamily="@font/axiforma_medium"
-                android:gravity="top"
                 android:paddingTop="@dimen/dp_2"
+                android:visibility="gone"
                 android:text="@string/date"
                 android:textAllCaps="false"
-                android:visibility="gone"
                 android:textColor="@color/grey_3"
-                app:layout_constraintStart_toEndOf="@+id/ivAddFood"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivAddFood"
                 app:layout_constraintTop_toBottomOf="@id/tvAddFood" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -178,11 +182,12 @@
             <TextView
                 android:id="@+id/tvAddMedicine"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="center"
                 android:text="@string/take_medicine"
                 android:textAllCaps="false"
+                android:layout_marginBottom="@dimen/dp_12"
                 android:textColor="@color/black_2"
                 app:layout_constraintStart_toEndOf="@id/ivAddMedicine"
                 app:layout_constraintTop_toTopOf="parent"
@@ -190,8 +195,9 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvMedicineValue"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_5"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="top"
                 android:paddingTop="@dimen/dp_2"
@@ -199,6 +205,7 @@
                 android:textAllCaps="false"
                 android:visibility="gone"
                 android:textColor="@color/grey_3"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivAddMedicine"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvAddMedicine" />

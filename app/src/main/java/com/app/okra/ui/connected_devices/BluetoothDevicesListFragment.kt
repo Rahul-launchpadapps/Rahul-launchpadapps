@@ -87,7 +87,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
         BleManager.instance.init(OkraApplication.getApplicationInstance())
         BleManager.instance.enableLog(true)
             .setReConnectCount(1, AppConstants.BLE_SCAN_TIMEOUT)
-            .setConnectOverTime(20000).operateTimeout
+            .setConnectOverTime(AppConstants.BLE_SCAN_TIMEOUT).operateTimeout
 
         bleValidate.checkPermissions()
     }
@@ -139,8 +139,8 @@ class BluetoothDevicesListFragment : BaseFragment(),
             },
             MessageConstants.Messages.bluetooth_turn_on_permission,
             false,
-            positiveButtonText = getString(R.string.ok),
-            negativeButtonText = getString(R.string.cancel),
+            positiveButtonText = getString(R.string.btn_ok),
+            negativeButtonText = getString(R.string.btn_cancel),
             title = getString(R.string.bluetooth),
         )
     }
@@ -160,8 +160,8 @@ class BluetoothDevicesListFragment : BaseFragment(),
             },
             MessageConstants.Messages.please_turn_on_your_location,
             false,
-            positiveButtonText = getString(R.string.ok),
-            negativeButtonText = getString(R.string.cancel),
+            positiveButtonText = getString(R.string.btn_ok),
+            negativeButtonText = getString(R.string.btn_cancel),
             title = getString(R.string.location),
         )
     }
@@ -194,7 +194,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
             },
             MessageConstants.Messages.location_permission_deny_text,
             false,
-            positiveButtonText = getString(R.string.ok),
+            positiveButtonText = getString(R.string.btn_ok),
             title = getString(R.string.alert),
         )
     }
@@ -295,10 +295,10 @@ class BluetoothDevicesListFragment : BaseFragment(),
         val dialogText = if(deviceData.name!=null && deviceData.name!!.toLowerCase(Locale.ROOT)
                 .contains("okra")){
             needCancelButton = true
-            needOkButtonText = getString(R.string.connect)
+            needOkButtonText = getString(R.string.btn_connect)
             MessageConstants.Messages.do_you_want_to
         }else{
-            needOkButtonText = getString(R.string.ok)
+            needOkButtonText = getString(R.string.btn_ok)
             MessageConstants.Messages.you_can_only_pair
         }
 
@@ -320,21 +320,19 @@ class BluetoothDevicesListFragment : BaseFragment(),
         }, dialogText,
             needCancelButton,
             needOkButtonText,
-            getString(R.string.cancel)
+            getString(R.string.btn_cancel)
         )
 
     }
 
     private fun connect(deviceData: BleDevice) {
         BleManager.instance.connect(deviceData,gattCallBack )
-
     }
 
-    var gattCallBack :BleGattCallback?= object : BleGattCallback() {
+    private var gattCallBack :BleGattCallback?= object : BleGattCallback() {
         override fun onStartConnect() {
             (activity as BluetoothActivity).setHeaderButtonVisibility(false)
             (activity as BluetoothActivity).setDeleteButtonVisibility(false,true)
-
             showProgressBar()
         }
 
@@ -349,7 +347,7 @@ class BluetoothDevicesListFragment : BaseFragment(),
         override fun onConnectSuccess(bleDevice: BleDevice?, gatt: BluetoothGatt?, status: Int) {
             hideProgressBar()
 
-            if(bleDevice!=null) {
+            /*if(bleDevice!=null) {
                 (activity as BluetoothActivity).connectedBleDevice = bleDevice
 
                 if ((activity as BluetoothActivity).checkIfDeviceCountExist(bleDevice)) {
@@ -362,7 +360,9 @@ class BluetoothDevicesListFragment : BaseFragment(),
                 }
             }else{
                 showToast(MessageConstants.Errors.an_error_occurred)
-            }
+            }*/
+            showToast("Connection Success")
+
         }
 
         override fun onDisConnected(

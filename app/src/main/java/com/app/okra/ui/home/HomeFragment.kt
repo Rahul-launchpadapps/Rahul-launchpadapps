@@ -18,24 +18,31 @@ import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.GraphInfo
 import com.app.okra.models.MealData
 import com.app.okra.models.UserInfo
-import com.app.okra.ui.home.HomeViewModel
+import com.app.okra.ui.DashBoardActivity
+import com.app.okra.ui.add_meal.AddMealActivity
+import com.app.okra.ui.add_medication.MedicationDetailsFragment
+import com.app.okra.ui.connected_devices.ConnectionStatusFragment
 import com.app.okra.ui.logbook.meal.MealLogsAdapter
+import com.app.okra.ui.logbook.test.TestLogsFragment
 import com.app.okra.ui.notification.NotificationActivity
-import com.app.okra.utils.AppConstants
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import com.app.okra.utils.navigateToLogin
+import com.app.okra.utils.*
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
+    private var avgGlucose: Double? = null
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var mealLogsAdapter: MealLogsAdapter
     private var hashMapKeyList = ArrayList<String>()
@@ -60,7 +67,6 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -78,10 +84,42 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         tv_time.text = textToSet
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateAvgGlucoseValue(avgGlucose)
+    }
+
+
+    private fun updateAvgGlucoseValue(averageGlucose: Double?) {
+        if(averageGlucose!=null){
+
+            val bloodGlucoseUnit = PreferenceManager.getString(AppConstants.Pref_Key.BLOOD_GLUCOSE_UNIT)
+
+            var valueToSet  = ""
+            var valueInDouble  = 0.0
+            if(!bloodGlucoseUnit.isNullOrEmpty()) {
+                if (bloodGlucoseUnit == AppConstants.MM_OL) {
+                    valueInDouble =  convertMGDLtoMMOL(averageGlucose.toFloat()).toDouble()
+                    valueToSet = String.format("%.2f", valueInDouble)
+
+                }else{
+                    valueToSet = String.format("%.2f", averageGlucose.toBigDecimal())
+                }
+            }else{
+                valueToSet = String.format("%.2f", averageGlucose.toBigDecimal())
+            }
+
+            tvAvgBgValue.text =valueToSet
+        }
+
+    }
+
     private fun getData() {
         viewModel.dashboardInfo(time)
         viewModel.stripeInfo()
     }
+
+
 
     private fun setObserver() {
         setBaseObservers(viewModel, this, observeError = false)
@@ -98,11 +136,8 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
                 tvTotalTestValue.text = it.totalTest
 
                 updateUserData(it.userInfo)
-
-                if(it.avgBloodGlucose!=null) {
-                    val valueToSet = String.format("%.2f", it.avgBloodGlucose!!.toBigDecimal())
-                    tvAvgBgValue.text =valueToSet
-                }
+                avgGlucose =it.avgBloodGlucose
+                updateAvgGlucoseValue(it.avgBloodGlucose)
 
                 if(it.avgInsulin!=null) {
                     tvInsulinValue.text = String.format("%.2f", it.avgInsulin!!.toBigDecimal())
@@ -146,6 +181,20 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
             if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
                 requireActivity().finish()
+            }
+        }
+
+        EventLiveData.eventLiveData.observe(viewLifecycleOwner){ event ->
+            if((requireActivity() as DashBoardActivity).currentFragment() == 0) {
+                event.peekContent().let {
+                    if (!it.type.isNullOrEmpty() &&
+                        (it.type == ConnectionStatusFragment::class.java.simpleName
+                                || it.type == AddMealActivity::class.java.simpleName
+                                || it.type == MedicationDetailsFragment::class.java.simpleName)) {
+                        event.update()
+                        getData()
+                    }
+                }
             }
         }
     }
@@ -241,36 +290,40 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         val textWhiteColor =
             activity?.let { it1 -> ContextCompat.getColor(it1, R.color.bg_grey) } ?: 0
 
-        if (value == 0) {
-            tv_today.setTextColor(textGreenColor)
-            iv_today.backgroundTintList =
-                ColorStateList.valueOf(textGreenColor)
-            tv_this_week.setTextColor(textGreyColor)
-            iv_this_week.backgroundTintList =
-                ColorStateList.valueOf(textWhiteColor)
-            tv_this_month.setTextColor(textGreyColor)
-            iv_this_month.backgroundTintList =
-                ColorStateList.valueOf(textWhiteColor)
-        } else if (value == 1) {
-            tv_this_week.setTextColor(textGreenColor)
-            iv_this_week.backgroundTintList =
-                ColorStateList.valueOf(textGreenColor)
-            tv_today.setTextColor(textGreyColor)
-            iv_today.backgroundTintList =
-                ColorStateList.valueOf(textWhiteColor)
-            tv_this_month.setTextColor(textGreyColor)
-            iv_this_month.backgroundTintList =
-                ColorStateList.valueOf(textWhiteColor)
-        } else {
-            tv_this_month.setTextColor(textGreenColor)
-            iv_this_month.backgroundTintList =
-                ColorStateList.valueOf(textGreenColor)
-            tv_this_week.setTextColor(textGreyColor)
-            iv_this_week.backgroundTintList =
-                ColorStateList.valueOf(textWhiteColor)
-            tv_today.setTextColor(textGreyColor)
-            iv_today.backgroundTintList =
-                ColorStateList.valueOf(textWhiteColor)
+        when (value) {
+            0 -> {
+                tv_today.setTextColor(textGreenColor)
+                iv_today.backgroundTintList =
+                    ColorStateList.valueOf(textGreenColor)
+                tv_this_week.setTextColor(textGreyColor)
+                iv_this_week.backgroundTintList =
+                    ColorStateList.valueOf(textWhiteColor)
+                tv_this_month.setTextColor(textGreyColor)
+                iv_this_month.backgroundTintList =
+                    ColorStateList.valueOf(textWhiteColor)
+            }
+            1 -> {
+                tv_this_week.setTextColor(textGreenColor)
+                iv_this_week.backgroundTintList =
+                    ColorStateList.valueOf(textGreenColor)
+                tv_today.setTextColor(textGreyColor)
+                iv_today.backgroundTintList =
+                    ColorStateList.valueOf(textWhiteColor)
+                tv_this_month.setTextColor(textGreyColor)
+                iv_this_month.backgroundTintList =
+                    ColorStateList.valueOf(textWhiteColor)
+            }
+            else -> {
+                tv_this_month.setTextColor(textGreenColor)
+                iv_this_month.backgroundTintList =
+                    ColorStateList.valueOf(textGreenColor)
+                tv_this_week.setTextColor(textGreyColor)
+                iv_this_week.backgroundTintList =
+                    ColorStateList.valueOf(textWhiteColor)
+                tv_today.setTextColor(textGreyColor)
+                iv_today.backgroundTintList =
+                    ColorStateList.valueOf(textWhiteColor)
+            }
         }
     }
 
@@ -283,6 +336,7 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     }
 
     private fun setCharts(graphInfo: ArrayList<GraphInfo>) {
+        chart.clear()
         chart.description.isEnabled = false
         chart.setTouchEnabled(true)
         chart.setDrawGridBackground(false)
@@ -290,21 +344,39 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         chart.setScaleEnabled(false)
         chart.setPinchZoom(false)
 
-        val xAxis: XAxis
-        xAxis = chart.getXAxis()
+        val xAxis: XAxis = chart.xAxis
         val array = arrayOfNulls<String>(graphInfo.size)
-        if(time == AppConstants.TODAY){
-            for(i in 0 until graphInfo.size)
-            array[i] = graphInfo[i].hours+"hr"
-        } else if(time == AppConstants.WEEK){
-            for(i in 0 until graphInfo.size)
-                array[i] = graphInfo[i].day?.substring(0)
-        }else if(time == AppConstants.MONTH){
-            for(i in 0 until graphInfo.size)
-                array[i] = "#"+graphInfo[i]._id.toString()
+        when (time) {
+            AppConstants.TODAY -> {
+                for(i in 0 until graphInfo.size) {
+                   // array[i] = graphInfo[i].hours + "hr"
+                    array[i] = graphInfo[i].hours
+                }
+            }
+            AppConstants.WEEK -> {
+                for(i in 0 until graphInfo.size) {
+                    var dayOfWeek = ""
+                    val firstLetter = graphInfo[i].day?.substring(0,1)
+                    val secondLetter = graphInfo[i].day?.substring(1,2)?.toLowerCase(Locale.ROOT)
+
+                    dayOfWeek = firstLetter+secondLetter
+                    array[i] = dayOfWeek
+                }
+            }
+            AppConstants.MONTH -> {
+                for(i in 0 until graphInfo.size)
+                    array[i] = "#"+graphInfo[i]._id.toString()
+            }
         }
+
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
+                if(value<0){
+                    return ""
+                }
+                if(value>array.size-1){
+                    return ""
+                }
                 return array[value.toInt()].toString()
             }
         }
@@ -312,11 +384,14 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(true)
+        xAxis.granularity = 1.0f
+        xAxis.isGranularityEnabled = true
+
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
         val yAxis: YAxis = chart.axisLeft
         // disable dual axis (only use LEFT axis)
-        chart.getAxisRight().setEnabled(false)
+        chart.axisRight.isEnabled = false
         yAxis.disableGridDashedLine()
         yAxis.setDrawAxisLine(false)
 
@@ -327,20 +402,28 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     private fun setData(count: Int, list: ArrayList<GraphInfo>) {
         val values: ArrayList<Entry> = ArrayList()
         for (i in 0 until count) {
-            list[i].bloodGlucose?.toFloat()?.let { Entry(i.toFloat(), it) }?.let { values.add(it) }
+            list[i].bloodGlucose?.toFloat()?.let {
+                println("::: This Value: ${i.toFloat()}")
+                Entry(i.toFloat(), it)
+            }?.let {
+                values.add(it)
+            }
         }
         val set1: LineDataSet
-        if (chart.data != null &&
-            chart.data.dataSetCount > 0
-        ) {
+        if (chart.data != null && chart.data.dataSetCount > 0) {
+            println("::: data set count: ${chart.data.dataSetCount}")
             set1 = chart.data.getDataSetByIndex(0) as LineDataSet
             set1.values = values
             set1.notifyDataSetChanged()
             chart.data.notifyDataChanged()
             chart.notifyDataSetChanged()
         } else {
+         //   println("::: New LineData Value: ${values.size}")
+
             set1 = LineDataSet(values, "")
             set1.setDrawIcons(false)
+            set1.cubicIntensity = 0.2f
+            set1.mode = LineDataSet.Mode.CUBIC_BEZIER
 
             // draw dashed line
             set1.disableDashedLine()
@@ -354,7 +437,12 @@ class HomeFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
             // draw points as solid circles
             set1.setDrawCircleHole(false)
-            set1.setDrawCircles(false)
+            if(values.size>1) {
+                set1.setDrawCircles(false)
+            }else{
+                set1.setDrawCircles(true)
+                set1.circleRadius = 5.0f
+            }
 
             // customize legend entry
             set1.formLineWidth = 0f

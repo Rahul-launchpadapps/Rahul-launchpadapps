@@ -1,15 +1,12 @@
 package com.app.okra.ui
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.app.okra.R
 import com.app.okra.extension.beGone
-import com.app.okra.ui.boarding.login.LoginActivity
-import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordActivity
+import com.app.okra.extension.beInvisible
 import com.app.okra.ui.my_account.support_request.AddSupportRequestFragment
-import com.app.okra.ui.profile.ProfileFragment
 import com.app.okra.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_message_2.*
 import kotlinx.android.synthetic.main.layout_button.*
@@ -33,11 +30,11 @@ class Message2Activity : AppCompatActivity(), View.OnClickListener {
 
     private fun setView() {
         if(fromScreen == AddSupportRequestFragment::class.java.simpleName){
-            btnCommon.text = getString(R.string.ok)
-            layout.beGone()
+            btnCommon.text = getString(R.string.btn_ok)
+            layout.beInvisible()
             tvHeader.text = getString(R.string.hang_tight)
             tvSubHeader.text = getString(R.string.your_message)
-
+            ivImage.setImageResource(R.mipmap.hang_tight)
         }
     }
 

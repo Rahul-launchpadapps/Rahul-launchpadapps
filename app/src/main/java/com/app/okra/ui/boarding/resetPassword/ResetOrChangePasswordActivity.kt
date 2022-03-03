@@ -2,6 +2,7 @@ package com.app.okra.ui.boarding.resetPassword
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
@@ -15,6 +16,7 @@ import com.app.okra.data.repo.ResetPasswordRepoImpl
 import com.app.okra.extension.*
 import com.app.okra.ui.profile.ProfileFragment
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.MessageConstants
 import kotlinx.android.synthetic.main.activity_reset_or_change_password.*
 import kotlinx.android.synthetic.main.activity_reset_or_change_password.etPassword
 import kotlinx.android.synthetic.main.activity_reset_or_change_password.iv_eye
@@ -79,11 +81,13 @@ class ResetOrChangePasswordActivity : BaseActivity(), View.OnClickListener, Text
         iv_eye_confirm.tag = AppConstants.SHOW_TAG
 
         if(screenType == ProfileFragment::class.java.simpleName){
+            tvSubHeader.text = getString(R.string.enter_ur_password_change_password)
             etPassword.hint = getString(R.string.current_password)
-            btnResendPass.text = getString(R.string.change_password)
+            btnResendPass.text = getString(R.string.btn_change_password)
             tvHeading.text = getString(R.string.change_password)
-            etConfirmPassword.hint = getString(R.string.password)
+            etConfirmPassword.hint = getString(R.string.new_password)
         }else{
+            tvSubHeader.text = getString(R.string.enter_ur_password)
             etPassword.hint = getString(R.string.password)
             btnResendPass.text = getString(R.string.resend_pass)
             tvHeading.text = getString(R.string.reset_your_password)
@@ -93,20 +97,18 @@ class ResetOrChangePasswordActivity : BaseActivity(), View.OnClickListener, Text
     private fun setObserver() {
         setBaseObservers(viewModel, this, this, observeToast = false)
         viewModel._resetPassLiveData.observe(this){
-            var screen = ResetOrChangePasswordActivity::class.java.simpleName
-            if(screenType ==ProfileFragment::class.java.simpleName){
-                screen = ProfileFragment::class.java.simpleName
+            val screen = ResetOrChangePasswordActivity::class.java.simpleName
+            if(screenType !=ProfileFragment::class.java.simpleName){
+                startActivity(Intent(this, MessageActivity::class.java)
+                                .putExtra(AppConstants.SCREEN_TYPE, screen)
+                )
+            }else {
+               showToast(MessageConstants.Messages.password_change_successfully)
             }
-
-            startActivity(
-                Intent(this, MessageActivity::class.java)
-                    .putExtra(AppConstants.SCREEN_TYPE, screen)
-            )
             finish()
         }
         viewModel._toastObserver.observe(this){
             val data = it.getContent()!!
-            showToast(data.message)
 
             tvErrorPass.beGone()
             tvErrorConfirmPass.beGone()
@@ -114,6 +116,7 @@ class ResetOrChangePasswordActivity : BaseActivity(), View.OnClickListener, Text
             etPassword.setNormalView(this)
 
             if(!checkAndLogout(data.message)){
+                showToast(data.message)
 
                 when(data.type) {
                     ResetOrChangePasswordViewModel.FIELD_1-> {
@@ -131,7 +134,7 @@ class ResetOrChangePasswordActivity : BaseActivity(), View.OnClickListener, Text
                         tvErrorConfirmPass.text = data.message
                         tvErrorConfirmPass.beVisible()
                         etConfirmPassword.setErrorView(this)
-
+                        etPassword.setErrorView(this)
                     }
                 }
 

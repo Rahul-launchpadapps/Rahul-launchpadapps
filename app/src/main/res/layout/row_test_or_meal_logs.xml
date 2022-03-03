@@ -29,15 +29,16 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDate"
             style="@style/heightWrapOnly"
-            android:fontFamily="@font/axiforma_regular"
-            tools:text="Oct 18 2021"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:fontFamily="@font/axiforma_regular"
+            android:maxLines="1"
             android:textAllCaps="false"
             android:textColor="@color/grey_4"
             android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Oct 18 2021" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTestLogs"

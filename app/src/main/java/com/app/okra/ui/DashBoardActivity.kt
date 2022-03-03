@@ -42,6 +42,9 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
     private fun init() {
         homeViewPagerAdapter = HomeViewPagerAdapter(supportFragmentManager, this, 0)
     }
+     fun currentFragment():Int {
+        return view_pager_home.currentItem
+    }
 
     private fun setFragments() {
         homeViewPagerAdapter?.addFragment(HomeFragment())
@@ -50,6 +53,7 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
         homeViewPagerAdapter?.addFragment(ProfileFragment())
         view_pager_home.adapter = homeViewPagerAdapter
         view_pager_home.offscreenPageLimit = 4
+
     }
 
     private fun setListeners() {
@@ -123,8 +127,8 @@ class DashBoardActivity : BaseActivity(), Listeners.CustomDialogListener, Listen
                 this,
                 getString(R.string.unverified_account_message),
                 false,
-                getString(R.string.ok),
-                getString(R.string.ok),
+                getString(R.string.btn_ok),
+                getString(R.string.btn_ok),
                 getString(R.string.alert)
             )
         }

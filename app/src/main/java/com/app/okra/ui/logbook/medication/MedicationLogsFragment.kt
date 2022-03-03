@@ -19,16 +19,17 @@ import com.app.okra.extension.beVisible
 import com.app.okra.extension.navigate
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MedicationData
+import com.app.okra.ui.DashBoardActivity
+import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.add_medication.AddMedicationActivity
-import com.app.okra.utils.AppConstants
+import com.app.okra.ui.add_medication.MedicationDetailsFragment
+import com.app.okra.ui.logbook.meal.MealLogsFragment
+import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.Intent_Constant.Companion.RELOAD_SCREEN
 
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_medication.*
 
-class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
+class MedicationLogsFragment(val listeners: Listeners.EventClickListener?) : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var medicationAdapter: MedicationAdapter
@@ -74,6 +75,7 @@ class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickList
         getData(pageNo)
         setObserver()
         setListener()
+        checkForFilter()
     }
 
      fun getData(pageNo: Int,fromDate: String?=null,
@@ -113,6 +115,17 @@ class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickList
             if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
                 requireActivity().finish()
+            }
+        }
+
+        EventLiveData.eventLiveData.observe(viewLifecycleOwner){ event ->
+            event.peekContent().let{
+                if((requireActivity() as DashBoardActivity).currentFragment() == 1) {
+                    if (!it.type.isNullOrEmpty() && it.type == MedicationDetailsFragment::class.java.simpleName) {
+                        event.update()
+                        checkForFilter()
+                    }
+                }
             }
         }
     }
@@ -176,8 +189,7 @@ class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickList
         })
 
         swipe_request.setOnRefreshListener {
-            pageNo = 1
-            getData(1)
+            checkForFilter()
         }
     }
 
@@ -195,4 +207,7 @@ class MedicationLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickList
     override fun onUnSelect(o: Any?, o1: Any?) {
     }
 
+    fun checkForFilter(){
+        listeners?.onEventClick(MedicationLogsFragment::class.java.simpleName, null)
+    }
 }

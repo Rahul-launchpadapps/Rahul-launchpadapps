@@ -3,7 +3,6 @@ package com.app.okra.ui.add_medication
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
@@ -291,6 +290,6 @@ class SearchMedicationFragment : BaseFragment(), Listeners.ItemClickListener {
         bundle.putParcelable(AppConstants.DATA, medicationData)
         bundle.putString(AppConstants.Intent_Constant.FROM_SCREEN, TAG)
 
-        navController.navigate(R.id.action_searchMed_to_saveMed, bundle)
+        navController.navigate(R.id.action_searchMed_to_medicationDetail, bundle)
     }
 }

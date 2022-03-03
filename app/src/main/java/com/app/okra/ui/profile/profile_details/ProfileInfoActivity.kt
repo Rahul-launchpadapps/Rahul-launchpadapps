@@ -154,7 +154,6 @@ ImageUtils.IChooseImageInterface, Listeners.CustomMediaDialogListener {
         }
         viewModel._toastObserver.observe(this) {
             val data = it.getContent()!!
-            showToast(data.message)
 
             if (isEditMode) {
                 tvErrorName.beGone()
@@ -190,19 +189,20 @@ ImageUtils.IChooseImageInterface, Listeners.CustomMediaDialogListener {
                 }
             }
             else{
+                showToast(data.message)
                 checkAndLogout(data.message)
             }
         }
 
     }
         private fun setViews() {
-            tvTitle.text = getString(R.string.personal_details)
+            tvTitle.text = getString(R.string.title_personal_details)
             cl_profile_edit.beGone()
             cv_profile_view_only.beVisible()
             ivRight.beVisible()
             ivDelete.beGone()
             includeButton.beGone()
-            btnCommon.text = getString(R.string.save)
+            btnCommon.text = getString(R.string.btn_save)
             btnCommon.beDisable()
             iv_upload.beGone()
 

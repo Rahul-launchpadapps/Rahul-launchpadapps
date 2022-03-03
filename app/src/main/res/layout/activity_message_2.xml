@@ -24,6 +24,7 @@
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         android:textSize="@dimen/sp_14"
+        android:gravity="center"
         android:lineSpacingExtra="@dimen/dp_5"
         android:textColor="@color/grey_3"
         android:text="@string/you_have_successfully"

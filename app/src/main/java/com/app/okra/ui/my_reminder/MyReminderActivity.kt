@@ -7,7 +7,10 @@ import androidx.navigation.fragment.NavHostFragment
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
-import kotlinx.android.synthetic.main.layout_header.*
+import com.app.okra.extension.beGone
+import com.app.okra.extension.beVisible
+import kotlinx.android.synthetic.main.activity_my_reminder.*
+
 
 class MyReminderActivity : BaseActivity(),View.OnClickListener {
 
@@ -36,7 +39,20 @@ class MyReminderActivity : BaseActivity(),View.OnClickListener {
     }
 
     private fun setViews() {
-        tvTitle.text = getString(R.string.my_reminders)
+        tvTitle.text = getString(R.string.title_my_reminders)
+    }
+
+    public fun setSubTitle(subTitle: String){
+        tvSubTitle.text = subTitle
+        tvSubTitle.beVisible()
+    }
+
+    public fun setSubTitleVisibility(isVisible: Boolean){
+        if(isVisible){
+            tvSubTitle.beVisible()
+        }else{
+            tvSubTitle.beGone()
+        }
     }
 
     override fun onClick(view: View?) {

@@ -15,6 +15,7 @@ import com.app.okra.data.repo.BloodGlucoseRepoImpl
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.convertWordsToUpperOrLowerCase
 import com.app.okra.utils.getMealTime
 import com.app.okra.utils.navigateToLogin
 import com.github.mikephil.charting.components.XAxis
@@ -37,12 +38,13 @@ import kotlinx.android.synthetic.main.fragment_blood_glucose.tv_no_chart
 import kotlinx.android.synthetic.main.fragment_blood_glucose.tv_this_month
 import kotlinx.android.synthetic.main.fragment_blood_glucose.tv_this_week
 import kotlinx.android.synthetic.main.fragment_blood_glucose.tv_today
+import kotlinx.android.synthetic.main.fragment_insulin.*
 
 class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
     private val type: String = AppConstants.BLOOD_GLUCOSE
     private var time: String = AppConstants.TODAY
-    private var testingTime: String = AppConstants.BEFORE_MEAL
+    private var testingTime: String = AppConstants.ALL
     private lateinit var customSpinnerAdapter: CustomSpinnerAdapter
 
     private val timingList by lazy {
@@ -163,44 +165,51 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 tvSet.text = timingList[p2]
-                testingTime = getMealTime(timingList[p2], false)
+                val localTestingTime = convertWordsToUpperOrLowerCase(timingList[p2].trim(), needUpperCase = true, needAllUppercase = true)
+                testingTime = getMealTime(localTestingTime.trim(), false)
                 getData()
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
-
     }
 
+
     private fun setAdapter() {
-        timingList.add(AppConstants.BEFORE_MEAL_TEXT)
-        timingList.add(AppConstants.AFTER_MEAL_TEXT)
-        timingList.add(AppConstants.POST_MEDICINE_TEXT)
-        timingList.add(AppConstants.POST_WORKOUT_TEXT)
-        timingList.add(AppConstants.CONTROLE_SOLUTION_TEXT)
+        timingList.add(convertWordsToUpperOrLowerCase(AppConstants.ALL_TEXT, needUpperCase = true, needAllUppercase = false))
+        timingList.add(convertWordsToUpperOrLowerCase(AppConstants.BEFORE_MEAL_TEXT, needUpperCase = true, needAllUppercase = false))
+        timingList.add(convertWordsToUpperOrLowerCase(AppConstants.AFTER_MEAL_TEXT, needUpperCase = true, needAllUppercase = false))
+        timingList.add(convertWordsToUpperOrLowerCase(AppConstants.POST_MEDICINE_TEXT, needUpperCase = true, needAllUppercase = false))
+        timingList.add(convertWordsToUpperOrLowerCase(AppConstants.POST_WORKOUT_TEXT, needUpperCase = true, needAllUppercase = false))
+        timingList.add(convertWordsToUpperOrLowerCase(AppConstants.CONTROLE_SOLUTION_TEXT, needUpperCase = true, needAllUppercase = false))
 
         customSpinnerAdapter = CustomSpinnerAdapter(requireActivity(), timingList)
         spinner.adapter = customSpinnerAdapter
 
-        var index = 0
+        val index = 0
         tvSet.text = timingList[index]
     }
 
     private fun setCharts(graphInfo: ArrayList<Float>) {
-        chart.getDescription().setEnabled(false)
+        chart.clear()
+        chart.description.isEnabled = false
         chart.setTouchEnabled(true)
         chart.setDrawGridBackground(false)
-        chart.setDragEnabled(false)
+        chart.isDragEnabled = false
         chart.setScaleEnabled(false)
         chart.setPinchZoom(false)
 
-        var xAxis: XAxis
-        xAxis = chart.getXAxis()
+        val xAxis: XAxis = chart.xAxis
         val array = arrayOfNulls<Int>(graphInfo.size)
         for (i in 0 until graphInfo.size)
-            array[i] = i
+            array[i] = i+1
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
+                if(value<0){
+                    return ""
+                }
+                if(value>array.size-1){
+                    return ""
+                }
                 return array[value.toInt()].toString()
             }
         }
@@ -208,12 +217,13 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(true)
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
+        xAxis.granularity = 1.0f
+        xAxis.isGranularityEnabled = true
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-        var yAxis: YAxis
-        yAxis = chart.getAxisLeft()
+        val yAxis: YAxis = chart.axisLeft
         // disable dual axis (only use LEFT axis)
-        chart.getAxisRight().setEnabled(false)
+        chart.axisRight.isEnabled = false
         yAxis.disableGridDashedLine()
         yAxis.setDrawAxisLine(false)
 
@@ -224,7 +234,7 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
     private fun setData(count: Int, list: ArrayList<Float>) {
         val values: ArrayList<Entry> = ArrayList()
         for (i in 0 until count) {
-            list[i].toFloat().let { Entry(i.toFloat(), it) }.let { values.add(it) }
+            Entry(i.toFloat(), list[i]).let { values.add(it) }
         }
         val set1: LineDataSet
         if (chart.data != null &&
@@ -238,7 +248,8 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
         } else {
             set1 = LineDataSet(values, "")
             set1.setDrawIcons(false)
-
+            set1.cubicIntensity = 0.2f
+            set1.mode = LineDataSet.Mode.CUBIC_BEZIER
             // draw dashed line
             set1.disableDashedLine()
 
@@ -251,8 +262,12 @@ class BloodGlucoseFragment : BaseFragmentWithoutNav() {
 
             // draw points as solid circles
             set1.setDrawCircleHole(false)
-            set1.setDrawCircles(false)
-
+            if(values.size>1) {
+                set1.setDrawCircles(false)
+            }else{
+                set1.setDrawCircles(true)
+                set1.circleRadius = 5.0f
+            }
             // customize legend entry
             set1.formLineWidth = 0f
             set1.formSize = 0f

@@ -364,7 +364,8 @@ class BleBluetooth(val device: BleDevice) {
                 val message = mainHandler.obtainMessage()
                 message.what = BleMsg.MSG_DISCOVER_SERVICES
                 mainHandler.sendMessageDelayed(message, 500)
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            }
+            else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 if (lastState == LastState.CONNECT_CONNECTING) {
                     val message = mainHandler.obtainMessage()
                     message.what = BleMsg.MSG_CONNECT_FAIL
@@ -391,13 +392,13 @@ class BleBluetooth(val device: BleDevice) {
     """.trimIndent()
             )
             bluetoothGatt = gatt
-            val bleChar =
+            /*val bleChar =
                 bluetoothGatt!!.getService(formUUID(BleConnector.UUID_CLIENT_SERVICE_DESCRIPTOR))
                     .getCharacteristic(formUUID(BleConnector.UUID_CLIENT_CHARACTERISTIC_DESCRIPTOR))
             bluetoothGatt!!.readCharacteristic(bleChar)
             bluetoothGatt!!.setCharacteristicNotification(bleChar, true)
             bleChar.value = byteArrayOf(1)
-            bluetoothGatt!!.writeCharacteristic(bleChar)
+            bluetoothGatt!!.writeCharacteristic(bleChar)*/
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 val message = mainHandler.obtainMessage()
                 message.what = BleMsg.MSG_DISCOVER_SUCCESS
@@ -415,6 +416,13 @@ class BleBluetooth(val device: BleDevice) {
             characteristic: BluetoothGattCharacteristic
         ) {
             super.onCharacteristicChanged(gatt, characteristic)
+            BleLog.i(
+                """
+    BluetoothGattCallback：onCharacteristicChanged 
+    status: $characteristic.value
+    currentThread: ${Thread.currentThread().id}
+    """.trimIndent()
+            )
             println("::::: onCharacteristicChanged: " + characteristic.value)
 
             println("::::: Data: ")
@@ -481,6 +489,13 @@ class BleBluetooth(val device: BleDevice) {
             status: Int
         ) {
             super.onDescriptorWrite(gatt, descriptor, status)
+            BleLog.i(
+                """
+    BluetoothGattCallback：onDescriptorWrite 
+    status: $status
+    currentThread: ${Thread.currentThread().id}
+    """.trimIndent()
+            )
             println("::::: Descriptor Write: ")
             var iterator: Iterator<*> = bleNotifyCallbackHashMap!!.entries.iterator()
             while (iterator.hasNext()) {
@@ -542,6 +557,13 @@ class BleBluetooth(val device: BleDevice) {
             status: Int
         ) {
             super.onCharacteristicWrite(gatt, characteristic, status)
+            BleLog.i(
+                """
+    BluetoothGattCallback：onCharacteristicWrite 
+    status: $status
+    currentThread: ${Thread.currentThread().id}
+    """.trimIndent()
+            )
             println("::::: onCharacteristicWrite: ")
             val iterator: Iterator<*> = bleWriteCallbackHashMap!!.entries.iterator()
             while (iterator.hasNext()) {

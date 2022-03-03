@@ -11,6 +11,7 @@ import com.app.okra.R
 import com.app.okra.base.BaseActivity
 import com.app.okra.base.BaseViewModel
 import com.app.okra.extension.*
+import com.app.okra.ui.boarding.login.LoginActivity
 import com.app.okra.ui.boarding.otpVerify.OTPVerifyActivity
 import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordViewModel
 import com.app.okra.utils.AppConstants
@@ -29,6 +30,7 @@ class ForgotPassActivity : BaseActivity(), TextWatcher {
         ).get(ForgotPasswordViewModel::class.java)
     }
 
+    private var email = ""
     override fun getViewModel(): BaseViewModel {
         return viewModel
     }
@@ -38,8 +40,25 @@ class ForgotPassActivity : BaseActivity(), TextWatcher {
         setContentView(R.layout.activity_forgot_pass)
         makeStatusBarTransparent()
         btnSend.beDisable()
+        getData()
+        setView()
         setObserver()
         setListener()
+    }
+
+    private fun setView() {
+        if(email.isNotEmpty()) {
+            etEmail.setText(email ?: "")
+            btnSend.beEnable()
+        }
+    }
+
+    private fun getData() {
+        intent?.let {
+            if(intent.hasExtra(AppConstants.Intent_Constant.EMAIL)){
+                email = intent.getStringExtra(AppConstants.Intent_Constant.EMAIL).toString()
+            }
+        }
     }
 
     private fun setListener() {
@@ -54,6 +73,8 @@ class ForgotPassActivity : BaseActivity(), TextWatcher {
             startActivity(
                 Intent(this, OTPVerifyActivity::class.java)
                     .putExtra(AppConstants.Intent_Constant.EMAIL, etEmail.text.toString().trim())
+                    .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, ForgotPassActivity::class.java.simpleName)
+
             )
         }
 

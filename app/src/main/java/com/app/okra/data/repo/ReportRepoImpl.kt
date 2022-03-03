@@ -4,27 +4,23 @@ import com.app.okra.data.network.ApiData
 import com.app.okra.data.network.ApiResult
 import com.app.okra.data.network.ApiService
 import com.app.okra.data.network.BaseRepo
+import com.app.okra.models.ReportRequest
 import com.app.okra.models.UserDetailResponse
 import kotlinx.coroutines.Dispatchers
+import retrofit2.http.QueryMap
 import java.util.*
 
-class ProfileRepoImpl constructor(
+class ReportRepoImpl constructor(
         private val apiService: ApiService,
 ) : BaseRepo(apiService),
-        ProfileRepo {
+        ReportRepo {
 
-    override suspend fun apiForProfileInfo(userId: String): ApiResult<ApiData<UserDetailResponse>> {
+
+    override suspend fun getReportUrl(params: WeakHashMap<String, Any>): ApiResult<ApiData<String>> {
         return safeApiCall(Dispatchers.IO) {
-            apiService.getUserProfile(userId)
+            apiService.getReport(params)
         }
     }
-
-    override suspend fun updateProfile(params: WeakHashMap<String, Any>): ApiResult<ApiData<Any>> {
-        return safeApiCall(Dispatchers.IO) {
-            apiService.updateProfile(params)
-        }
-    }
-
 }
 
 

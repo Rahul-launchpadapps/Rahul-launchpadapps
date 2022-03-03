@@ -57,12 +57,17 @@ class TutorialsActivity : BaseActivity() {
         dataList.add(TutorialModel(
                 headerText = getString(R.string.tutorial_header_1),
                 subText = getString(R.string.tutorial_sub_header_1),
-                image = R.mipmap.ic_tutorial
+                image = R.mipmap.tutorial_1
         ))
         dataList.add(TutorialModel(
                 headerText = getString(R.string.tutorial_header_1),
                 subText = getString(R.string.tutorial_sub_header_1),
-                image = R.mipmap.ic_tutorial
+                image = R.mipmap.tutorial_2
+        ))
+        dataList.add(TutorialModel(
+                headerText = getString(R.string.tutorial_header_1),
+                subText = getString(R.string.tutorial_sub_header_1),
+                image = R.mipmap.tutorial_3
         ))
         dataList[0].isSelected = true
     }
@@ -135,6 +140,4 @@ class TutorialsActivity : BaseActivity() {
             return TutorialFragment.newInstance(dataList[position], position)
         }
     }
-
-
 }

@@ -17,7 +17,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/axiforma_semibold"
         android:maxLines="1"
-        android:text="@string/my_account"
+        android:text="@string/title_my_account"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_18"
         android:gravity="center"

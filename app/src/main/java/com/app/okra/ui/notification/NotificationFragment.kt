@@ -18,10 +18,8 @@ import com.app.okra.utils.swipe.RecyclerTouchListener
 import kotlinx.android.synthetic.main.fragment_notification.*
 import kotlinx.android.synthetic.main.fragment_notification.swipe_request
 
-class NotificationFragment : BaseFragment(),
-    Listeners.ItemClickListener {
+class NotificationFragment : BaseFragment(), Listeners.ItemClickListener {
 
-    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var notificationAdapterToday: NotificationRecyclerAdapter
     private lateinit var notificationAdapterEarlier: NotificationRecyclerAdapter
     private var touchListener1: RecyclerTouchListener? = null
@@ -58,7 +56,7 @@ class NotificationFragment : BaseFragment(),
         viewModel.getNotification(pageNo)
     }
 
-    private fun setAdapter() {
+       private fun setAdapter() {
         notificationAdapterToday = NotificationRecyclerAdapter(requireContext(), notificationToday)
         notificationAdapterEarlier =
             NotificationRecyclerAdapter(requireContext(), notificationEarlier)
@@ -74,10 +72,8 @@ class NotificationFragment : BaseFragment(),
             }
 
             override fun onIndependentViewClicked(independentViewID: Int, position: Int) {}
-        })
-            .setSwipeOptionViews(R.id.clRowBG)
-            .setSwipeable(
-                R.id.clRowFG, R.id.clRowBG
+        }).setSwipeOptionViews(R.id.clRowBG)
+            .setSwipeable(R.id.clRowFG, R.id.clRowBG
             ) { viewID, position ->
                 when (viewID) {
                     R.id.clRowBG -> {
@@ -86,7 +82,7 @@ class NotificationFragment : BaseFragment(),
                             object : Listeners.DialogListener {
                                 override fun onOkClick(dialog: DialogInterface?) {
                                     notificationToday[position]._id?.let {
-                                        var list = ArrayList<String>()
+                                        val list = ArrayList<String>()
                                         list.add(it)
                                         viewModel.deleteNotification(
                                             list
@@ -101,11 +97,11 @@ class NotificationFragment : BaseFragment(),
                                     dialog?.dismiss()
                                 }
                             },
-                            getString(R.string.are_you_sure_you_want_to_clear_all_your_notifications),
+                            getString(R.string.are_you_sure_you_want_to_clear_this_your_notifications),
                             true,
-                            positiveButtonText = getString(R.string.ok),
-                            getString(R.string.cancel),
-                            title = getString(R.string.clear_notifications),
+                            positiveButtonText = getString(R.string.btn_ok),
+                            getString(R.string.btn_cancel),
+                            title = getString(R.string.clear_notification),
                         )
                     }
                 }
@@ -129,7 +125,7 @@ class NotificationFragment : BaseFragment(),
                             object : Listeners.DialogListener {
                                 override fun onOkClick(dialog: DialogInterface?) {
                                     notificationEarlier[position]._id?.let {
-                                        var list = ArrayList<String>()
+                                        val list = ArrayList<String>()
                                         list.add(it)
                                         viewModel.deleteNotification(
                                             list
@@ -144,11 +140,11 @@ class NotificationFragment : BaseFragment(),
                                     dialog?.dismiss()
                                 }
                             },
-                            getString(R.string.are_you_sure_you_want_to_clear_all_your_notifications),
+                            getString(R.string.are_you_sure_you_want_to_clear_this_your_notifications),
                             true,
-                            positiveButtonText = getString(R.string.ok),
-                            getString(R.string.cancel),
-                            title = getString(R.string.clear_notifications),
+                            positiveButtonText = getString(R.string.btn_ok),
+                            getString(R.string.btn_cancel),
+                            title = getString(R.string.clear_notification),
                         )
                     }
                 }
@@ -186,6 +182,8 @@ class NotificationFragment : BaseFragment(),
                     (activity as NotificationActivity).showClear(true)
                     clNoData.visibility = View.GONE
                     if (it.today?.size!! > 0) {
+                        tvToday.beVisible()
+                        rv_today.beVisible()
                         notificationToday.addAll(it.today!!)
                     } else {
                         tvToday.visibility = View.GONE
@@ -193,6 +191,8 @@ class NotificationFragment : BaseFragment(),
                     }
 
                     if (it.earlier?.size!! > 0) {
+                        tvEarlier.beVisible()
+                        rv_earlier.beVisible()
                         notificationEarlier.addAll(it.earlier!!)
                     } else {
                         tvEarlier.visibility = View.GONE
@@ -204,7 +204,14 @@ class NotificationFragment : BaseFragment(),
             }
         }
 
-        viewModel._notificationLiveData.observe(viewLifecycleOwner) { it ->
+        viewModel._deleteNotificationLiveData.observe(viewLifecycleOwner) {
+            if(notificationEarlier.isEmpty() && notificationToday.isEmpty()){
+                tvEarlier.beGone()
+                tvToday.beGone()
+                rv_today.beGone()
+                rv_earlier.beGone()
+                clNoData.beVisible()
+            }
         }
     }
 
@@ -242,16 +249,9 @@ class NotificationFragment : BaseFragment(),
             requireContext(),
             object : Listeners.DialogListener {
                 override fun onOkClick(dialog: DialogInterface?) {
-                    var list = ArrayList<String>()
-                    for (i in 0 until notificationToday.size) {
-                        notificationToday[i]._id?.let { list.add(it) }
-                    }
-                    for (i in 0 until notificationEarlier.size) {
-                        notificationEarlier[i]._id?.let { list.add(it) }
-                    }
-                    viewModel.deleteNotification(
-                        list
-                    )
+                    val list = prepareIdList()
+
+                    viewModel.deleteNotification(list)
                     notificationEarlier.clear()
                     notificationToday.clear()
                     notificationAdapterEarlier.notifyDataSetChanged()
@@ -266,10 +266,22 @@ class NotificationFragment : BaseFragment(),
             },
             getString(R.string.are_you_sure_you_want_to_clear_all_your_notifications),
             true,
-            positiveButtonText = getString(R.string.ok),
-            getString(R.string.cancel),
+            positiveButtonText = getString(R.string.btn_ok),
+            getString(R.string.btn_cancel),
             title = getString(R.string.clear_notifications),
         )
+
+    }
+
+    private fun prepareIdList():ArrayList<String> {
+        val list = ArrayList<String>()
+        for (i in 0 until notificationToday.size) {
+            notificationToday[i]._id?.let { list.add(it) }
+        }
+        for (i in 0 until notificationEarlier.size) {
+            notificationEarlier[i]._id?.let { list.add(it) }
+        }
+        return list
 
     }
 

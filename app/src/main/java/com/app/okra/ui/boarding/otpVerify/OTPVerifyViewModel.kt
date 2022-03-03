@@ -42,6 +42,8 @@ class OTPVerifyViewModel(private val repo : OTPVerifyRepo?) : BaseViewModel() {
     fun setVerifyOtpValue(email: String, otp :String) {
         otpVerifyRequest.email = email
         otpVerifyRequest.otp = otp
+        otpVerifyRequest.deviceId = AppConstants.android
+        otpVerifyRequest.deviceToken = PreferenceManager.getString(AppConstants.Pref_Key.DEVICE_TOKEN)
     }
 
     fun otpVerifyApi(){

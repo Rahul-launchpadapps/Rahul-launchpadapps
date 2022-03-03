@@ -27,7 +27,6 @@ import kotlinx.coroutines.*
 abstract class BaseActivity :AppCompatActivity() {
     private var progressDialog: AlertDialog? = null
 
-    private var viewModel: BaseViewModel?=null
     protected var apiService: ApiService = ApiManager.getRetrofit()
     protected var apiServiceAuth: ApiService = ApiManager.getRetrofitAuth()
     protected var apiServiceCalorieMama: ApiService = ApiManager.getRetrofitCalorieMama()
@@ -197,8 +196,11 @@ abstract class BaseActivity :AppCompatActivity() {
             inAppNotification: Boolean? = null,
             isApproved: Boolean? = null,
             isVerify: Boolean? = null,
+            bloodGlucoseUnit: String? = null,
         ) {
-
+            bloodGlucoseUnit?.let {
+                PreferenceManager.putString(AppConstants.Pref_Key.BLOOD_GLUCOSE_UNIT, it)
+            }
             accessToken?.let {
                 PreferenceManager.putString(AppConstants.Pref_Key.ACCESS_TOKEN, accessToken)
             }

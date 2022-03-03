@@ -15,7 +15,11 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
+import com.app.okra.ui.DashBoardActivity
+import com.app.okra.ui.add_meal.AddMealActivity
+import com.app.okra.ui.connected_devices.ConnectionStatusFragment
 import com.app.okra.ui.logbook.test.contract.TestLogContract
+import com.app.okra.utils.EventLiveData
 
 
 import com.app.okra.utils.Listeners
@@ -24,7 +28,7 @@ import com.app.okra.utils.navigateToLogin
 import kotlinx.android.synthetic.main.fragment_test_logs.*
 import kotlinx.android.synthetic.main.fragment_test_logs.progressBar_loadMore
 
-class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener {
+class TestLogsFragment(val listeners: Listeners.EventClickListener?) : BaseFragmentWithoutNav(),  Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var requestAdapter: TestLogsAdapter
@@ -57,9 +61,10 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        getData(pageNo)
+      //  getData(pageNo)
         setObserver()
         setListener()
+        checkForFilter()
     }
 
     public fun getData(pageNo: Int,
@@ -101,11 +106,21 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
 
             if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
-
                 requireActivity().finish()
             }
-
         }
+
+        EventLiveData.eventLiveData.observe(viewLifecycleOwner){ event ->
+            if((requireActivity() as DashBoardActivity).currentFragment() == 1) {
+                event.peekContent().let {
+                    if (!it.type.isNullOrEmpty() && it.type == ConnectionStatusFragment::class.java.simpleName) {
+                        event.update()
+                        checkForFilter()
+                    }
+                }
+            }
+        }
+
     }
 
     private fun prepareDateWiseData(testLogData: ArrayList<Data>) {
@@ -166,8 +181,7 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
         })
 
         swipe_request.setOnRefreshListener {
-            pageNo=1
-            getData(1)
+            checkForFilter()
         }
     }
 
@@ -190,5 +204,9 @@ class TestLogsFragment : BaseFragmentWithoutNav(),  Listeners.ItemClickListener 
     override fun onUnSelect(o: Any?, o1: Any?) {
     }
 
+
+    fun checkForFilter(){
+        listeners?.onEventClick(TestLogsFragment::class.java.simpleName, null)
+    }
 
 }

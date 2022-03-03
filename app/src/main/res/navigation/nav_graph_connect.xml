@@ -12,7 +12,7 @@
         android:label="ConnectedDevicesFragment"
         tools:layout="@layout/fragment_connected_devices">
         <action
-            android:id="@+id/action_connectedDevicesFragment_to_discoveringFragment"
+            android:id="@+id/action_connectedDevicesFragment_to_bluetoothDeviceListFragment"
             app:destination="@id/blueToothDeviceListFragment" />
     </fragment>
     <fragment

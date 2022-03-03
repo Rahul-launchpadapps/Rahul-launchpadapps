@@ -32,6 +32,19 @@
         android:src="@mipmap/filter"
         tools:ignore="UsingOnClickInXml" />
 
+    <View
+        android:id="@+id/view_filter"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="45dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_circle_green"
+        app:layout_constraintBottom_toBottomOf="@+id/ivFilter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ivFilter"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RelativeLayout
         android:id="@+id/rl_test_logs"
         android:layout_width="wrap_content"

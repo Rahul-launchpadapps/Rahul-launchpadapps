@@ -44,7 +44,6 @@
                 android:layout_height="@dimen/dp_150"
                 android:layout_margin="@dimen/dp_20"
                 android:elevation="@dimen/dp_5"
-                android:padding="@dimen/dp_10"
                 app:cardBackgroundColor="@color/bg_grey"
                 app:cardCornerRadius="@dimen/dp_10"
                 app:cardElevation="@dimen/dp_8"
@@ -135,6 +134,7 @@
                 android:layout_marginEnd="@dimen/dp_20"
                 android:inputType="text"
                 android:ellipsize="end"
+                android:background="@null"
                 android:visibility="gone"
                 android:fontFamily="@font/axiforma_medium"
                 android:gravity="end"
@@ -184,6 +184,44 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvDateHeading" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNoOfServingHeading"
+                style="@style/textContainer"
+                android:layout_width="@dimen/dp_0"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="@font/axiforma_medium"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/no_of_Servings_2"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etNoOfServing"
+                style="@style/edit_text_style"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:background="@mipmap/bg_edittext"
+                android:gravity="center_vertical"
+                android:hint="@string/calories"
+                android:inputType="numberDecimal"
+                android:maxLength="3"
+                android:text="@string/_1"
+                android:singleLine="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvNoOfServingHeading" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvCaloriesHeading"
                 style="@style/textContainer"
                 android:layout_width="@dimen/dp_0"
@@ -198,7 +236,7 @@
                 android:textSize="@dimen/sp_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+                app:layout_constraintTop_toBottomOf="@+id/etNoOfServing" />
 
 
             <androidx.appcompat.widget.AppCompatEditText

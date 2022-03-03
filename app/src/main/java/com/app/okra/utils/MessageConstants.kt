@@ -6,8 +6,19 @@ class MessageConstants {
 
         companion object {
 
+            val please_fill_hyper_values = "Please fill the hyper or hypo blood glucose value to save."
+            val hypo_cant_be_greater = "Hypo can't be greater than hyper."
+            val please_enter_to_date = "Please enter to date."
+            val please_enter_from_date = "Please enter from date."
+            const  val please_select_protein="Please select protein"
+            const  val please_select_fat="Please select fat"
+            const  val please_select_carbs="Please select carbs"
+            const  val please_select_calories="Please select calories"
+            const  val please_select_date = "Please select date."
+            const  val please_select_image = "Please select image."
+            const  val please_select_food_type = "Please select food type."
             const  val selected_time_should_not_be = "Selected time should not be lesser than current time."
-            const  val invalid_age = "Age must be between 35 and 100"
+            const  val invalid_age = "Age must be between 35 and 150"
             const val please_enter_decline_reason = "Please enter decline reason."
             const val please_enter_message = "Please enter message"
             const val enter_group_name = "Enter group name"
@@ -70,7 +81,7 @@ class MessageConstants {
             const val invalid_pass = "Invalid Password"
             const val invalid_confirm_pass = "Invalid Confirm Password"
             const val password_mismatch = "You must type the same password each time"
-            const val same_password_issue = "Current password & New password could’nt be same"
+            const val same_password_issue = "Current password & New password couldn't be same"
             const val invalid_phone = "Invalid Phone No."
             const val invalid_data = "Invalid data."
             const val fb_login_failed = "Facebook Login Failed."
@@ -122,6 +133,11 @@ class MessageConstants {
     class Messages {
 
         companion object {
+            val file_downloaded_successfully = "File downloaded successfully"
+            val addtional_notes_not_allowed = "Additional Notes is not allowed to be empty"
+            val medication_updated_successfully = "Medicine updated successfully"
+            val alert_msg_sync = "Data of this Okra device is already synced with this user's database."
+            val message_unit_interchange = "You can't select this option."
             val test_already_added = "Test already added."
             val test_fetched_successfully = "Test fetched successfully"
             val you_can_only_pair = "You can only pair the Okra pro devices with this application."
@@ -159,6 +175,7 @@ class MessageConstants {
             const val location_permission_deny_text = "Location permission is required for this feature?"
             const val work_in_progress = "Work in progress."
             const val no_data_available = "No data available."
+            const val no_app_found = "No app found to open downloaded file."
             const val no_device_available = "No device found."
             const val unsaved_meal_data = "You have unsaved meal details. These meal details will be lost."
 

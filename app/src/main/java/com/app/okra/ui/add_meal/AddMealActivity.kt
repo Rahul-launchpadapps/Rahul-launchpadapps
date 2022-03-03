@@ -25,6 +25,7 @@ import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
 import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_2
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_6
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_add_meal.*
@@ -69,6 +70,10 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
         if(result!=null){
             selectedFoodItem= result
             tvFoodTypeValue.text = result.name
+
+            result.noOfServing?.let {
+                etNoOfServing.setText(it)
+            }
             result.nutrition?.let {
                 if(it.calories!=null) {
                     tvCalories.setText("${it.calories}")
@@ -91,20 +96,25 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_meal)
         setUpToolbar()
+        setView()
         setObserver()
         setListener()
+    }
+
+    private fun setView() {
+        tvDate.text = getCurrentDateInString(DATE_FORMAT_1)
+        strDate = getCurrentDateInString(DATE_FORMAT_6)
     }
 
     private fun setUpToolbar() {
         tvTitle.text = getString(R.string.new_meal)
         btnSave.beVisible()
-        btnSave.text = getString(R.string.add_meal)
+        btnSave.text = getString(R.string.btn_add_meal)
     }
 
     private fun setListener() {
         mChooseImageUtils.setCallbacks(this, this)
         viewModel.setAmazonCallback(this)
-
 
         ivBack.setOnClickListener {
             checkDataExistence()
@@ -120,52 +130,35 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
         btnSave.setOnClickListener {
             when {
                 TextUtils.isEmpty(amazonImageUrl) -> {
-                    showToast(getString(R.string.please_select_image))
+                    showToast(MessageConstants.Errors.please_select_image)
                 }
                 TextUtils.isEmpty(etFoodTypeValue.text.toString()) && isManual -> {
-                    showToast(getString(R.string.please_select_food_type))
+                    showToast(MessageConstants.Errors.please_select_food_type)
                 }
                 TextUtils.isEmpty(tvDate.text.toString()) -> {
-                    showToast(getString(R.string.please_select_date))
+                    showToast(MessageConstants.Errors.please_select_date)
                 }
                 TextUtils.isEmpty(tvCalories.text.toString()) -> {
-                    showToast(getString(R.string.please_select_calories))
+                    showToast(MessageConstants.Errors.please_select_calories)
                 }
                 TextUtils.isEmpty(tvCarbs.text.toString()) -> {
-                    showToast(getString(R.string.please_select_carbs))
+                    showToast(MessageConstants.Errors.please_select_carbs)
                 }
                 TextUtils.isEmpty(tvFat.text.toString()) -> {
-                    showToast(getString(R.string.please_select_fat))
+                    showToast(MessageConstants.Errors.please_select_fat)
                 }
                 TextUtils.isEmpty(tvProtein.text.toString()) -> {
-                    showToast(getString(R.string.please_select_protein))
+                    showToast(MessageConstants.Errors.please_select_protein)
                 }
                 else -> {
-                    var date = ""
                     val foodList: ArrayList<FoodItemsRequest> = ArrayList()
 
-                    date = tvDate.text.toString()
-
-                    val foodItemsRequest = if(this::selectedFoodItem.isInitialized){
-                        FoodItemsRequest(
-                            selectedFoodItem.group,
-                            selectedFoodItem.name,
-                            selectedFoodItem.selectedServingSize?.unit
-                        )
-                    }else {
-                        FoodItemsRequest(
-                            "android",
-                            "android",
-                            "0"
-                        )
-                    }
-
-                    var foodType: String
-                    if(isManual)
-                        foodType = etFoodTypeValue.text.toString()
+                    val foodType = if(isManual)
+                        etFoodTypeValue.text.toString()
                     else
-                        foodType = tvFoodTypeValue.text.toString()
-                    val dateToConvert =   getDifferentInfoFromDate_String(strDate, "yyyy-MM-dd hh:mm",DATE_FORMAT_2)
+                        tvFoodTypeValue.text.toString()
+
+                    val dateToConvert =  getISOFromDate(strDate, DATE_FORMAT_6)
                     viewModel.prepareAddRequest(
                         date = dateToConvert,
                         image = amazonImageUrl,
@@ -175,6 +168,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
                         carbs = CommonData(tvCarbs.text.toString(), "gm"),
                         fat = CommonData(tvFat.text.toString(), "gm"),
                         protein = CommonData(tvProtein.text.toString(), "gm"),
+                        noOfServings = etNoOfServing.text.toString()
                     )
                     viewModel.addMeal()
                 }
@@ -189,6 +183,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
             if(isManual){
                 tvFoodTypeValue.visibility = View.INVISIBLE
                 etFoodTypeValue.visibility = View.VISIBLE
+                etFoodTypeValue.requestFocus()
             }
         }
     }
@@ -210,8 +205,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
                 },
                 MessageConstants.Messages.unsaved_meal_data,
                 true,
-                positiveButtonText = getString(R.string.ok),
-                negativeButtonText = getString(R.string.cancel),
+                positiveButtonText = getString(R.string.btn_ok),
+                negativeButtonText = getString(R.string.btn_cancel),
                 title = getString(R.string.unsaved_meal)
             )
         }else{
@@ -286,7 +281,7 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
                         if (fileSize > -1 && fileSize <= AppConstants.ALLOWED_FILE_SIZE) {
                             localImageUri = imageUri
                             viewModel.uploadFile(imageUri)
-                          //  viewModel.foodRecognition(imageUri.path)
+                            //  viewModel.foodRecognition(imageUri.path)
                         } else {
                             showToast("Selected file exceeds the maximum limit of ${AppConstants.ALLOWED_FILE_SIZE} MB.")
                         }
@@ -358,14 +353,10 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
         viewModel._foodRecognitionLiveData.observe(this) {
             iv_image.loadUserImageFromUrl(this, localImageUri.path)
             try {
-                println("::: Output: ${it}")
-
                 val mealInput  = if (!it.is_food) {
-                    println("::::: Invalid: True ")
 
                     MealInput(invalid = true, image= localImageUri.path!!)
                 } else if (it.results == null || it.results!!.size == 0) {
-                    println("::::: Invalid: True, No Data ")
 
                     MealInput(invalid = true, image= localImageUri.path!!)
                 } else {
@@ -385,6 +376,8 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
         }
 
         viewModel._addMealLiveData.observe(this) {
+            EventLiveData.eventLiveData.value =
+                    Event(EventLiveData.EventData(AddMealActivity::class.java.simpleName))
             finish()
         }
 
@@ -436,5 +429,17 @@ class AddMealActivity : BaseActivity(), Listeners.CustomMediaDialogListener,
 
     override fun onBackPressed() {
         checkDataExistence()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(mPermissionUtils.hasPermissions(this,*permissions)){
+            if(typeOfAction == AppConstants.PermissionCodes.PERMISSION_CAMERA){
+                onPermissionsGiven(AppConstants.PermissionCodes.PERMISSION_CAMERA)
+            }
+            else if(typeOfAction == AppConstants.PermissionCodes.PERMISSION_STORAGE){
+                onPermissionsGiven(AppConstants.PermissionCodes.PERMISSION_STORAGE)
+            }
+        }
     }
 }

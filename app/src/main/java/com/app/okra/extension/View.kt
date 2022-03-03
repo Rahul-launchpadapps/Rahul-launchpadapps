@@ -18,6 +18,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
+import com.app.okra.data.preference.PreferenceManager
+import com.app.okra.utils.AppConstants
+import com.app.okra.utils.convertMGDLtoMMOL
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
@@ -147,7 +150,18 @@ fun View.setNormalView(context: Context){
     this.background = ResourcesCompat.getDrawable(context.resources, R.mipmap.bg_edittext, null)
 }
 
-
  fun EditText.setMaxLength(maxLength: Int) {
     filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
+}
+
+ fun TextView.getGlucoseToSet(data: String?) {
+    val bloodGlucoseUnit = PreferenceManager.getString(AppConstants.Pref_Key.BLOOD_GLUCOSE_UNIT)
+
+     data?.let {
+       this.text =   if (bloodGlucoseUnit != null && bloodGlucoseUnit == AppConstants.MM_OL) {
+           "${convertMGDLtoMMOL(it.toFloat())} mmol"
+       } else {
+           "$it mg/dL"
+       }
+     }
 }

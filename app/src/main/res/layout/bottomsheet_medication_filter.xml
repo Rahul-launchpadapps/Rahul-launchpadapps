@@ -60,13 +60,16 @@
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
         android:drawableEnd="@mipmap/calendar"
-        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:gravity="start|center_vertical"
         android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginStart="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvMedToDate"/>
+        app:layout_constraintEnd_toStartOf="@id/tvMedToDate"
+        tools:text="2021-11-22"
+        tools:ignore="RtlSymmetry"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/edit_text_style"
@@ -78,13 +81,16 @@
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
         android:drawableEnd="@mipmap/calendar"
-        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:gravity="start|center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
-        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_10"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toEndOf="@id/tvMedFromDate"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="2021-11-30"
+        tools:ignore="RtlSymmetry"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvMedication"
@@ -94,7 +100,7 @@
         android:fontFamily="@font/axiforma_medium"
         android:gravity="center"
         android:maxLines="2"
-        android:text="@string/medication"
+        android:text="@string/unit_type"
         android:textColor="@color/grey_3"
         android:textSize="@dimen/sp_16"
         android:layout_marginStart="@dimen/dp_20"
@@ -138,7 +144,7 @@
         android:fontFamily="@font/axiforma_medium"
         android:gravity="center"
         android:maxLines="2"
-        android:text="@string/pills"
+        android:text="@string/pills_inSmall"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_16"
         android:layout_marginStart="@dimen/dp_20"
@@ -185,6 +191,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPills"
         tools:ignore="RtlSymmetry" />
+ <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvML"
+        style="@style/textContainer"
+        android:layout_width="@dimen/dp_0"
+        android:ellipsize="end"
+        android:fontFamily="@font/axiforma_medium"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="@string/ml"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_16"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMG"
+        tools:ignore="RtlSymmetry" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivML"
+        style="@style/textContainer"
+        android:layout_width="@dimen/dp_0"
+        android:src="@drawable/selector_tick"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMG"
+        tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnReset"
@@ -194,7 +227,7 @@
         android:layout_width="@dimen/dp_0"
         android:text="@string/reset"
         android:textColor="@color/grey_4"
-        app:layout_constraintTop_toBottomOf="@+id/tvMG"
+        app:layout_constraintTop_toBottomOf="@+id/tvML"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnMedApplyFilter"
         android:background="@mipmap/apply_filter"
@@ -208,7 +241,7 @@
         android:layout_width="@dimen/dp_0"
         android:text="@string/apply_filter"
         android:textColor="@color/green_1"
-        app:layout_constraintTop_toBottomOf="@+id/tvMG"
+        app:layout_constraintTop_toBottomOf="@+id/tvML"
         app:layout_constraintStart_toEndOf="@id/btnReset"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@mipmap/apply_filter"

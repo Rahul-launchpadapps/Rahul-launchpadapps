@@ -13,8 +13,8 @@
             android:id="@+id/action_searchMed_to_addMed"
             app:destination="@id/addMedication" />
         <action
-            android:id="@+id/action_searchMed_to_saveMed"
-            app:destination="@id/saveMedication" />
+            android:id="@+id/action_searchMed_to_medicationDetail"
+            app:destination="@id/medicationDetail" />
     </fragment>
     <fragment
         android:id="@+id/addMedication"
@@ -22,17 +22,17 @@
         android:label="addMedication"
         tools:layout="@layout/fragment_add_medication">
         <action
-            android:id="@+id/action_addMed_to_saveMed"
-            app:destination="@id/saveMedication" />
+            android:id="@+id/action_addMed_to_medicationDetail"
+            app:destination="@id/medicationDetail" />
     </fragment>
 
     <fragment
-        android:id="@+id/saveMedication"
+        android:id="@+id/medicationDetail"
         android:name="com.app.okra.ui.add_medication.MedicationDetailsFragment"
-        android:label="saveMedicationFragment"
-        tools:layout="@layout/fragment_save_medication">
+        android:label="medicationDetailFragment"
+        tools:layout="@layout/fragment_medication_detail">
         <action
-            android:id="@+id/action_saveMedication_to_editMedicationFragment"
+            android:id="@+id/action_medicationDetail_to_editMedicationFragment"
             app:destination="@id/editMedicationFragment" />
     </fragment>
     <fragment

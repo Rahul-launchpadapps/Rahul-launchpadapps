@@ -87,7 +87,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
                         isVerify = it.isVerify,
                         phone = it.mobileNo,
                         profilePicture = it.profilePicture,
-                        pushNotificationStatus = it.pushNotificationStatus
+                        pushNotificationStatus = it.pushNotificationStatus,
+                        bloodGlucoseUnit = it.bloodGlucoseUnit
                     )
                     etEmail.setText("")
                     etPassword.setText("")
@@ -141,7 +142,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
 
     private fun setView() {
 
-        btnCommon.text = getString(R.string.sign_in)
+        btnCommon.text = getString(R.string.btn_sign_in)
         btnCommon.beDisable()
         PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_FIRST_TIME, true)
         etPassword.transformationMethod = PasswordTransformationMethod()
@@ -156,16 +157,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
         val boldTypeface = ResourcesCompat.getFont(this, R.font.axiforma_bold)
 
         val span = SpannableString(tvSignUp.text)
-        span.setSpan(messageClick, 20, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+        span.setSpan(messageClick, 23, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         span.setSpan(
             CustomTypefaceSpan(boldTypeface!!),
-            20,
+            23,
             tvSignUp.text.length,
             Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
         span.setSpan(
             ForegroundColorSpan(ContextCompat.getColor(this, R.color.colorPrimary)),
-            20, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+            23, tvSignUp.text.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
 
         tvSignUp.text = span
@@ -178,7 +179,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, TextWatcher {
     }
 
     fun onForgotPassClick(view: View) {
-        navigationOnly(ForgotPassActivity())
+        val intent = Intent(this, ForgotPassActivity::class.java)
+        intent.putExtra(AppConstants.Intent_Constant.EMAIL, etEmail.text.toString())
+        navigate(intent)
     }
 
     override fun onClick(p0: View?) {

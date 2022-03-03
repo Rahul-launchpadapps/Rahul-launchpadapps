@@ -22,6 +22,7 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() ,
     val _medicationLiveData: LiveData<ApiData<MedicationResponse>>
         get() = medicationLiveData
 
+
     private var updateMedicationLiveData = MutableLiveData<ApiData<Any>>()
     val _updateMedicationLiveData: LiveData<ApiData<Any>>
         get() = updateMedicationLiveData
@@ -77,11 +78,23 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() ,
         params[AppConstants.RequestParam.limit] = AppConstants.DATA_LIMIT
 
         if (!fromDate.isNullOrEmpty()) {
-            params[AppConstants.RequestParam.from] = fromDate
+            params[AppConstants.RequestParam.from] = getDifferentInfoFromDate_String(fromDate,
+                    AppConstants.DateFormat.DATE_FORMAT_7, AppConstants.DateFormat.DATE_FORMAT_3)
         }
         if (!toDate.isNullOrEmpty()) {
-            params[AppConstants.RequestParam.to] = toDate
+            params[AppConstants.RequestParam.to] = getDifferentInfoFromDate_String(toDate,
+                    AppConstants.DateFormat.DATE_FORMAT_7, AppConstants.DateFormat.DATE_FORMAT_3)
         }
+      /*  if (!fromDate.isNullOrEmpty()) {
+            params[AppConstants.RequestParam.from] = fromDate*//* getISOFromDate(fromDate,
+                AppConstants.DateFormat.DATE_FORMAT_3
+            )*//*
+        }
+        if (!toDate.isNullOrEmpty()) {
+            params[AppConstants.RequestParam.to] = toDate *//*getISOFromDate(toDate,
+                AppConstants.DateFormat.DATE_FORMAT_3
+            )*//*
+        }*/
         if (!type.isNullOrEmpty()) {
             params[AppConstants.RequestParam.type] = type
         }
@@ -147,7 +160,7 @@ class MedicationViewModel(private val repo: MedicationRepo?) : BaseViewModel() ,
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))
                 }
-                is ApiResult.NetworkError -> {
+                else -> {
                     errorObserver.value = Event(ApiData(message = "Network Issue"))
                 }
             }

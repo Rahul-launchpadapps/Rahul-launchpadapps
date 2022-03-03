@@ -34,6 +34,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/axiforma_medium"
         android:gravity="center"
+        android:lineSpacingExtra="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_20"
         android:maxLines="2"
         android:text="@string/what_unit_of_measure_would_you_like_to_use"
@@ -85,7 +86,7 @@
             android:fontFamily="@font/axiforma_medium"
             android:gravity="center"
             android:maxLines="1"
-            android:text="@string/pill"
+            android:text="@string/pill_inSmall"
             android:textColor="@color/grey_3"
             android:textSize="@dimen/sp_14"
             tools:ignore="RtlSymmetry" />
@@ -121,6 +122,7 @@
         android:imeOptions="actionNext"
         android:inputType="number"
         android:maxLength="4"
+        android:hint="@string/quantity"
         app:layout_constraintTop_toBottomOf="@+id/ll_unit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

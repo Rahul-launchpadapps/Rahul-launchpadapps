@@ -1,11 +1,10 @@
 package com.app.okra.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.app.okra.R
-import com.app.okra.extension.loadUserImageFromUrl
 import com.app.okra.extension.navigationOnly
 import com.app.okra.ui.boarding.login.LoginActivity
 import com.app.okra.ui.boarding.resetPassword.ResetOrChangePasswordActivity
@@ -28,7 +27,7 @@ class MessageActivity : AppCompatActivity() {
 
     private fun setView() {
         if(fromScreen == ProfileFragment::class.java.simpleName){
-            btnSend.text = getString(R.string.ok)
+            btnSend.text = getString(R.string.btn_ok)
         }else if (fromScreen == SignUpActivity::class.java.simpleName){
             btnSend.text = getString(R.string.lets_get_started_2)
 

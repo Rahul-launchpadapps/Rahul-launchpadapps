@@ -142,4 +142,7 @@ interface ApiService {
     @GET("v1/users/medication/search")
     suspend fun searchMedication(@Query("search") search:String): Response<BaseResponse<MedicationSearchResponse>>
 
+    @GET("v1/test/download")
+    suspend fun getReport(@QueryMap params: WeakHashMap<String, Any>): Response<BaseResponse<String>>
+
 }

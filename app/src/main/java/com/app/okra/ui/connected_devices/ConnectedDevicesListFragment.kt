@@ -49,11 +49,6 @@ class ConnectedDevicesListFragment : BaseFragment(),
         return viewModel
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = ConnectedDevicesListFragment()
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,13 +63,18 @@ class ConnectedDevicesListFragment : BaseFragment(),
         setAdapter()
         setViews()
         setObserver()
+        setViewListener()
         bleValidate.checkPermissions()
         viewModel.getPreviousDevices()
     }
 
+    private fun setViewListener() {
+        btnCommon.setOnClickListener(this)
+    }
+
     override fun onResume() {
         super.onResume()
-        (activity as BluetoothActivity).setTitle(getString(R.string.connected_devices))
+        (activity as BluetoothActivity).setTitle(getString(R.string.title_connected_devices))
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -111,14 +111,14 @@ class ConnectedDevicesListFragment : BaseFragment(),
     }
 
     private fun setViews() {
-        btnCommon.text = getString(R.string.connect)
-        (activity as BluetoothActivity).setDeleteButtonVisibility(false, true)
+        btnCommon.text = getString(R.string.btn_connect)
+        (activity as BluetoothActivity).setDeleteButtonVisibility(makeVisible = false, beInvisible = true)
         (activity as BluetoothActivity).setHeaderButtonVisibility(false)
     }
 
 
     override fun onBluetoothDisable(msg: String) {
-        showCustomAlertDialog(
+       /* showCustomAlertDialog(
             requireContext(),
             object : Listeners.DialogListener {
                 override fun onOkClick(dialog: DialogInterface?) {
@@ -132,10 +132,10 @@ class ConnectedDevicesListFragment : BaseFragment(),
             },
             MessageConstants.Messages.bluetooth_turn_on_permission,
             false,
-            positiveButtonText = getString(R.string.ok),
-            negativeButtonText = getString(R.string.cancel),
+            positiveButtonText = getString(R.string.btn_ok),
+            negativeButtonText = getString(R.string.btn_cancel),
             title = getString(R.string.bluetooth),
-        )
+        )*/
     }
 
     override fun onLocationDisable(msg: String) {
@@ -153,8 +153,8 @@ class ConnectedDevicesListFragment : BaseFragment(),
             },
             MessageConstants.Messages.please_turn_on_your_location,
             false,
-            positiveButtonText = getString(R.string.ok),
-            negativeButtonText = getString(R.string.cancel),
+            positiveButtonText = getString(R.string.btn_ok),
+            negativeButtonText = getString(R.string.btn_cancel),
             title = getString(R.string.location),
         )
     }
@@ -176,7 +176,7 @@ class ConnectedDevicesListFragment : BaseFragment(),
             },
             MessageConstants.Messages.location_permission_deny_text,
             false,
-            positiveButtonText = getString(R.string.ok),
+            positiveButtonText = getString(R.string.btn_ok),
             title = getString(R.string.alert),
         )
     }
@@ -204,7 +204,7 @@ class ConnectedDevicesListFragment : BaseFragment(),
 
     override fun onClick(p0: View?) {
         when(p0?.id){
-            R.id.btnSave -> {
+            R.id.btnCommon -> {
                 navController.navigate(R.id.action_connectedDevicesListFragment_to_connectedDevicesFragment)
             }
         }

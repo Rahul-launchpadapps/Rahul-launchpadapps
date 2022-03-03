@@ -83,7 +83,7 @@ class SettingsActivity : BaseActivity(),
 
     private fun setViews() {
         tvTitle.text = getString(R.string.title_my_setting)
-        btnLogin.text = getString(R.string.log_out)
+        btnLogin.text = getString(R.string.btn_log_out)
         btnLogin.setTextColor(ContextCompat.getColor(this, R.color.red))
         ivDelete.beInvisible()
     }
@@ -101,10 +101,9 @@ class SettingsActivity : BaseActivity(),
                         dialog?.dismiss()
                     }
 
-                }, MessageConstants.Messages.logout_message,
-                    true,
+                }, MessageConstants.Messages.logout_message, true,
                 getString(R.string.logout),
-                getString(R.string.cancel),
+                getString(R.string.btn_cancel),
                 getString(R.string.logout),
                 )
             }

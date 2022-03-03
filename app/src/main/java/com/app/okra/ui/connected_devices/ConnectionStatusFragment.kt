@@ -2,6 +2,7 @@ package com.app.okra.ui.connected_devices
 
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -55,6 +56,11 @@ class ConnectionStatusFragment : BaseFragment(){
         return viewModel
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as BluetoothActivity).setTitle(getString(R.string.title_connect_device))
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,11 +97,11 @@ class ConnectionStatusFragment : BaseFragment(){
                 if (service != null) {
                     getCharacteristicsOfDevice()
                 } else {
-                    showToast_errorOccurred()
+                    showToastErrorOccurred()
                 }
             }
         }else{
-            showToast_errorOccurred()
+            showToastErrorOccurred()
         }
     }
 
@@ -130,10 +136,10 @@ class ConnectionStatusFragment : BaseFragment(){
                         }
                     })
             }else{
-                showToast_errorOccurred()
+                showToastErrorOccurred()
             }
         }else{
-            showToast_errorOccurred()
+            showToastErrorOccurred()
         }
     }
 
@@ -166,16 +172,10 @@ class ConnectionStatusFragment : BaseFragment(){
                                 if (localDeviceDataCount < it.totalDataCount!!.toInt()) {
                                     limitValue = it.totalDataCount!!.toInt() - localDeviceDataCount
                                 } else {
-                                    executeOnMainThread {
-                                        showToast(MessageConstants.Messages.test_already_added)
-                                            (requireActivity() as BluetoothActivity).navigateToStartingFragment()
-                                    }
+                                    showAlreadySyncAlertDialog()
                                 }
                             } else {
-                                executeOnMainThread {
-                                    showToast(MessageConstants.Messages.test_already_added)
-                                    (requireActivity() as BluetoothActivity).navigateToStartingFragment()
-                                }
+                                showAlreadySyncAlertDialog()
                             }
                         }
 
@@ -188,10 +188,7 @@ class ConnectionStatusFragment : BaseFragment(){
                                 fetchTestDataFromDevice()
                             }, 1000)
                         } else {
-                            executeOnMainThread {
-                                showToast(MessageConstants.Messages.test_already_added)
-                                    (requireActivity() as BluetoothActivity).navigateToStartingFragment()
-                            }
+                            showAlreadySyncAlertDialog()
                         }
                     }
                 } else {
@@ -220,6 +217,26 @@ class ConnectionStatusFragment : BaseFragment(){
         })
     }
 
+    private fun showAlreadySyncAlertDialog() {
+        executeOnMainThread {
+            showAlertDialog(
+                requireContext(),
+                listener =object :Listeners.DialogListener{
+                override fun onOkClick(dialog: DialogInterface?) {
+                    (requireActivity() as BluetoothActivity).navigateToStartingFragment()
+                }
+
+                override fun onCancelClick(dialog: DialogInterface?) {}
+
+            },
+            MessageConstants.Messages.alert_msg_sync,
+                false
+            )
+
+        }
+
+    }
+
     private fun fetchTestDataFromDevice() {
         if(initValue<=255){
             mByte_ForData[5] =initValue.toString().toByte()
@@ -246,11 +263,13 @@ class ConnectionStatusFragment : BaseFragment(){
 
     private fun setObserver() {
         setBaseObservers(viewModel, this)
-        viewModel._testAddLiveData.observe(viewLifecycleOwner){
+        viewModel._testAddLiveData.observe(viewLifecycleOwner){ it ->
             totalCountFromDevice?.let {
                 viewModel.updateDeviceDataList(it)
             }
             it.message?.let { it1 -> showToast(it1) }
+            EventLiveData.eventLiveData.value =
+                Event(EventLiveData.EventData(ConnectionStatusFragment::class.java.simpleName))
             requireActivity().finish()
         }
     }

@@ -13,6 +13,7 @@ class TestUpdateRequest(
         var bloodPressure: Int?=null,
         var insulin: Int?=null,
         var additionalNotes: String?=null,
+        var date: String?=null,
         var testingTime: String?=null,
         var deviceName: String?=null,
         var mealsBefore: ArrayList<String>?=null,
@@ -35,8 +36,10 @@ class Data(
         var insulin: String?=null,
         var testingTime: String?=null,
         var createdAt: String?=null,
+        var additionalNotes: String?=null,
         ) : Parcelable {
         constructor(parcel: Parcel) : this(
+                parcel.readString(),
                 parcel.readString(),
                 parcel.readString(),
                 parcel.readString(),
@@ -59,6 +62,7 @@ class Data(
                 parcel.writeString(insulin)
                 parcel.writeString(testingTime)
                 parcel.writeString(createdAt)
+                parcel.writeString(additionalNotes)
         }
 
         override fun describeContents(): Int {

@@ -21,10 +21,7 @@ import com.app.okra.models.Items
 import com.app.okra.models.Results
 import com.app.okra.models.ServingSize
 import com.app.okra.ui.add_meal.contract.AddMealContracts
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.MessageConstants
-import com.app.okra.utils.dialog
-import com.app.okra.utils.showCustomAlertDialog
+import com.app.okra.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_image_view.*
@@ -34,12 +31,15 @@ import kotlinx.android.synthetic.main.bottomsheet_final_selected_meal.*
 
 class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
 
+    private lateinit var enteredNoOfServing: String
     var data: FoodRecognintionResponse? = null
 
     private lateinit var foodNameAdapter: FoodItemNameAdapter
     private lateinit var foodTypeAdapter: FoodItemAdapter
     private lateinit var servingAdapter : FoodServingAdapter
     private var selectedItem : Items?=null
+    private lateinit var bottomSheetDialog :BottomSheetDialog
+    private lateinit var bottomSheetConfirmationDialog :BottomSheetDialog
 
     private val foodNameList by lazy {  ArrayList<Results>() }
     private val foodTypeList by lazy {  ArrayList<Items>() }
@@ -94,7 +94,7 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
     }
 
     private fun showBottomSheetDialog() {
-        val bottomSheetDialog = BottomSheetDialog(this)
+         bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.apply {
             setContentView(R.layout.bottomsheet_choose_item)
             val height = Resources.getSystem().displayMetrics.heightPixels
@@ -227,11 +227,10 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
 
             val btnPositive: Button = findViewById(R.id.btnPositive)
             val btnNegative: Button = findViewById(R.id.btnNegative)
-            val tvServingCount: TextView = findViewById(R.id.tvNoOfServingCount)
+            val etNoOfServingCount: TextView = findViewById(R.id.etNoOfServingCount)
             val rv_serving: RecyclerView = findViewById(R.id.rv_serving)
 
             selectedItem?.selectedServingSize = foodServingList[0]
-            tvServingCount.text = foodServingList[0].unit
             foodServingList[0].isServingSelected = true
             val staggeredGridLayoutManager = StaggeredGridLayoutManager(
                 2,
@@ -245,7 +244,6 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
                         selectedItem?.selectedServingSize = foodServingList[pos]
 
                         updateSelectedServing(pos)
-                        tvServingCount.text = foodServingList[pos].unit
                     }
 
                     override fun onUnSelect(o: Any?, o1: Any?) {}
@@ -256,6 +254,8 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
 
             btnPositive.setOnClickListener {
                 if(selectedItem!=null && selectedItem!!.selectedServingSize!=null) {
+                    enteredNoOfServing = etNoOfServingCount.text.toString()
+                    selectedItem!!.noOfServing = enteredNoOfServing
                     showBottomSheetConfirmationDialog()
                 }else{
                     showToast(MessageConstants.Errors.invalid_data)
@@ -272,10 +272,10 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
     }
 
     private fun showBottomSheetConfirmationDialog() {
-        val bottomSheetDialog = BottomSheetDialog(this)
-        bottomSheetDialog.apply {
+         bottomSheetConfirmationDialog = BottomSheetDialog(this)
+        bottomSheetConfirmationDialog.apply {
             setContentView(R.layout.bottomsheet_final_selected_meal)
-            setupFullHeight(bottomSheetDialog)
+            setupFullHeight(bottomSheetConfirmationDialog)
             show()
 
             selectedItem?.let{ it ->
@@ -285,10 +285,14 @@ class ImageViewActivity : BaseActivity(), Listeners.DialogListener {
                 }
 
                 tv_looks_good.setOnClickListener {
-                    setResult(RESULT_OK, Intent().putExtra(AddMealContracts.data, selectedItem))
+                    setResult(RESULT_OK, Intent()
+                        .putExtra(AddMealContracts.data, selectedItem)
+                        .putExtra(AppConstants.NO_OF_SERVING, enteredNoOfServing)
+                    )
                     finish()
                 }
             }
         }
     }
+
 }

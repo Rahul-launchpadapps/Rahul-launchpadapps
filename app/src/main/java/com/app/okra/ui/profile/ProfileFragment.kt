@@ -38,10 +38,10 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.File
 
 class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
-        View.OnClickListener,
-        Listeners.CustomMediaDialogListener,
-        PermissionUtils.IGetPermissionListener,
-        ImageUtils.IChooseImageInterface{
+    View.OnClickListener,
+    Listeners.CustomMediaDialogListener,
+    PermissionUtils.IGetPermissionListener,
+    ImageUtils.IChooseImageInterface{
 
     companion object{
         var isProfilePicUpdated = false
@@ -57,9 +57,9 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
 
     private val viewModel by lazy {
         ViewModelProvider(this,
-                viewModelFactory {
-                    ProfileViewModel(ProfileRepoImpl(apiServiceAuth))
-                }
+            viewModelFactory {
+                ProfileViewModel(ProfileRepoImpl(apiServiceAuth))
+            }
         ).get(ProfileViewModel::class.java)
     }
 
@@ -82,8 +82,8 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
@@ -140,9 +140,9 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
 
     private fun setAdapter() {
         profileAdapter = ItemsAdapter(
-                this,
-                requireActivity(),
-                ProfileFragment::class.java.simpleName
+            this,
+            requireActivity(),
+            ProfileFragment::class.java.simpleName
         )
         rvOptions.layoutManager = LinearLayoutManager(requireContext())
         rvOptions.adapter = profileAdapter
@@ -157,6 +157,12 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
         when (pos + 1) {
             1 -> {
                 requireActivity().navigationOnly(ProfileInfoActivity())
+            }
+            2 -> {
+                val intent = Intent(requireActivity(), StaticContentActivity::class.java)
+                intent.putExtra(AppConstants.Intent_Constant.TYPE, StaticContentActivity.OKRA_WEB_URL)
+
+                requireActivity().navigate(intent)
             }
             3 -> {
                 val intent = Intent(requireActivity(), BluetoothActivity::class.java)
@@ -173,22 +179,22 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
             }
             6 -> {
                 requireActivity().navigate(
-                        Intent(requireContext(), ResetOrChangePasswordActivity::class.java)
-                                .putExtra(AppConstants.SCREEN_TYPE, ProfileFragment::class.java.simpleName)
+                    Intent(requireContext(), ResetOrChangePasswordActivity::class.java)
+                        .putExtra(AppConstants.SCREEN_TYPE, ProfileFragment::class.java.simpleName)
                 )
             }
             7 -> {
                 try {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/")))
                 } catch (e: ActivityNotFoundException) {
-                   println("Exception:"+e.printStackTrace())
+                    println("Exception:"+e.printStackTrace())
                 }
             }
             8 -> {
                 requireActivity().navigationOnly(MyReminderActivity())
             }
             9 -> {
-            requireActivity().navigationOnly(SupportRequestActivity())
+                requireActivity().navigationOnly(SupportRequestActivity())
             }
         }
     }
@@ -301,14 +307,14 @@ class ProfileFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener,
 
     private fun openCropper(uri: Uri) {
         CropImage.activity(uri)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setAspectRatio(1, 1)
-                .setAutoZoomEnabled(false)
-                .setAllowFlipping(false)
-                .setBorderLineThickness(8f)
-                .setGuidelines(CropImageView.Guidelines.OFF)
-                .setAllowRotation(false)
-                .start(requireActivity(), this)
+            .setCropShape(CropImageView.CropShape.RECTANGLE)
+            .setAspectRatio(1, 1)
+            .setAutoZoomEnabled(false)
+            .setAllowFlipping(false)
+            .setBorderLineThickness(8f)
+            .setGuidelines(CropImageView.Guidelines.OFF)
+            .setAllowRotation(false)
+            .start(requireActivity(), this)
 
     }
 }

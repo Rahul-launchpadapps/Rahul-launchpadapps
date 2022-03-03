@@ -2,6 +2,8 @@ package com.app.okra.ui.add_medication
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +13,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
+import com.app.okra.extension.beDisable
+import com.app.okra.extension.beEnable
 import com.app.okra.extension.setMaxLength
 import com.app.okra.models.MedicationData
 import com.app.okra.utils.AppConstants
@@ -31,8 +35,8 @@ class AddMedicationFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_medication, container, false)
@@ -55,12 +59,12 @@ class AddMedicationFragment : BaseFragment() {
         }
 
         layout_button.btnCommon.setOnClickListener {
-           if(etName.text.isNullOrEmpty()){
-               showToast(getString(R.string.please_enter_medicine_name))
-           }else {
-               name = etName.text.toString()
-               showUnitDialog()
-           }
+            if(etName.text.isNullOrEmpty()){
+                showToast(getString(R.string.please_enter_medicine_name))
+            }else {
+                name = etName.text.toString()
+                showUnitDialog()
+            }
         }
     }
 
@@ -89,6 +93,23 @@ class AddMedicationFragment : BaseFragment() {
             val tvML: TextView = findViewById(R.id.tvML)
 
             tvTitle.text = name
+            btnAdd.beDisable()
+
+
+            etUnit.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(!p0.isNullOrEmpty()){
+                        btnAdd.beEnable()
+                    }else{
+                        btnAdd.beDisable()
+                    }
+                }
+
+                override fun afterTextChanged(p0: Editable?) { }
+            })
+
 
             tvMG.setOnClickListener {
                 isMG = true
@@ -122,7 +143,7 @@ class AddMedicationFragment : BaseFragment() {
                 isPill = false
                 etUnit.setMaxLength(3)
                 tvML.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
+                        ResourcesCompat.getDrawable(resources, R.drawable.bg_button_green, null)
                 tvML.setTextColor(ContextCompat.getColor(context, R.color.white))
                 tvMG.background = null
                 tvMG.setTextColor(ContextCompat.getColor(context, R.color.grey_3))
@@ -141,7 +162,7 @@ class AddMedicationFragment : BaseFragment() {
                         } else if(etUnit.text.toString().toInt() > 10){
                             showToast("You can not exceed 10 pills")
                         }else {
-                           addMedicationApi(etUnit.text.toString().toInt())
+                            addMedicationApi(etUnit.text.toString().toInt())
                             dialog?.dismiss()
                         }
                     }else {
@@ -170,7 +191,7 @@ class AddMedicationFragment : BaseFragment() {
         val bundle = Bundle()
         bundle.putString(AppConstants.MEDICATION_TYPE,"2")
         bundle.putParcelable(AppConstants.DATA,data)
-        navController.navigate(R.id.action_addMed_to_saveMed, bundle)
+        navController.navigate(R.id.action_addMed_to_medicationDetail, bundle)
     }
 
 }

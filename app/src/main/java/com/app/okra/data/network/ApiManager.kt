@@ -53,20 +53,27 @@ object ApiManager {
         }
 
     private fun getHttpClientAuth(): OkHttpClient.Builder {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
         return OkHttpClient.Builder().addInterceptor { chain ->
             val original = chain.request()
+
+            val tz: TimeZone = TimeZone.getDefault()
+
             val requestBuilder: Request.Builder = original.newBuilder()
                 .header("Accept", "application/json")
                 .header("Authorization", "Bearer "+PreferenceManager.getString(AppConstants.Pref_Key.ACCESS_TOKEN))
                 .header("platform", "1")
                 .header("api_key","1234")
                 .header("language", "en")
-                .method(original.method, original.body)
+                .header("timezone", tz.id)
+                .header("offset", tz.rawOffset.toString())
             val request = requestBuilder.build()
             val response = chain.proceed(request)
             response
         }
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(httpLoggingInterceptor.apply {
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            })
             .readTimeout(30000, TimeUnit.MILLISECONDS)
             .writeTimeout(30000, TimeUnit.MILLISECONDS)
 

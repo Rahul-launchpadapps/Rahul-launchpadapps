@@ -35,7 +35,8 @@ class FoodItemAdapter (private val data : ArrayList<Items>, val listener : Liste
         fun onBind( position: Int) {
 
             itemView.tvTitle.text = data[position].name
-            itemView.tvDetail.text = data[position].servingSizes?.size.toString() + " Serving"
+            val details = data[position].servingSizes?.size.toString() + " Serving"
+            itemView.tvDetail.text = details
             itemView.setOnClickListener{
                 listener?.onSelect(position,null)
             }

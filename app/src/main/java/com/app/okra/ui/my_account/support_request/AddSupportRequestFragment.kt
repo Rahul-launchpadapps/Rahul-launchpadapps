@@ -117,7 +117,7 @@ class AddSupportRequestFragment : BaseFragment(),
 
 
     private fun setViews() {
-        btnCommon.text = getString(R.string.submit)
+        btnCommon.text = getString(R.string.btn_submit)
     }
 
     override fun onClick(p0: View?) {

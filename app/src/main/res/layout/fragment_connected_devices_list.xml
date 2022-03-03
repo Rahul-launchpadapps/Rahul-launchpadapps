@@ -11,7 +11,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llNoData"
         style="@style/container"
-        android:visibility="gone"
         android:background="@color/bg_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

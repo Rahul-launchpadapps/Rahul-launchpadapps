@@ -86,7 +86,7 @@
         android:id="@+id/etEmail"
         android:layout_height="wrap_content"
         android:background="@mipmap/bg_edittext"
-        android:hint="@string/email"
+        android:hint="@string/email_id"
         android:singleLine="true"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"

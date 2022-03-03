@@ -29,7 +29,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/textContainer"
-                android:drawableTop="@mipmap/upload_image"
+                android:drawableTop="@mipmap/delete_white"
                 android:drawablePadding="@dimen/dp_5"
                 android:fontFamily="@font/axiforma_medium"
                 android:text="@string/clear"

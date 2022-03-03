@@ -96,20 +96,20 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
             println("Action$action")
             when {
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED == action -> {
-                    println("Started")
+                    println("$$$ Bluetooth Started")
                 }
                 BluetoothAdapter.ACTION_STATE_CHANGED == action -> {
-                    println("changed")
+                    println("$$$ Bluetooth Changed")
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action -> {
-                    println("finished")
+                    println("$$$ Bluetooth Finished")
                 }
                 BluetoothDevice.ACTION_FOUND == action -> {
                     //bluetooth device found
                     val device =
                         intent.getParcelableExtra<Parcelable>(BluetoothDevice.EXTRA_DEVICE) as BluetoothDevice?
 
-                    System.out.println("**** Found device " + device?.name);
+                    println("$$$ Bluetooth device Found:  " + device?.name);
                 }
             }
         }
@@ -129,7 +129,7 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
         }
     }
 
-     fun setTitle(title: String){
+    fun setTitle(title: String){
         tvTitle.text = title
     }
 
@@ -218,15 +218,17 @@ class BluetoothActivity : BaseActivity(), View.OnClickListener{
 
     fun navigateToStartingFragment() {
         Handler(Looper.getMainLooper()).postDelayed({
-           val navigationId= if(!fromScreen.isNullOrEmpty()
-               && fromScreen == ProfileFragment::class.java.simpleName) {
-               R.id.connectedDevicesListFragment
+            val navigationId= if(!fromScreen.isNullOrEmpty()
+                && fromScreen == ProfileFragment::class.java.simpleName) {
+                //R.id.connectedDevicesListFragment
+                val navOptions = NavOptions.Builder().setPopUpTo(R.id.connectedDevicesListFragment, true).build()
+                navController.navigate(R.id.connectedDevicesListFragment, null, navOptions)
             }else{
-               R.id.connectedDevicesFragment
+             //   R.id.connectedDevicesFragment
+                finish()
             }
 
-            val navOptions = NavOptions.Builder().setPopUpTo(navigationId, true).build()
-            navController.navigate(navigationId, null, navOptions)
+
         },1000)
 
     }

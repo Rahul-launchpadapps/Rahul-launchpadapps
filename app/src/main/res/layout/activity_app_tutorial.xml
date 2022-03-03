@@ -4,8 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/container"
-    android:background="@color/bg_grey"
-    tools:context=".ui.connected_devices.ConnectedDeviceActivity">
+    android:background="@color/bg_grey">
 
     <include
         android:id="@+id/layout"

@@ -10,6 +10,8 @@ import com.app.okra.models.TestListResponse
 import com.app.okra.models.TestUpdateRequest
 import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.Companion.DATA_LIMIT
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_3
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,7 +38,7 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
 
 
 
-  fun prepareRequest(pageNo: Int,
+    fun prepareRequest(pageNo: Int,
                        testingTime: String?=null,
                        fromDate: String?=null,
                        toDate: String?=null){
@@ -49,23 +51,32 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
         }
 
         if(!fromDate.isNullOrEmpty()){
-            params[AppConstants.RequestParam.fromDate] = fromDate
+            params[AppConstants.RequestParam.fromDate] = getDifferentInfoFromDate_String(fromDate,
+                    AppConstants.DateFormat.DATE_FORMAT_7, DATE_FORMAT_3)
         }
         if(!toDate.isNullOrEmpty()){
-            params[AppConstants.RequestParam.toDate] = toDate
+            params[AppConstants.RequestParam.toDate] = getDifferentInfoFromDate_String(toDate,
+                    AppConstants.DateFormat.DATE_FORMAT_7, DATE_FORMAT_3)
         }
+       /* if(!fromDate.isNullOrEmpty()){
+            params[AppConstants.RequestParam.fromDate] = fromDate *//*getISOFromDate(fromDate, DATE_FORMAT_3)*//*
+        }
+        if(!toDate.isNullOrEmpty()){
+            params[AppConstants.RequestParam.toDate] = toDate *//*getISOFromDate(toDate, DATE_FORMAT_3)*//*
+        }*/
 
     }
 
     fun prepareUpdateRequest(
-                        testId: String?=null,
-                       testingTime: String?=null,
-                        bloodGlucose: Int?=null,
-                        bloodPressure: Int?=null,
-                        insulin: Int?=null,
-                        additionalNotes: String?=null,
-                        mealsBefore: MutableList<String>?=null,
-                        mealsAfter: MutableList<String>?=null,
+        testId: String?=null,
+        date: String?=null,
+        testingTime: String?=null,
+        bloodGlucose: Int?=null,
+        bloodPressure: Int?=null,
+        insulin: Int?=null,
+        additionalNotes: String?=null,
+        mealsBefore: MutableList<String>?=null,
+        mealsAfter: MutableList<String>?=null,
     ){
 
 
@@ -79,26 +90,23 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
             updateRequest.bloodGlucose = it
         }
         bloodPressure?.let{
-           updateRequest.bloodPressure = it
+            updateRequest.bloodPressure = it
         }
         insulin?.let{
-           updateRequest.insulin = it
+            updateRequest.insulin = it
         }
         if(!additionalNotes.isNullOrEmpty()){
-           updateRequest.additionalNotes = additionalNotes
+            updateRequest.additionalNotes = additionalNotes
         }
 
-       updateRequest.mealsBefore = mealsBefore?.toCollection(ArrayList())
-       updateRequest.mealsAfter = mealsAfter?.toCollection(ArrayList())
-
-       /* if(!mealsBefore.isNullOrEmpty()){
-            params[AppConstants.RequestParam.mealsBefore] = mealsBefore
+        date?.let{
+            updateRequest.date = getISOFromDate(it, AppConstants.DateFormat.DATE_FORMAT_5)
         }
-        if(!mealsAfter.isNullOrEmpty()){
-            params[AppConstants.RequestParam.mealsAfter] = mealsAfter
-        }*/
 
-    }
+        updateRequest.mealsBefore = mealsBefore?.toCollection(ArrayList())
+        updateRequest.mealsAfter = mealsAfter?.toCollection(ArrayList())
+
+          }
 
     fun getTestLogs() {
         launchDataLoad {
@@ -120,7 +128,7 @@ class TestLogsViewModel(private val repo: TestLogsRepo?) : BaseViewModel() {
         }
     }
 
-fun updateTest() {
+    fun updateTest() {
         launchDataLoad {
             showProgressBar()
             val result = repo?.updateTestLog(updateRequest)
@@ -138,7 +146,7 @@ fun updateTest() {
             }
         }
     }
-fun deleteTest(id :String) {
+    fun deleteTest(id :String) {
         launchDataLoad {
             showProgressBar()
             val result = repo?.deleteTest(id)

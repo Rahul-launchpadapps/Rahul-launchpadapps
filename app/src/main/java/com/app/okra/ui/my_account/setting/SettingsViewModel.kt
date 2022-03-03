@@ -8,6 +8,7 @@ import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.SettingRepo
 import com.app.okra.data.repo.SettingRepoImpl
 import com.app.okra.models.ContactResponse
+import com.app.okra.models.MealUpdateRequest
 import com.app.okra.models.SettingRequest
 import com.app.okra.utils.*
 
@@ -38,9 +39,10 @@ class SettingsViewModel(private val repo: SettingRepo?) : BaseViewModel() {
             inAppStatus: Boolean?=null,
             pushNotification: Boolean?=null,
             bloodGlucoseUnit: String?=null,
-            hyperBloodGlucoseValue: Int?=null,
-            hypoBloodGlucoseValue: Int?=null
+            hyperBloodGlucoseValue: String?=null,
+            hypoBloodGlucoseValue: String?=null
     ){
+        settingRequest = SettingRequest()
 
         inAppStatus?.let {
             settingRequest.inappNotificationStatus = it
@@ -84,7 +86,8 @@ class SettingsViewModel(private val repo: SettingRepo?) : BaseViewModel() {
 
     fun updateSettings() {
         launchDataLoad {
-             showProgressBar()
+            if(validateRequest()) {
+                showProgressBar()
                 val result = repo?.updateNotificationStatus(settingRequest)
                 hideProgressBar()
                 when (result) {
@@ -97,9 +100,30 @@ class SettingsViewModel(private val repo: SettingRepo?) : BaseViewModel() {
                     is ApiResult.NetworkError -> {
                         errorObserver.value = Event(ApiData(message = "Network Issue"))
                     }
+                }
             }
         }
     }
+
+
+    private fun validateRequest(): Boolean {
+        return when{
+            settingRequest.hyperBloodGlucoseValue.isNullOrBlank() ->{
+                toastObserver.value = Event(ToastData(MessageConstants.Errors.please_fill_hyper_values))
+                false
+            }
+            settingRequest.hypoBloodGlucoseValue.isNullOrBlank() ->{
+                toastObserver.value = Event(ToastData(MessageConstants.Errors.please_fill_hyper_values))
+                false
+            }
+            settingRequest.hypoBloodGlucoseValue!!.toFloat() > settingRequest.hyperBloodGlucoseValue!!.toFloat()->{
+                toastObserver.value = Event(ToastData(MessageConstants.Errors.hypo_cant_be_greater))
+                false
+            }
+            else -> true
+        }
+    }
+
 
     fun onLogout() {
         launchDataLoad {
@@ -113,7 +137,7 @@ class SettingsViewModel(private val repo: SettingRepo?) : BaseViewModel() {
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))
                 }
-                is ApiResult.NetworkError -> {
+                else -> {
                     errorObserver.value = Event(ApiData(message = "Network Issue"))
                 }
             }

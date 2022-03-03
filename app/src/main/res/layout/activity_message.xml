@@ -80,7 +80,7 @@
         android:layout_marginEnd="@dimen/dp_0"
         android:background="@mipmap/bg_button"
         android:onClick="onSendClick"
-        android:text="@string/back_to_signin"
+        android:text="@string/btn_back_to_signin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

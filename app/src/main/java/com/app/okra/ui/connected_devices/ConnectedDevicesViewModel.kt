@@ -42,30 +42,6 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
     var deviceDataRequest= DeviceDataRequest()
     var testAddRequest= TestAddRequest()
 
-    fun  setSettingRequest(
-        inAppStatus: Boolean?=null,
-        pushNotification: Boolean?=null,
-        bloodGlucoseUnit: String?=null,
-        hyperBloodGlucoseValue: Int?=null,
-        hypoBloodGlucoseValue: Int?=null
-    ){
-
-        inAppStatus?.let {
-            settingRequest.inappNotificationStatus = it
-        }
-        pushNotification?.let {
-            settingRequest.pushNotificationStatus = it
-        }
-        bloodGlucoseUnit?.let {
-            settingRequest.bloodGlucoseUnit = it
-        }
-        hyperBloodGlucoseValue?.let {
-            settingRequest.hyperBloodGlucoseValue = it
-        }
-        hypoBloodGlucoseValue?.let {
-            settingRequest.hypoBloodGlucoseValue = it
-        }
-    }
 
     fun  prepareTestRequest(fetchedTestList : ArrayList<BLETestData>){
         testAddRequest.testData = fetchedTestList
@@ -111,7 +87,7 @@ class ConnectedDevicesViewModel(private val repo: ConnectedDevicesRepo?) : BaseV
                 is ApiResult.GenericError -> {
                     errorObserver.value = Event(ApiData(message = result.message))
                 }
-                is ApiResult.NetworkError -> {
+                else -> {
                     errorObserver.value = Event(ApiData(message = "Network Issue"))
                 }
             }

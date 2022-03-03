@@ -8,6 +8,7 @@ import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.ReminderRepo
 import com.app.okra.models.UserDetailResponse
 import com.app.okra.utils.*
+import kotlinx.android.synthetic.main.fragment_set_reminder.*
 
 class ReminderViewModel(private val repo: ReminderRepo?) : BaseViewModel() {
 
@@ -21,19 +22,19 @@ class ReminderViewModel(private val repo: ReminderRepo?) : BaseViewModel() {
 
     fun setReminder(data : HashMap<String,Any>) {
         launchDataLoad {
-             showProgressBar()
-                val result = repo?.setReminder(data)
-                hideProgressBar()
-                when (result) {
-                    is ApiResult.Success -> {
-                        setReminderLiveData.value = result.value
-                    }
-                    is ApiResult.GenericError -> {
-                        errorObserver.value = Event(ApiData(message = result.message))
-                    }
-                    is ApiResult.NetworkError -> {
-                        errorObserver.value = Event(ApiData(message = "Network Issue"))
-                    }
+            showProgressBar()
+            val result = repo?.setReminder(data)
+            hideProgressBar()
+            when (result) {
+                is ApiResult.Success -> {
+                    setReminderLiveData.value = result.value
+                }
+                is ApiResult.GenericError -> {
+                    errorObserver.value = Event(ApiData(message = result.message))
+                }
+                is ApiResult.NetworkError -> {
+                    errorObserver.value = Event(ApiData(message = "Network Issue"))
+                }
             }
         }
     }
@@ -57,4 +58,23 @@ class ReminderViewModel(private val repo: ReminderRepo?) : BaseViewModel() {
         }
     }
 
+     fun getRepeatType(repeatType:String, forNotification:Boolean =false):String {
+        return if(forNotification) {
+            when (repeatType) {
+                AppConstants.MONTHLY -> AppConstants.MONTHLY
+                AppConstants.DAILY -> AppConstants.DAILY
+                AppConstants.WEEKLY -> AppConstants.WEEKLY
+                else -> AppConstants.NEVER_TEXT
+            }
+        }else{
+            when (repeatType) {
+                AppConstants.NEVER_TEXT -> AppConstants.NEVER
+                AppConstants.DAILY -> AppConstants.EVERY_DAY
+                AppConstants.MONTHLY -> AppConstants.EVERY_MONTH
+                AppConstants.WEEKLY -> AppConstants.EVERY_WEEK
+                else -> AppConstants.SET_UP
+            }
+
+        }
+    }
 }

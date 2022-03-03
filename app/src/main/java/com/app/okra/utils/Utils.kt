@@ -34,16 +34,19 @@ import com.app.okra.models.ItemModel
 import com.app.okra.ui.boarding.login.LoginActivity
 import com.app.okra.utils.AppConstants.Companion.AFTER_MEAL
 import com.app.okra.utils.AppConstants.Companion.AFTER_MEAL_TEXT
+import com.app.okra.utils.AppConstants.Companion.ALL
+import com.app.okra.utils.AppConstants.Companion.ALL_TEXT
 import com.app.okra.utils.AppConstants.Companion.BEFORE_MEAL
 import com.app.okra.utils.AppConstants.Companion.BEFORE_MEAL_TEXT
 import com.app.okra.utils.AppConstants.Companion.CONTROLE_SOLUTION
 import com.app.okra.utils.AppConstants.Companion.CONTROLE_SOLUTION_TEXT
-import com.app.okra.utils.AppConstants.Companion.ISO_FORMAT
-import com.app.okra.utils.AppConstants.Companion.ISO_FORMATE
 import com.app.okra.utils.AppConstants.Companion.POST_MEDICINE
 import com.app.okra.utils.AppConstants.Companion.POST_MEDICINE_TEXT
 import com.app.okra.utils.AppConstants.Companion.POST_WORKOUT
 import com.app.okra.utils.AppConstants.Companion.POST_WORKOUT_TEXT
+import com.app.okra.utils.AppConstants.DateFormat.ISO_FORMAT
+import com.app.okra.utils.AppConstants.DateFormat.ISO_FORMATE
+import com.app.okra.utils.DateFormatter.DATE_DD_MM_YYYY
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.dialog_add_new.*
 import java.io.File
@@ -58,10 +61,10 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 fun showAlertDialog(
-    context: Context?,
-    listener: Listeners.DialogListener?,
-    msg: String?,
-    needCancelButton: Boolean
+        context: Context?,
+        listener: Listeners.DialogListener?,
+        msg: String?,
+        needCancelButton: Boolean
 ) {
     val dialog: AlertDialog.Builder = AlertDialog.Builder(context!!)
     dialog.setCancelable(false)
@@ -102,13 +105,13 @@ fun Context.openLink(url: String) {
 
 
 fun showAlertDialog(
-    context: Context?,
-    listener: Listeners.DialogListener?,
-    msg: String?,
-    needCancelButton: Boolean,
-    positiveButtonText: String?,
-    negativeButtonText: String?,
-    title: String = ""
+        context: Context?,
+        listener: Listeners.DialogListener?,
+        msg: String?,
+        needCancelButton: Boolean,
+        positiveButtonText: String?,
+        negativeButtonText: String?,
+        title: String = ""
 ) {
     val dialog: AlertDialog.Builder = AlertDialog.Builder(context!!)
     dialog.setCancelable(false)
@@ -139,8 +142,8 @@ fun showAlertDialog(
 fun getKeyHash(context: Context) {
     try {
         val info: PackageInfo = context.getPackageManager().getPackageInfo(
-            context.packageName,
-            PackageManager.GET_SIGNATURES
+                context.packageName,
+                PackageManager.GET_SIGNATURES
         )
         for (signature in info.signatures) {
             val md: MessageDigest = MessageDigest.getInstance("SHA")
@@ -216,6 +219,16 @@ fun getDateFromTimeStamp(timeStamp: Long?, formatYouWant: String? = null): Strin
     return ""
 }
 
+fun convertMGDLtoMMOL(mgdlValue: Float): String {
+    // return String.format("%.2f", (mgdlValue * 0.0555).toString())
+    return (mgdlValue * 0.0555).toString()
+}
+fun convertMMOLtoMGDL(mmolValue: Float): String {
+    // return String.format("%.2f", (mmolValue / 0.0555).toString())
+    return(mmolValue / 0.0555).toString()
+}
+
+
 
 fun getDateOnly(year: Int?, month: Int?, day: Int?): String {
     val cal: Calendar = GregorianCalendar()
@@ -260,17 +273,17 @@ fun getISOFromDateAndTime(year: Int?, month: Int?, day: Int?, hour: Int, min: In
     return result
 }
 
-fun getISOFromDate(date: String, currentFormat: String?): String? {
+fun getISOFromDate(date: String, currentFormat: String?, needUTC: Boolean = true): String {
 
     val formatter: DateFormat = SimpleDateFormat(currentFormat, Locale.getDefault())
     val dateInDateFormat =  formatter.parse(date)
-
     val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         SimpleDateFormat(ISO_FORMATE, Locale.getDefault())
     } else {
         SimpleDateFormat(ISO_FORMAT, Locale.getDefault())
     }
-    formatISO.timeZone = TimeZone.getTimeZone("UTC")
+    if(needUTC)
+        formatISO.timeZone = TimeZone.getTimeZone("UTC")
 
     var result = ""
 
@@ -305,10 +318,10 @@ fun getISOFromDateAndTime_inDate(date: Date?): Date? {
 
 
 fun getDateFromDateISO(
-    selectDate: String?,
-    formatYouWant: String? = null,
-    needFormatYouWantInUtc: Boolean = true,
-    needCurrentFormatInUtc: Boolean = false
+        selectDate: String?,
+        formatYouWant: String? = null,
+        needFormatYouWantInUtc: Boolean = true,
+        needCurrentFormatInUtc: Boolean = false
 ): Date? {
     var fromFormat = "dd/MM/yyyy"
 
@@ -369,9 +382,9 @@ fun getDateTimeFromISO(iSODate: String, formatYouWant: String? = "EEE MMM dd, HH
 }
 
 fun getDateFromISOInString(
-    iSODate: String,
-    formatYouWant: String = "hh:mm a, EEE MMM dd",
-    dateInUTC: Boolean = true
+        iSODate: String,
+        formatYouWant: String = "hh:mm a, EEE MMM dd",
+        dateInUTC: Boolean = true
 ): String {
     // val formatISO = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault());
     val formatISO = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -394,9 +407,9 @@ fun getDateFromISOInString(
 }
 
 fun getDateFromISOInDate(
-    selectDate: String?,
-    formatYouWant: String? = null,
-    needInUtc: Boolean = true
+        selectDate: String?,
+        formatYouWant: String? = null,
+        needInUtc: Boolean = true
 ): Date? {
     var fromFormat = ISO_FORMATE
     if (formatYouWant != null)
@@ -418,13 +431,13 @@ fun getDateFromISOInDate(
 
 
 fun showCustomAlertDialog(
-    context: Context?,
-    listener: Listeners.DialogListener?,
-    message: String? = null,
-    needCancelButton: Boolean,
-    positiveButtonText: String? = null,
-    negativeButtonText: String? = null,
-    title: String? = null
+        context: Context?,
+        listener: Listeners.DialogListener?,
+        message: String? = null,
+        needCancelButton: Boolean,
+        positiveButtonText: String? = null,
+        negativeButtonText: String? = null,
+        title: String? = null
 ) {
     dialog = Dialog(context!!, R.style.MyCustomTheme)
     val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_custom_alert, null)
@@ -627,11 +640,10 @@ fun checkLocationEnabled(context: Context?): Boolean {
 @formatYouWant: It must not be empty. This is the form you need.
 */
 fun getDifferentInfoFromDate(
-    dateToConvert: String,
-    initFormat: String?,
-    formatYouWant: String
+        dateToConvert: String,
+        initFormat: String?,
+        formatYouWant: String
 ): Date? {
-    var month = "";
     var date: Date? = null
     var initialFormat: String? = initFormat
 
@@ -641,7 +653,6 @@ fun getDifferentInfoFromDate(
     val dayFormat = SimpleDateFormat(formatYouWant, Locale.getDefault());
     try {
         date = SimpleDateFormat(initialFormat, Locale.getDefault()).parse(dateToConvert);
-        month = dayFormat.format(date!!);
 
     } catch (e: ParseException) {
         e.printStackTrace();
@@ -654,9 +665,9 @@ fun getDifferentInfoFromDate(
 @formatYouWant: It must not be empty. This is the form you need.
 */
 fun getDifferentInfoFromDate_String(
-    dateToConvert: String,
-    initFormat: String?,
-    formatYouWant: String
+        dateToConvert: String,
+        initFormat: String?,
+        formatYouWant: String
 ): String? {
     val date: Date?
     var initialFormat: String? = initFormat
@@ -676,9 +687,9 @@ fun getDifferentInfoFromDate_String(
 }
 
 fun compareDates(
-    selectedDate: Long,
-    currentDate: Long,
-    formatYouWant: String? = "dd-MM-yyyy HH:mm"
+        selectedDate: Long,
+        currentDate: Long,
+        formatYouWant: String? = "dd-MM-yyyy HH:mm"
 ): Boolean {
     var selectedDateInstance: Date? = null
     var currentDateInstance: Date? = null
@@ -701,21 +712,21 @@ fun compareDates(
 }
 
 fun compareAndGetDateToSet(
-    startTime: String,
-    endTime: String,
-    needCurrentFormatInUtc: Boolean,
-    formatYouWantToCompare: String? = null,
-    needFormatYouWantInUtc: Boolean = false
+        startTime: String,
+        endTime: String,
+        needCurrentFormatInUtc: Boolean,
+        formatYouWantToCompare: String? = null,
+        needFormatYouWantInUtc: Boolean = false
 ): String {
     val sdate = getDateFromDateISO(
-        startTime, formatYouWantToCompare,
-        needCurrentFormatInUtc = needCurrentFormatInUtc,
-        needFormatYouWantInUtc = needFormatYouWantInUtc
+            startTime, formatYouWantToCompare,
+            needCurrentFormatInUtc = needCurrentFormatInUtc,
+            needFormatYouWantInUtc = needFormatYouWantInUtc
     )
     val edate = getDateFromDateISO(
-        endTime, formatYouWantToCompare,
-        needCurrentFormatInUtc = needCurrentFormatInUtc,
-        needFormatYouWantInUtc = needFormatYouWantInUtc,
+            endTime, formatYouWantToCompare,
+            needCurrentFormatInUtc = needCurrentFormatInUtc,
+            needFormatYouWantInUtc = needFormatYouWantInUtc,
     )
     val sTime = getDateTimeFromISO(startTime)
 
@@ -736,10 +747,10 @@ fun compareAndGetDateToSet(
 
 
 public fun compareAndGetDateMatchStatus(
-    time1: String,
-    time2: String,
-    needCurrentFormatInUtc: Boolean,
-    formatYouWantToCompare: String? = null
+        time1: String,
+        time2: String,
+        needCurrentFormatInUtc: Boolean,
+        formatYouWantToCompare: String? = null
 ): Int {
     val t1date = getDateFromDateISO(time1, formatYouWantToCompare, needCurrentFormatInUtc)
     val t2date = getDateFromDateISO(time2, formatYouWantToCompare, needCurrentFormatInUtc)
@@ -818,9 +829,9 @@ fun navigateToLogin(activity: FragmentActivity) {
     }*/
     ActivityCompat.finishAffinity(activity);
     activity.startActivity(
-        Intent(activity, LoginActivity::class.java)
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
+            Intent(activity, LoginActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(AppConstants.Intent_Constant.FROM_SCREEN, AppConstants.LOGIN)
     )
 }
 
@@ -830,13 +841,13 @@ fun getProfileItems(context: Context?): MutableMap<Int, ItemModel> {
 
     profileHash[0] = ItemModel("Personal informations", R.mipmap.personal_info)
     profileHash[1] = ItemModel(
-        "My subscriptions",
-        R.mipmap.my_subs
+            "My subscriptions",
+            R.mipmap.my_subs
     )
     profileHash[2] = ItemModel("Connected devices", R.mipmap.connected_device)
     profileHash[3] = ItemModel(
-        "Settings",
-        R.mipmap.setting
+            "Settings",
+            R.mipmap.setting
     )
     profileHash[4] = ItemModel("App tutorial", R.mipmap.app_tutorial)
     profileHash[5] = ItemModel("Change password", R.mipmap.change_password)
@@ -853,8 +864,8 @@ fun getSettingsItems(context: Context?): MutableMap<Int, ItemModel> {
 
     profileHash[0] = ItemModel("About us", R.mipmap.about_us)
     profileHash[1] = ItemModel(
-        "Privacy policy",
-        R.mipmap.privacy_policy
+            "Privacy policy",
+            R.mipmap.privacy_policy
     )
     profileHash[2] = ItemModel("Terms and conditions", R.mipmap.terms_conditions)
 
@@ -868,9 +879,9 @@ fun getSettingsItems(context: Context?): MutableMap<Int, ItemModel> {
 
 
 fun showOptionDialog(
-    context: Context?,
-    listener: Listeners.CustomMediaDialogListener,
-    isUploadFromEmail: Boolean
+        context: Context?,
+        listener: Listeners.CustomMediaDialogListener,
+        isUploadFromEmail: Boolean
 ) {
     dialog = Dialog(context!!, R.style.MyCustomTheme)
     val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_more_option, null)
@@ -892,8 +903,8 @@ fun showOptionDialog(
             window?.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
             window?.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
 
@@ -915,8 +926,8 @@ fun showOptionDialog(
 }
 
 fun showAddNewDialog(
-    context: Context?,
-    listener: Listeners.CustomDialogListener
+        context: Context?,
+        listener: Listeners.CustomDialogListener
 ) {
     dialog = Dialog(context!!, R.style.MyCustomTheme)
     val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_add_new, null)
@@ -937,8 +948,8 @@ fun showAddNewDialog(
             window?.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
             window?.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
 
@@ -983,37 +994,38 @@ fun getMealTime(mealTime: String, forValue: Boolean = true): String {
             POST_WORKOUT -> {
                 POST_WORKOUT_TEXT
             }
-            else -> ""
+            else -> ALL_TEXT
         }
-    } else {
+    }
+    else {
         return when (mealTime) {
-            AFTER_MEAL_TEXT -> {
+            AFTER_MEAL_TEXT-> {
                 AFTER_MEAL
             }
             BEFORE_MEAL_TEXT -> {
                 BEFORE_MEAL
             }
-            CONTROLE_SOLUTION_TEXT -> {
+            CONTROLE_SOLUTION_TEXT-> {
                 CONTROLE_SOLUTION
             }
             POST_MEDICINE_TEXT -> {
                 POST_MEDICINE
             }
-            POST_WORKOUT_TEXT -> {
+            POST_WORKOUT_TEXT-> {
                 POST_WORKOUT
             }
-            else -> ""
+            else -> ALL
         }
     }
 }
 
 fun convertLocalTimeZoneToUTC(inputPattern: String?, date: String?): String {
-    val utcDateFormat: SimpleDateFormat = SimpleDateFormat(inputPattern, Locale.US)
+    val utcDateFormat = SimpleDateFormat(inputPattern, Locale.US)
     var localDate: Date? = null
     try {
         localDate = SimpleDateFormat(
-            inputPattern,
-            Locale.getDefault()
+                inputPattern,
+                Locale.getDefault()
         ).parse(date) // Local Date Format (By default)
         utcDateFormat.timeZone = TimeZone.getTimeZone("UTC")
         utcDateFormat.format(localDate)
@@ -1024,7 +1036,7 @@ fun convertLocalTimeZoneToUTC(inputPattern: String?, date: String?): String {
     }
 }
 
-fun convertUtc2Local(utcTime: String?,date_formate: String?): String? {
+fun convertUtc2Local(utcTime: String?, date_formate: String?): String? {
     var time = ""
     if (utcTime != null) {
         val utcFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
@@ -1066,6 +1078,19 @@ fun getDateFromPattern(inputPattern: String?, date: String?): Date? {
 }
 
 
+fun getCurrentDateInString(formatYouWant: String? = DATE_DD_MM_YYYY): String {
+
+    val date = Date(System.currentTimeMillis())
+    val sdf = SimpleDateFormat(formatYouWant, Locale.getDefault())
+
+    try {
+        return sdf.format(date)
+    }catch (e: java.lang.Exception){
+       e.printStackTrace()
+    }
+    return ""
+}
+
 fun getPastTimeString(createdTimestamp: Long?): String {
     var convertedTime = ""
     var convertedSecTime = ""
@@ -1083,7 +1108,9 @@ fun getPastTimeString(createdTimestamp: Long?): String {
             val day = TimeUnit.MILLISECONDS.toDays(dateDiff)
             when {
                 second < 60 -> {
-                    convertedSecTime = "Just now"
+                    value = second
+                    text = "second"
+                 //   convertedSecTime = "Just now"
                 }
                 minute < 2 -> {
                     value = minute
@@ -1152,9 +1179,9 @@ fun getPastTimeString(createdTimestamp: Long?): String {
 }
 
 fun getDatePicker(
-    context: Context,
-    dateSelected: (Long, Boolean) -> Unit,
-    isEndDate: Boolean
+        context: Context,
+        dateSelected: (Long, Boolean) -> Unit,
+        isEndDate: Boolean
 ): DatePickerDialog {
     val calendar = Calendar.getInstance()
     return DatePickerDialog(context, { _, year, month, dayOfMonth ->
@@ -1162,17 +1189,17 @@ fun getDatePicker(
         val longTime = calendar.timeInMillis
         dateSelected(longTime, isEndDate)
     },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
     )
 }
 
 fun getDatePicker(
-    context: Context,
-    dateSelected: (Long, Boolean) -> Unit,
-    setDateInMillis: Long,
-    isEndDate: Boolean,
+        context: Context,
+        dateSelected: (Long, Boolean) -> Unit,
+        setDateInMillis: Long,
+        isEndDate: Boolean,
 ): DatePickerDialog {
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = setDateInMillis
@@ -1181,18 +1208,18 @@ fun getDatePicker(
         val longTime = calendar.timeInMillis
         dateSelected(longTime, isEndDate)
     },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
     )
 }
 
 fun getMinDateForReports(): Long {
     val calendar = Calendar.getInstance()
     calendar.set(
-        calendar.get(Calendar.YEAR) - 1,
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
+            calendar.get(Calendar.YEAR) - 1,
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
     )
     return calendar.timeInMillis
 }
@@ -1200,4 +1227,52 @@ fun getMinDateForReports(): Long {
 
 fun getPrimaryColor(context: Context): Int{
     return ContextCompat.getColor(context, R.color.colorPrimary)
+}
+
+
+// "needAllUppercase" -> If TRUE, uppercase first letter of all word .
+fun convertWordsToUpperOrLowerCase(string: String, needUpperCase: Boolean, needAllUppercase: Boolean): String{
+    val words: List<String> = string.split(" ")
+    var modifiedString = ""
+
+
+    if(needAllUppercase) {
+        if(words.isNotEmpty()) {
+            if (words.size > 1) {
+                for (word in words) {
+                    // Capitalize first letter
+                    val firstLetter = word.substring(0, 1)
+                    // Get remaining letter
+                    val remainingLetters = word.substring(1)
+                    modifiedString += if (needUpperCase) {
+                        firstLetter.toUpperCase(Locale.ROOT) + remainingLetters + " "
+                    } else {
+                        firstLetter.toLowerCase(Locale.ROOT) + remainingLetters + " "
+                    }
+                }
+            } else {
+                modifiedString = words[0]
+            }
+        }
+    }else{
+        for ((i,word) in words.withIndex()) {
+            // Capitalize first letter
+            val firstLetter = word.substring(0, 1)
+            // Get remaining letter
+            val remainingLetters = word.substring(1)
+
+            modifiedString += if(i==0) {
+                if (needUpperCase) {
+                    firstLetter.toUpperCase(Locale.ROOT) + remainingLetters + " "
+                } else {
+                    firstLetter.toLowerCase(Locale.ROOT) + remainingLetters + " "
+                }
+            }else{
+                firstLetter.toLowerCase(Locale.ROOT) + remainingLetters + " "
+
+            }
+        }
+
+    }
+    return modifiedString
 }

@@ -16,20 +16,21 @@ import com.app.okra.extension.beGone
 import com.app.okra.extension.beVisible
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.MealData
+import com.app.okra.ui.DashBoardActivity
 
 
 import com.app.okra.ui.add_meal.AddMealActivity
 import com.app.okra.ui.add_meal.contract.AddMealContracts
 import com.app.okra.ui.logbook.contract.MealLogContract
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import com.app.okra.utils.navigateToLogin
+import com.app.okra.ui.logbook.test.TestLogsFragment
+import com.app.okra.utils.*
 import kotlinx.android.synthetic.main.fragment_meal_logs.*
 import kotlinx.android.synthetic.main.fragment_meal_logs.progressBar_loadMore
 import kotlinx.android.synthetic.main.fragment_meal_logs.rv_meal_list
 import kotlinx.android.synthetic.main.fragment_meal_logs.tvNoTestLogged
 
-class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
+class MealLogsFragment(val listeners: Listeners.EventClickListener?)
+    : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var mealLogsAdapter: MealLogsAdapter
@@ -48,9 +49,9 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     private val viewModel by lazy {
         ViewModelProvider(this,
-            viewModelFactory {
-                MealLogsViewModel(MealLogsRepoImpl(apiServiceAuth))
-            }
+                viewModelFactory {
+                    MealLogsViewModel(MealLogsRepoImpl(apiServiceAuth))
+                }
         ).get(MealLogsViewModel::class.java)
     }
 
@@ -62,8 +63,8 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_meal_logs, container, false)
@@ -75,13 +76,14 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         getData(pageNo)
         setObserver()
         setListener()
+        checkForFilter()
     }
 
-     fun getData(pageNo: Int,
-                 fromDate: String?=null,
-                        toDate: String?=null,
-                        type: String?=null,
-     ) {
+    fun getData(pageNo: Int,
+                fromDate: String?=null,
+                toDate: String?=null,
+                type: String?=null,
+    ) {
         viewModel.prepareRequest(pageNo,fromDate,toDate, type)
         viewModel.getMealLogs()
     }
@@ -118,6 +120,18 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
             if (data?.message == getString(R.string.your_login_session_has_been_expired)) {
                 navigateToLogin(requireActivity())
                 requireActivity().finish()
+            }
+        }
+
+        EventLiveData.eventLiveData.observe(viewLifecycleOwner){ event ->
+            event.peekContent().let{
+                if((requireActivity() as DashBoardActivity).currentFragment() == 1) {
+
+                    if (!it.type.isNullOrEmpty() && it.type == AddMealActivity::class.java.simpleName) {
+                        event.update()
+                        checkForFilter()
+                    }
+                }
             }
         }
     }
@@ -181,8 +195,7 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
         })
 
         swipe_request.setOnRefreshListener {
-            pageNo = 1
-            getData(1)
+            checkForFilter()
         }
         ivAdd.setOnClickListener {
             startActivity(Intent(activity,AddMealActivity::class.java))
@@ -196,5 +209,10 @@ class MealLogsFragment : BaseFragmentWithoutNav(), Listeners.ItemClickListener {
 
     override fun onUnSelect(o: Any?, o1: Any?) {
     }
+
+    fun checkForFilter(){
+        listeners?.onEventClick(MealLogsFragment::class.java.simpleName, null)
+    }
+
 
 }

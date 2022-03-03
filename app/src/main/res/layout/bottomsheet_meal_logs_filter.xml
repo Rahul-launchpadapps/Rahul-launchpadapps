@@ -57,16 +57,19 @@
         android:layout_height="wrap_content"
         android:background="@mipmap/date_input"
         android:hint="@string/from"
+        android:paddingStart="@dimen/dp_20"
+        android:gravity="start|center_vertical"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
         android:drawableEnd="@mipmap/calendar"
-        android:gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvMealToDate"/>
+        app:layout_constraintEnd_toStartOf="@id/tvMealToDate"
+        tools:text="2021-11-22"
+        tools:ignore="RtlSymmetry"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/edit_text_style"
@@ -75,16 +78,19 @@
         android:layout_height="wrap_content"
         android:background="@mipmap/date_input"
         android:hint="@string/to"
+        android:paddingStart="@dimen/dp_20"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
         android:drawableEnd="@mipmap/calendar"
-        android:gravity="center_vertical"
+        android:gravity="start|center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toEndOf="@id/tvMealFromDate"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="2021-11-30"
+        tools:ignore="RtlSymmetry"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTestingTime"
@@ -94,7 +100,7 @@
         android:fontFamily="@font/axiforma_medium"
         android:gravity="center"
         android:maxLines="2"
-        android:text="@string/testing_time"
+        android:text="@string/time_period"
         android:textColor="@color/grey_3"
         android:textSize="@dimen/sp_16"
         android:layout_marginStart="@dimen/dp_20"

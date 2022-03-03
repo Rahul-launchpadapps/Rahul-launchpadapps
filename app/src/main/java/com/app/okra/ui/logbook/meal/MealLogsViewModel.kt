@@ -1,14 +1,18 @@
 package com.app.okra.ui.logbook.meal
 
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.app.okra.R
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.network.ApiData
 import com.app.okra.data.network.ApiResult
 import com.app.okra.data.repo.MealLogsRepo
+import com.app.okra.extension.isEmailValid
 import com.app.okra.models.*
 import com.app.okra.utils.*
 import com.app.okra.utils.AppConstants.Companion.DATA_LIMIT
+import kotlinx.android.synthetic.main.activity_add_meal.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -32,7 +36,7 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
         get() = deleteMealLiveData
 
     var params= WeakHashMap<String, Any>()
-    val updateRequest = MealUpdateRequest()
+    var updateRequest = MealUpdateRequest()
 
     fun prepareRequest(pageNo: Int,
                        fromDate: String?=null,
@@ -47,11 +51,23 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
              params[AppConstants.RequestParam.type] = type
 
         if(!fromDate.isNullOrEmpty()){
-            params[AppConstants.RequestParam.fromDate] = fromDate
+            params[AppConstants.RequestParam.fromDate] = getDifferentInfoFromDate_String(fromDate,
+                    AppConstants.DateFormat.DATE_FORMAT_7, AppConstants.DateFormat.DATE_FORMAT_3)
         }
         if(!toDate.isNullOrEmpty()){
-            params[AppConstants.RequestParam.toDate] = toDate
+            params[AppConstants.RequestParam.toDate] = getDifferentInfoFromDate_String(toDate,
+                    AppConstants.DateFormat.DATE_FORMAT_7, AppConstants.DateFormat.DATE_FORMAT_3)
         }
+       /* if(!fromDate.isNullOrEmpty()){
+            params[AppConstants.RequestParam.fromDate] = fromDate *//*getISOFromDate(fromDate,
+                AppConstants.DateFormat.DATE_FORMAT_3, false
+            )*//*
+        }
+        if(!toDate.isNullOrEmpty()){
+            params[AppConstants.RequestParam.toDate] = toDate*//*getISOFromDate(toDate,
+                AppConstants.DateFormat.DATE_FORMAT_3, false
+            )*//*
+        }*/
 
     }
 
@@ -65,7 +81,10 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
         carbs: CommonData?=null,
         fat: CommonData?=null,
         protein: CommonData?=null,
+        noOfServing: String?=null,
     ){
+        updateRequest = MealUpdateRequest()
+
         updateRequest.mealsId= mealsId
 
         if(!date.isNullOrEmpty()){
@@ -93,6 +112,10 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
         foodType?.let{
             updateRequest.foodType = it
         }
+
+        if(!noOfServing.isNullOrEmpty()){
+            updateRequest.noOfServings=noOfServing
+        }
     }
 
     fun getMealLogs() {
@@ -116,22 +139,59 @@ class MealLogsViewModel(private val repo: MealLogsRepo?) : BaseViewModel() {
 
     fun updateMeal() {
         launchDataLoad {
-            showProgressBar()
-            val result = repo?.updateMealLog(updateRequest)
-            hideProgressBar()
-            when (result) {
-                is ApiResult.Success -> {
-                    updateMealLiveData.value = result.value
-                }
-                is ApiResult.GenericError -> {
-                    errorObserver.value = Event(ApiData(message = result.message))
-                }
-                is ApiResult.NetworkError -> {
-                    errorObserver.value = Event(ApiData(message = "Network Issue"))
+            if(validateRequest(updateRequest)) {
+                showProgressBar()
+                val result = repo?.updateMealLog(updateRequest)
+                hideProgressBar()
+                when (result) {
+                    is ApiResult.Success -> {
+                        updateMealLiveData.value = result.value
+                    }
+                    is ApiResult.GenericError -> {
+                        errorObserver.value = Event(ApiData(message = result.message))
+                    }
+                    else -> {
+                        errorObserver.value = Event(ApiData(message = "Network Issue"))
+                    }
                 }
             }
         }
     }
+
+    private fun validateRequest(updateRequest: MealUpdateRequest): Boolean {
+      return when{
+          updateRequest.image.isNullOrBlank() ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_image))
+              false
+          }
+          updateRequest.foodType.isNullOrBlank() ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_food_type))
+              false
+          }
+          updateRequest.date.isNullOrBlank() ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_date))
+              false
+          }
+          updateRequest.calories == null ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_calories))
+              false
+          }
+          updateRequest.carbs == null ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_carbs))
+              false
+          }
+          updateRequest.fat == null ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_fat))
+              false
+          }
+          updateRequest.protien == null ->{
+              toastObserver.value = Event(ToastData(MessageConstants.Errors.please_select_protein))
+              false
+          }
+          else -> true
+      }
+    }
+
     fun deleteMeal(id :String) {
         launchDataLoad {
             showProgressBar()

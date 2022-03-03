@@ -85,7 +85,7 @@ class OTPVerifyActivity : BaseActivity() {
     }
 
     private fun setObserver() {
-        viewModel._OtpVerifyLiveData.observe(this) {
+        viewModel._OtpVerifyLiveData.observe(this) {it1->
             screenType?.let {
                 if(screenType ==  SignUpActivity::class.java.simpleName
                     || screenType== LoginActivity::class.java.simpleName){
@@ -96,7 +96,7 @@ class OTPVerifyActivity : BaseActivity() {
                         saveDataInPreference(
                             name = it.name,
                             email = it.email,
-                            accessToken = it.accessToken,
+                            accessToken = it1.data!!.accessToken,
                             userType = it.userType,
                             userId = it.userId,
                             password = password,
@@ -127,15 +127,16 @@ class OTPVerifyActivity : BaseActivity() {
 
                     )
                 }
+                finish()
             }
 
         }
 
-        viewModel._OtpResendLiveData.observe(this) {
+        viewModel._OtpResendLiveData.observe(this) { it ->
             val apiSuccess: ApiData<*> = it as ApiData<*>
 
             if (apiSuccess.statusCode == "200") {
-                showToast(MessageConstants.Messages.we_have_sent)
+                showToast(it.message!!)
             } else {
                 apiSuccess.message?.let { showToast(it) }
             }
@@ -206,14 +207,11 @@ class OTPVerifyActivity : BaseActivity() {
     fun onOtpVerifyClick(view: View) {
         /* viewModel.setVerifyOtpValue(phoneNumber!!, email!!, otp_view.text.toString(), screenType!!)
          viewModel.otpVerifyApi()*/
-
     }
 
     fun onOTPVerifyBackClick(view: View) {
         finish()
     }
-
-
 
     fun onBackClick(view: View) {
         finish()
@@ -224,6 +222,7 @@ class OTPVerifyActivity : BaseActivity() {
     }
 
     fun onResendClick(view: View) {
+        otp_view.setText("")
         viewModel.setResetOTPValue( email, "EMAIL")
         viewModel.otpReSendApi()
     }

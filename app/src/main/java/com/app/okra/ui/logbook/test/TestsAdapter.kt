@@ -5,16 +5,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.okra.R
+import com.app.okra.data.preference.PreferenceManager
+import com.app.okra.extension.getGlucoseToSet
 import com.app.okra.models.Data
-import com.app.okra.utils.Listeners
-import com.app.okra.utils.getDateFromISOInString
-import com.app.okra.utils.getMealTime
+import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.Companion.ALL_TEXT
 import kotlinx.android.synthetic.main.row_test.view.*
 
 class TestsAdapter (var listener: Listeners.ItemClickListener,
                     private val dataList :  ArrayList<Data>,
 ) : RecyclerView.Adapter<TestsAdapter.ItemViewHolder>() {
 
+    var bloodGlucoseUnit: String?=null
+    init {
+         bloodGlucoseUnit = PreferenceManager.getString(AppConstants.Pref_Key.BLOOD_GLUCOSE_UNIT)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -41,10 +46,24 @@ class TestsAdapter (var listener: Listeners.ItemClickListener,
 
             data?.let{ it ->
                 it.bloodGlucose?.let{
-                    itemView.tvGlucoseValue.text = "$it mg/dL"
+                    /*itemView.tvGlucoseValue.text=    if(!bloodGlucoseUnit.isNullOrEmpty()){
+                                if(bloodGlucoseUnit == AppConstants.MM_OL){
+                                    "${convertMGDLtoMMOL(it.toFloat())} mmol"
+                                }else{
+                                    "$it mg/dL"
+                                }
+                    }else{
+                        "$it mg/dL"
+                    }*/
+                itemView.tvGlucoseValue.getGlucoseToSet(it)
+
                 }
                 it.testingTime?.let{
-                    itemView.tvDetail.text = getMealTime(it)
+                    itemView.tvDetail.text = if(getMealTime(it)!= ALL_TEXT){
+                        getMealTime(it)
+                    }else{
+                        ""
+                    }
                 }
 
                 it.date?.let{

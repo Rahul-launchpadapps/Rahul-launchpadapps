@@ -10,6 +10,7 @@ import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
+import com.app.okra.extension.getGlucoseToSet
 import com.app.okra.extension.viewModelFactory
 import com.app.okra.models.Data
 import com.app.okra.ui.logbook.test.TestLogsViewModel
@@ -28,16 +29,11 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
 
     private val viewModel by lazy {
         ViewModelProvider(this,
-            viewModelFactory {
-                TestLogsViewModel(TestLogsRepoImpl(apiServiceAuth))
-            }
+            viewModelFactory { TestLogsViewModel(TestLogsRepoImpl(apiServiceAuth)) }
         ).get(TestLogsViewModel::class.java)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_test_details, container, false)
     }
 
@@ -60,7 +56,7 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
     }
 
     private fun setUpToolbar() {
-        tvTitle.text = getString(R.string.test_details)
+        tvTitle.text = getString(R.string.title_test_details)
         ivRight.visibility = View.VISIBLE
         ivDelete.visibility = View.GONE
     }
@@ -82,8 +78,8 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 this,
                 getString(R.string.are_you_sure_you_want_to_delete_the_added_test),
                 true,
-                positiveButtonText=   getString(R.string.cancel),
-                negativeButtonText = getString(R.string.delete),
+                positiveButtonText=   getString(R.string.btn_cancel),
+                negativeButtonText = getString(R.string.btn_delete),
                 title = getString(R.string.delete_test)
             )
         }
@@ -102,11 +98,15 @@ class TestDetailsFragment : BaseFragment(), Listeners.DialogListener {
                 }
 
             data?.testingTime?.let {
-                tvTestingTimeValue.text =getMealTime(it)
+                tvTestingTimeValue.text =if(getMealTime(it)!= AppConstants.ALL_TEXT){
+                    getMealTime(it)
+                }else{
+                    ""
+                }
             }
 
 
-            tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
+            tvBloodGlucoseValue.getGlucoseToSet(data?.bloodGlucose)
             tvDeviceIdValue.text = data?.deviceId ?: ""
             tvDeviceNameValue.text = data?.deviceName ?: ""
         }

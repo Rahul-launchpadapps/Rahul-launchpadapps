@@ -38,6 +38,7 @@
         android:layout_marginBottom="@dimen/dp_24"
         android:src="@mipmap/okra_home_logo"
         app:layout_anchor="@id/bottom_navigation"
-        app:layout_anchorGravity="center" />
+        app:layout_anchorGravity="center"
+        android:contentDescription="TODO" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

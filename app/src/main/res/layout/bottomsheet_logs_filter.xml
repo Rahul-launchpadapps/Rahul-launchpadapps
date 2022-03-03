@@ -58,15 +58,18 @@
         android:background="@mipmap/date_input"
         android:hint="@string/from"
         android:singleLine="true"
+        android:paddingStart="@dimen/dp_20"
         android:drawablePadding="@dimen/dp_5"
         android:drawableEnd="@mipmap/calendar"
-        android:gravity="center_vertical"
+        android:gravity="start|center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvToDate"/>
+        app:layout_constraintEnd_toStartOf="@id/tvToDate"
+        tools:text="2021-11-22"
+        tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatTextView
         style="@style/edit_text_style"
@@ -77,14 +80,17 @@
         android:hint="@string/to"
         android:singleLine="true"
         android:drawablePadding="@dimen/dp_5"
+        android:paddingStart="@dimen/dp_20"
         android:drawableEnd="@mipmap/calendar"
-        android:gravity="center_vertical"
+        android:gravity="start|center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginEnd="@dimen/dp_20"
         app:layout_constraintTop_toBottomOf="@+id/tvDateRange"
         app:layout_constraintStart_toEndOf="@id/tvFromDate"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="2021-11-30"
+        tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTestingTime"

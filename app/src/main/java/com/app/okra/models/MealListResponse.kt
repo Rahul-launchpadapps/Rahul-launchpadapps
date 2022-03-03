@@ -11,6 +11,7 @@ class AddMealRequest(
     var carbs: CommonData?=null,
     var fat: CommonData?=null,
     var protien: CommonData?=null,
+    var noOfServings: String?=null,
     var foodItems: ArrayList<FoodItemsRequest>?=null,
 )
 
@@ -19,6 +20,7 @@ class MealUpdateRequest(
     var date: String?=null,
     var image: String?=null,
     var foodType: String?=null,
+    var noOfServings: String?=null,
     var calories: CommonData?=null,
     var carbs: CommonData?=null,
     var fat: CommonData?=null,
@@ -38,6 +40,7 @@ class MealListResponse(
 
 class MealData(
         var _id: String?= null,
+        var noOfServings: String?= null,
         var userId: String?= null,
         var created: Long?=null,
         var createdAt: String?=null,
@@ -53,6 +56,7 @@ class MealData(
         var foodItems: List<FoodItems>?=null,
         ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Long::class.java.classLoader) as? Long,
@@ -72,6 +76,7 @@ class MealData(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(_id)
+        parcel.writeString(noOfServings)
         parcel.writeString(userId)
         parcel.writeValue(created)
         parcel.writeString(createdAt)
@@ -103,8 +108,8 @@ class MealData(
 }
 
 class CommonData(
-    val value :String?=null,
-    val unit: String?
+    var value :String?=null,
+    var unit: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

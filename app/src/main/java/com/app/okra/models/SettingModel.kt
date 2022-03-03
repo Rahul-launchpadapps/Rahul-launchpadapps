@@ -5,8 +5,8 @@ class SettingRequest {
     var pushNotificationStatus: Boolean?=null
     var inappNotificationStatus: Boolean?=null
     var bloodGlucoseUnit: String?=null
-    var hyperBloodGlucoseValue: Int?=null
-    var hypoBloodGlucoseValue: Int?=null
+    var hyperBloodGlucoseValue: String?=null
+    var hypoBloodGlucoseValue: String?=null
 
 }
 

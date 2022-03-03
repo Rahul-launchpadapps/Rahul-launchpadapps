@@ -2,9 +2,9 @@ package com.app.okra.ui.add_medication
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.app.okra.R
 import com.app.okra.base.BaseActivity
@@ -41,21 +41,20 @@ class AddMedicationActivity : BaseActivity() {
     private fun manageNavigation() {
         screenFrom?.let{
             if(screenFrom.equals(MedicationLogsFragment::class.java.simpleName)){
-              /*  val  graph = navHost?.navController?.navInflater!!.inflate(R.navigation.nav_graph_medication)
+                val  graph = navHost?.navController?.navInflater!!.inflate(R.navigation.nav_graph_medication)
                 graph.apply {
-                    startDestination = R.id.saveMedication
+                    startDestination = R.id.medicationDetail
                     navController?.graph = graph
-                    navController?.navigate()
-                }*/
 
                     if(medicationData!=null) {
                         val bundle = Bundle()
                         bundle.putParcelable(AppConstants.DATA, medicationData)
                         bundle.putString(AppConstants.Intent_Constant.FROM_SCREEN, screenFrom)
-                        navController!!.navigate(R.id.saveMedication,bundle)
+                        navController!!.navigate(R.id.medicationDetail,bundle)
                     }else{
-                        navController!!.navigate(R.id.saveMedication)
+                        navController!!.navigate(R.id.medicationDetail)
                     }
+                }
 
             }
         }
@@ -77,6 +76,13 @@ class AddMedicationActivity : BaseActivity() {
 
         val fragment: Fragment =  navHost?.childFragmentManager?.fragments?.get(0)!!
         fragment.onActivityResult(requestCode, resultCode, data)
+    }
 
+    override fun onBackPressed() {
+        if(navHost!!.childFragmentManager.backStackEntryCount <2 ) {
+            finish()
+        }else{
+            navController!!.popBackStack()
+        }
     }
 }

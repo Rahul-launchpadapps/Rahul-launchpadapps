@@ -96,6 +96,8 @@ class AppConstants {
             const val PASS: String = "pass"
             const val TYPE = "type"
             const val REMINDER = "reminder"
+            const val NOTIFICATION_TITLE = "notificationTitle"
+            const val NOTIFICATION_DESC = "notificationDesc"
             const val DATA = "data"
         }
 
@@ -110,18 +112,22 @@ class AppConstants {
 
 
     companion object {
+        const val MG_DL = "mg/dL"
+        const val MM_OL = "mmol/dL"
+
         const val BLE_SCAN_TIMEOUT = 10000L
         const val DATA_LIMIT = 100
         const val DATA = "data"
+        const val NO_OF_SERVING = "no_of_serving"
         const val SCREEN_TYPE = "screen_type"
         const val EMAIL = "email"
+        const val TYPE_EXCEL = "EXCEL"
+        const val TYPE_PDF = "PDF"
         const val android = "Android"
         const val SHOW_TAG = "1"
         const val HIDE_TAG = "2"
         const val LOGIN = "login"
         const val ALLOWED_FILE_SIZE = 10
-        const val ISO_FORMATE = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-        const val ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
         const val SELECT_TESTING_TIME = "Choose Testing Time"
         const val AFTER_MEAL_TEXT = "After Meal"
         const val AFTER_MEAL = "AFTER_MEAL"
@@ -130,6 +136,8 @@ class AppConstants {
         const val THIS_MONTH = "MONTH"
         const val BEFORE_MEAL_TEXT = "Before Meal"
         const val BEFORE_MEAL = "BEFORE_MEAL"
+        const val ALL = "ALL"
+        const val ALL_TEXT = "All"
         const val CONTROLE_SOLUTION_TEXT = "Control Solution"
         const val CONTROLE_SOLUTION = "CONTROLE_SOLUTION"
         const val NO_USE = "NO_USE"
@@ -140,6 +148,7 @@ class AppConstants {
         const val NEVER_TEXT = "Never"
         const val NEVER = "NEVER"
         const val DAILY = "Daily"
+        const val EVERY_DAY_TEXT = "Every Day"
         const val WEEKLY = "Weekly"
         const val MONTHLY = "Monthly"
         const val END_REPEAT_DATE = "End repeat date"
@@ -172,13 +181,23 @@ class AppConstants {
         const val TERM_AND_COND_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "TERMS_AND_CONDITIONS"
         const val ABOUT_US_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "ABOUT_US"
         const val FAQ_URL = BuildConfig.ADMIN_STATIC_BASE_URL + "FAQ"
+        const val OKRA_WEB_URL = "https://okra.care/products/refill-kit"
     }
 
     object DateFormat {
-        const val DATE_FORMAT_1 = "MMM dd YYYY | hh:mma"
+        const val DATE_FORMAT_1 = "MMM dd yyyy | hh:mma"
         const val DATE_FORMAT_2 = "yyyy-MM-dd hh:mm a"
         const val DATE_FORMAT_3 = "yyyy-MM-dd"
-        const val DATE_FORMAT_4 = "MMM dd YYYY"
+        const val DATE_FORMAT_4 = "MMM dd yyyy"
+        const val DATE_FORMAT_5 = "yyyy-MM-dd HH:mm"
+        const val DATE_FORMAT_6 = "yyyy-MM-dd hh:mm"
+        const val DATE_FORMAT_7 = "MMM dd yyyy"
+        const val DATE_FORMAT_8 = "dd MMM yyyy"
+        const val DATE_FORMAT_9 = "EEEE, MMM dd yyyy"
+        const val DATE_FORMAT_10 = "yyyy/MM/dd"
+
+        const val ISO_FORMATE = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+        const val ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
     }
 
 }

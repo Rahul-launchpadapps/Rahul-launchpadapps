@@ -20,6 +20,7 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.InitialBoardingRepoImpl
 import com.app.okra.extension.*
+import com.app.okra.models.InitialBoardingResponse
 import com.app.okra.ui.DashBoardActivity
 import com.app.okra.ui.boarding.forgotPassword.ForgotPassActivity
 import com.app.okra.ui.boarding.login.InitialBoardingViewModel
@@ -86,9 +87,10 @@ class SignUpActivity : BaseActivity(), View.OnClickListener, TextWatcher {
         setBaseObservers(viewModel, this, this,observeToast = false)
         viewModel._loginLiveData.observe(this) {
 
+            val boardingResponse = it.data as InitialBoardingResponse
             navigate(Intent(this, OTPVerifyActivity::class.java)
                     .putExtra(FROM_SCREEN, SignUpActivity::class.java.simpleName)
-                    .putExtra(DATA, it.data)
+                    .putExtra(DATA,boardingResponse )
                     .putExtra(EMAIL, etEmail.text.toString().trim())
                     .putExtra(PASS, etPassword.text.toString().trim()))
         }
@@ -137,7 +139,7 @@ class SignUpActivity : BaseActivity(), View.OnClickListener, TextWatcher {
 
     private fun setView() {
 
-        btnCommon.text = getString(R.string.sign_up)
+        btnCommon.text = getString(R.string.btn_sign_up)
         btnCommon.beDisable()
         PreferenceManager.putBoolean(AppConstants.Pref_Key.IS_FIRST_TIME, true)
         etPassword.transformationMethod = PasswordTransformationMethod()

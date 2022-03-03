@@ -107,6 +107,18 @@
 
     </RelativeLayout>
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/grey_2"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/viewPager1"
+        />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager1"
         android:layout_width="0dp"

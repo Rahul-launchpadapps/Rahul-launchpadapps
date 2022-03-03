@@ -12,7 +12,9 @@ import com.app.okra.base.BaseViewModel
 import com.app.okra.data.preference.PreferenceManager
 import com.app.okra.data.repo.ReminderRepoImpl
 import com.app.okra.extension.viewModelFactory
+import com.app.okra.ui.connected_devices.ConnectionStatusFragment
 import com.app.okra.utils.AppConstants
+import com.app.okra.utils.EventLiveData
 import com.app.okra.utils.convertUtc2Local
 import kotlinx.android.synthetic.main.fragment_my_reminder.*
 
@@ -34,11 +36,8 @@ class MyReminderFragment : BaseFragment() {
         return viewModel
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_reminder, container, false)
     }
 
@@ -75,32 +74,50 @@ class MyReminderFragment : BaseFragment() {
                 }
             }
         }
+
+        EventLiveData.eventLiveData.observe(viewLifecycleOwner){event ->
+            event.peekContent().let {
+                if (!it.type.isNullOrEmpty() && it.type == SetReminderFragment::class.java.simpleName) {
+                    event.update()
+                    viewModel.getProfileInfo(userId!!)
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MyReminderActivity).setSubTitleVisibility(false)
+
     }
 
     private fun setListener() {
         clDiabetesTest.setOnClickListener {
+            (activity as MyReminderActivity).setSubTitle(getString(R.string.perform_diabetes_test))
             val bundle = Bundle()
             bundle.putString(AppConstants.DATA, AppConstants.DIABETES)
             navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
         }
 
         clAddFood.setOnClickListener {
+            (activity as MyReminderActivity).setSubTitle(getString(R.string.food_log))
             val bundle = Bundle()
             bundle.putString(AppConstants.DATA, AppConstants.FOOD)
             navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
         }
 
         clAddMedicine.setOnClickListener {
+            (activity as MyReminderActivity).setSubTitle(getString(R.string.title_take_medicine))
             val bundle = Bundle()
             bundle.putString(AppConstants.DATA, AppConstants.MEDICINE)
             navController.navigate(R.id.action_myReminderFragment_to_setReminderFragment, bundle)
         }
     }
 
-    fun getRepeatType(type: String?): String {
+    private fun getRepeatType(type: String?): String {
          return when (type) {
                 AppConstants.EVERY_DAY -> {
-                    AppConstants.DAILY
+                    AppConstants.EVERY_DAY_TEXT
                 }
                 AppConstants.EVERY_MONTH -> {
                     AppConstants.MONTHLY

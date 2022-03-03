@@ -288,7 +288,7 @@ class BleManager {
         if (Looper.myLooper() == null || Looper.myLooper() != Looper.getMainLooper()) {
             BleLog.w("Be careful: currentThread is not MainThread!")
         }
-        if (bleDevice == null || bleDevice.device == null) {
+        if (bleDevice?.device == null) {
             bleGattCallback.onConnectFail(
                 bleDevice,
                 OtherException("Not Found Device Exception Occurred!")

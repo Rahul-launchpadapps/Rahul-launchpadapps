@@ -26,6 +26,7 @@
     <fragment
         android:id="@+id/successfulUpdatedFragment"
         android:name="com.app.okra.ui.logbook.test.test_details.SuccessfulUpdatedFragment"
-        android:label="SuccessfulUpdatedFragment" />
+        android:label="SuccessfulUpdatedFragment"
+        tools:layout="@layout/fragment_successful_updated"/>
 
 </navigation>

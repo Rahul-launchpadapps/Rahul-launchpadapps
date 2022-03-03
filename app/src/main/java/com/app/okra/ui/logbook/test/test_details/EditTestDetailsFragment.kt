@@ -15,24 +15,27 @@ import com.app.okra.R
 import com.app.okra.base.BaseFragment
 import com.app.okra.base.BaseViewModel
 import com.app.okra.data.repo.TestLogsRepoImpl
-import com.app.okra.extension.beGone
-import com.app.okra.extension.beInvisible
-import com.app.okra.extension.beVisible
-import com.app.okra.extension.viewModelFactory
+import com.app.okra.extension.*
 import com.app.okra.models.Data
+import com.app.okra.ui.logbook.meal.meal_detail.EditMealDetailsFragment
 import com.app.okra.ui.logbook.test.TestLogsViewModel
 import com.app.okra.ui.my_account.setting.measurement.CustomSpinnerAdapter
-import com.app.okra.utils.AppConstants
-import com.app.okra.utils.getDateFromISOInString
-import com.app.okra.utils.getDifferentInfoFromDate_String
-import com.app.okra.utils.getMealTime
+import com.app.okra.utils.*
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_1
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_2
+import com.app.okra.utils.AppConstants.DateFormat.DATE_FORMAT_5
 import kotlinx.android.synthetic.main.fragment_edit_test_details.*
+import kotlinx.android.synthetic.main.fragment_edit_test_details.tvBloodGlucoseValue
+import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDate
+import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceIdValue
+import kotlinx.android.synthetic.main.fragment_edit_test_details.tvDeviceNameValue
+import kotlinx.android.synthetic.main.fragment_test_details.*
 import kotlinx.android.synthetic.main.layout_header.*
 import java.util.*
 
 class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
 
-    private lateinit var strDate: String
+    private  var strDate: String?=null
     private lateinit var customSpinnerAdapter: CustomSpinnerAdapter
     private var data: Data? = null
     private var mYear: Int = 0
@@ -88,7 +91,6 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         var index = 0
 
         data?.testingTime?.let {
-
             if(it.isNotEmpty()){
                 for((i, data) in timingList.withIndex()){
                     if(getMealTime(it) == data){
@@ -106,15 +108,18 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         ivRight.beInvisible()
         ivDelete.beGone()
         btnSave.beVisible()
-        tvDate.isEnabled=false
     }
 
     private fun setObserver() {
         setBaseObservers(viewModel, this)
-        viewModel._updateTestLiveData.observe(viewLifecycleOwner) { it ->
+        viewModel._updateTestLiveData.observe(viewLifecycleOwner) {
+            val bundle = Bundle()
+            bundle.putParcelable(AppConstants.DATA, data)
+            bundle.putString(AppConstants.Intent_Constant.FROM_SCREEN,
+                    EditTestDetailsFragment::class.java.simpleName )
             navController.navigate(
                 R.id.action_editTestDetails_to_successfulUpdatedFragment,
-                null
+                bundle
             )
         }
     }
@@ -123,7 +128,6 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         ivBack.setOnClickListener(this)
 
         tvSetTestingTime.setOnClickListener(this)
-
         btnSave.setOnClickListener (this)
 
         tvDate.setOnClickListener {
@@ -166,15 +170,12 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
 
             tvDate.text =
                 data?.date?.let { it1 ->
-                    getDateFromISOInString(
-                        it1,
-                        AppConstants.DateFormat.DATE_FORMAT_1
-                    )
+                    getDateFromISOInString(it1, AppConstants.DateFormat.DATE_FORMAT_1)
                 }
-
-            tvBloodGlucoseValue.text = data?.bloodGlucose + " mg/dL"
+            tvBloodGlucoseValue.getGlucoseToSet(data?.bloodGlucose)
             tvDeviceIdValue.text = data?.deviceId ?: ""
             tvDeviceNameValue.text = data?.deviceName ?: ""
+            etNotes.setText(data?.additionalNotes ?: "")
         }
     }
 
@@ -188,11 +189,10 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         val datePickerDialog =
             DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
                 strDate = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth.toString()
-                showTimePicker(tvDate, strDate)
+            showTimePicker(tvDate, strDate!!)
             }, mYear, mMonth, mDay)
         val c1 = Calendar.getInstance()
         c1.add(Calendar.MONTH, -2)
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
         datePickerDialog.show()
 
     }
@@ -208,7 +208,7 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
         val tpd = TimePickerDialog(
             requireContext(), { timePicker, hour, minute ->
                 strDate = "$selectedDate $hour:$minute"
-                tvDate.text =  getDifferentInfoFromDate_String(strDate,"yyyy-MM-dd hh:mm",
+                tvDate.text =  getDifferentInfoFromDate_String(strDate!!, DATE_FORMAT_5,
                     AppConstants.DateFormat.DATE_FORMAT_1
                 )
             },
@@ -235,18 +235,23 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
                     bloodGlucose = if (!this.bloodGlucose.isNullOrEmpty()) {
                         this.bloodGlucose!!.toInt()
                     } else 0
+
                     bloodPresure = if (!this.datbloodPressuree.isNullOrEmpty()) {
                         this.datbloodPressuree!!.toInt()
                     } else 0
+
                     insulin = if (!this.insulin.isNullOrEmpty()) {
                         this.insulin!!.toInt()
                     } else 0
+
                     testId = if (!_id.isNullOrEmpty()) {
                         _id!!
                     } else ""
+
                     testId = if (!_id.isNullOrEmpty()) {
                         _id!!
                     } else ""
+
                     val newTestTime = tvSetTestingTime.text.toString().trim()
                     testingTime =
                         if (newTestTime.isEmpty() || newTestTime == AppConstants.SELECT_TESTING_TIME) ({
@@ -255,29 +260,39 @@ class EditTestDetailsFragment : BaseFragment() , View.OnClickListener{
                             }else ""
                         }).toString()
                         else {
-                           getMealTime(newTestTime, false)
+                            getMealTime(newTestTime, false)
                         }
 
+                    _id = testId
+                    this.bloodGlucose = bloodGlucose.toString()
+                    this.datbloodPressuree = bloodPresure.toString()
+                    this.insulin = insulin.toString()
+                    this.additionalNotes = etNotes.text.toString().trim()
+                    this.testingTime =testingTime
+
+                    if(!strDate.isNullOrEmpty()){
+                        this.date =getISOFromDate(strDate!!, DATE_FORMAT_5)
+                    }
                 }
 
-                val mealAfter = mutableListOf<String>()
-                mealAfter.add("123")
-                mealAfter.add("321")
-                val mealBefore= mutableListOf<String>()
-                mealBefore.add("AAA")
-                mealBefore.add("BBB")
+                if(etNotes.text.isNullOrEmpty()){
+                    showToast(MessageConstants.Messages.addtional_notes_not_allowed)
+                }else {
 
-                viewModel.prepareUpdateRequest(
-                    testId = testId,
-                    bloodGlucose = bloodGlucose,
-                    bloodPressure = bloodPresure,
-                    insulin = insulin,
-                    additionalNotes = etNotes.text.toString().trim(),
-                    mealsAfter = null,
-                    mealsBefore = null,
-                    testingTime = testingTime
-                )
-                viewModel.updateTest()
+                    viewModel.prepareUpdateRequest(
+                            testId = testId,
+                            bloodGlucose = bloodGlucose,
+                            bloodPressure = bloodPresure,
+                            insulin = insulin,
+                            additionalNotes = etNotes.text.toString().trim(),
+                            mealsAfter = null,
+                            mealsBefore = null,
+                            testingTime = testingTime,
+                            date = strDate
+                    )
+                    viewModel.updateTest()
+
+                }
 
             }
         }

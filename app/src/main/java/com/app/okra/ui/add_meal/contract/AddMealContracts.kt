@@ -14,6 +14,7 @@ class AddMealContracts :ActivityResultContract<MealInput, Items?>() {
 
     companion object {
          val data = AppConstants.DATA
+         val noOfServing = AppConstants.NO_OF_SERVING
     }
 
     override fun createIntent(context: Context, mealInput: MealInput): Intent {

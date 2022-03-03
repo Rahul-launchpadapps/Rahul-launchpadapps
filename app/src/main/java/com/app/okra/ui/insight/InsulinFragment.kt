@@ -149,20 +149,26 @@ class InsulinFragment : BaseFragmentWithoutNav() {
     }
 
     private fun setCharts(graphInfo: ArrayList<Float>) {
-        chart.getDescription().setEnabled(false)
+        chart.clear()
+        chart.description.isEnabled = false
         chart.setTouchEnabled(true)
         chart.setDrawGridBackground(false)
-        chart.setDragEnabled(false)
+        chart.isDragEnabled = false
         chart.setScaleEnabled(false)
         chart.setPinchZoom(false)
 
-        var xAxis: XAxis
-        xAxis = chart.getXAxis()
+        val xAxis: XAxis = chart.xAxis
         val array = arrayOfNulls<Int>(graphInfo.size)
         for (i in 0 until graphInfo.size)
-            array[i] = i
+            array[i] = i+1
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
+                if(value<0){
+                    return ""
+                }
+                if(value>array.size-1){
+                    return ""
+                }
                 return array[value.toInt()].toString()
             }
         }
@@ -170,12 +176,13 @@ class InsulinFragment : BaseFragmentWithoutNav() {
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(true)
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
+        xAxis.granularity = 1.0f
+        xAxis.isGranularityEnabled = true
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-        var yAxis: YAxis
-        yAxis = chart.getAxisLeft()
+        val yAxis: YAxis = chart.axisLeft
         // disable dual axis (only use LEFT axis)
-        chart.getAxisRight().setEnabled(false)
+        chart.axisRight.isEnabled = false
         yAxis.disableGridDashedLine()
         yAxis.setDrawAxisLine(false)
 
@@ -189,9 +196,7 @@ class InsulinFragment : BaseFragmentWithoutNav() {
             list[i].toFloat().let { Entry(i.toFloat(), it) }.let { values.add(it) }
         }
         val set1: LineDataSet
-        if (chart.data != null &&
-            chart.data.dataSetCount > 0
-        ) {
+        if (chart.data != null && chart.data.dataSetCount > 0) {
             set1 = chart.data.getDataSetByIndex(0) as LineDataSet
             set1.values = values
             set1.notifyDataSetChanged()
@@ -200,6 +205,8 @@ class InsulinFragment : BaseFragmentWithoutNav() {
         } else {
             set1 = LineDataSet(values, "")
             set1.setDrawIcons(false)
+            set1.cubicIntensity = 0.2f
+            set1.mode = LineDataSet.Mode.CUBIC_BEZIER
 
             // draw dashed line
             set1.disableDashedLine()
@@ -213,7 +220,12 @@ class InsulinFragment : BaseFragmentWithoutNav() {
 
             // draw points as solid circles
             set1.setDrawCircleHole(false)
-            set1.setDrawCircles(false)
+            if(values.size>1) {
+                set1.setDrawCircles(false)
+            }else{
+                set1.setDrawCircles(true)
+                set1.circleRadius = 5.0f
+            }
 
             // customize legend entry
             set1.formLineWidth = 0f

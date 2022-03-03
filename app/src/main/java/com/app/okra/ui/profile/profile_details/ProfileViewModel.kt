@@ -184,7 +184,7 @@ class ProfileViewModel(private val repo: ProfileRepo?) : BaseViewModel(), Amazon
             params.containsKey(age) && params[age].toString().isNotBlank()
             -> {
                 val intAge = params[age].toString().toInt()
-                if(intAge<35 || intAge>100) {
+                if(intAge<35 || intAge>150) {
                     toastObserver.value = Event(ToastData(MessageConstants.Errors.invalid_age, FIELD_AGE))
                     false
                 }else {

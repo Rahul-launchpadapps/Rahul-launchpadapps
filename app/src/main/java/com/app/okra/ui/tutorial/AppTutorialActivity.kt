@@ -38,7 +38,7 @@ class AppTutorialActivity : BaseActivity() {
         val ssb = SpannableStringBuilder("   ")
         val smiley = BitmapFactory.decodeResource(resources, R.mipmap.okra_home_logo)
         ssb.setSpan(ImageSpan(smiley), 1, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        tvMessage2.setText(getString(R.string.app_tutorial_message1))
+        tvMessage2.text = getString(R.string.app_tutorial_message1)
         tvMessage2.append(ssb)
         tvMessage2.append(getString(R.string.app_tutorial_message2))
 

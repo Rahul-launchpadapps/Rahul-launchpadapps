@@ -15,6 +15,7 @@ class InitialBoardingResponse(
         var pushNotificationStatus: Boolean?=null,
         var isApproved: Boolean?=null,
         var isVerify: Boolean?=null,
+        var bloodGlucoseUnit: String?=null,
         ): Parcelable{
         constructor(parcel: Parcel) : this(
                 parcel.readString(),
@@ -27,7 +28,8 @@ class InitialBoardingResponse(
                 parcel.readString(),
                 parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
                 parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
-                parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+                parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+                parcel.readString()
         )
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -42,6 +44,7 @@ class InitialBoardingResponse(
                 parcel.writeValue(pushNotificationStatus)
                 parcel.writeValue(isApproved)
                 parcel.writeValue(isVerify)
+                parcel.writeString(bloodGlucoseUnit)
         }
 
         override fun describeContents(): Int {
